@@ -1,0 +1,29 @@
+{
+    "PipelineGUI": "GLGUI",
+    "TimerMilliseconds": -1,
+    
+    "shaders": {
+        "vertex": [ "normalmap.vs" ],
+        "fragment": [ "normalmap.fs" ]
+    },
+    
+    "uniforms": "normalmap_lemon_uniforms.json",
+    
+    "mesh": "lemon/Lemon_01.obj",
+    
+    "textures": {
+        "diffuse": "lemon/lemon_01_Diffuse.png",
+        "normals": "lemon/Lemon_01_Normal Map.png",
+        "grid": "uv_grid.png",
+        "yokohama": [
+            "yokohama/posx.jpg",
+            "yokohama/negx.jpg",
+            "yokohama/posy.jpg",
+            "yokohama/negy.jpg",
+            "yokohama/posz.jpg",
+            "yokohama/negz.jpg"
+            ]
+    },
+    
+    "ClearColor": [ 1.0, 1.0, 1.0, 1.0 ]
+}

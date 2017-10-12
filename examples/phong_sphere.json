@@ -1,0 +1,55 @@
+{
+    "PipelineGUI": "GLGUI",
+    "TimerMilliseconds": -1,
+    
+    "shaders": {
+        "vertex": [ "phong.vs" ],
+        "fragment": [ "phong.fs" ]
+    },
+    
+    "uniforms": {
+        "uEnvironmentTex": { "type": "texture", "value": "yokohama" },
+        
+        "material.color_ambient": { "type": "3f", "value": [ 0.1, 0.1, 0.1 ] },
+        "material.color_diffuse": { "type": "3f", "value": [ 0.8, 0.8, 0.8 ] },
+        "material.color_specular": { "type": "3f", "value": [ 0.3, 0.3, 0.3 ] },
+        "material.shininess": { "type": "1f", "value": 10.0 },
+        
+        "material.reflective": { "type": "1i", "value": 1 },
+        "material.color_reflect": { "type": "3f", "value": [ 0.4, 0.3, 0.2 ] },
+        
+        "material.refractive": { "type": "1i", "value": 0 },
+        "material.color_refract": { "type": "3f", "value": [ 0.0, 0.0, 0.0 ] },
+        "material.index_of_refraction": { "type": "1f", "value": 1.1 },
+        
+        "material.use_diffuse_texture": { "type": "1i", "value": 1 },
+        "material.diffuse_tex": { "type": "texture", "value": "earth" },
+        
+        "num_lights": { "type": "1i", "value": 2 },
+        
+        "lights[0].color_ambient": { "type": "3f", "value": [ 0.1, 0.1, 0.1 ] },
+        "lights[0].color": { "type": "3f", "value": [ 1, 1, 1 ] },
+        "lights[0].position": { "type": "3f", "value": [ 0.0, 0.0, 0.0 ] },
+        
+        "lights[1].color_ambient": { "type": "3f", "value": [ 0.1, 0.0, 0.1 ] },
+        "lights[1].color": { "type": "3f", "value": [ 1, 0.6, 1 ] },
+        "lights[1].position": { "type": "3f", "value": [ 0.0, 3.0, 0.0 ] }
+    },
+    
+    "mesh": "sphere-y.obj",
+    
+    "textures": {
+        "earth": "earth.png",
+        "grid": "uv_grid.png",
+        "yokohama": [
+            "yokohama/posx.jpg",
+            "yokohama/negx.jpg",
+            "yokohama/posy.jpg",
+            "yokohama/negy.jpg",
+            "yokohama/posz.jpg",
+            "yokohama/negz.jpg"
+            ]
+    },
+    
+    "ClearColor": [ 1.0, 1.0, 1.0, 1.0 ]
+}

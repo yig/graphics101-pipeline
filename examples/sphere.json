@@ -1,0 +1,31 @@
+{
+    "PipelineGUI": "GLGUI",
+    "TimerMilliseconds": 16,
+    
+    "shaders": {
+        "vertex": [ "sphere.vs" ],
+        "fragment": [ "sphere.fs" ]
+    },
+    
+    "uniforms": {
+        "uTex": { "type": "texture", "value": "earth" },
+        "uTexCube": { "type": "texture", "value": "yokohama" }
+    },
+    
+    "mesh": "sphere-y.obj",
+    
+    "textures": {
+        "earth": "earth.png",
+        "grid": "uv_grid.png",
+        "yokohama": [
+            "yokohama/posx.jpg",
+            "yokohama/negx.jpg",
+            "yokohama/posy.jpg",
+            "yokohama/negy.jpg",
+            "yokohama/posz.jpg",
+            "yokohama/negz.jpg"
+            ]
+    },
+    
+    "ClearColor": [ 0.0, 1.0, 0.0, 1.0 ]
+}

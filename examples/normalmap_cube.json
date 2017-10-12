@@ -1,0 +1,28 @@
+{
+    "PipelineGUI": "GLGUI",
+    "TimerMilliseconds": -1,
+    
+    "shaders": {
+        "vertex": [ "normalmap.vs" ],
+        "fragment": [ "normalmap.fs" ]
+    },
+    
+    "uniforms": "normalmap_cube_uniforms.json",
+    
+    "mesh": "cube_morgan.obj",
+    
+    "textures": {
+        "normals": "bricks-normal-map.jpg",
+        "grid": "uv_grid.png",
+        "yokohama": [
+            "yokohama/posx.jpg",
+            "yokohama/negx.jpg",
+            "yokohama/posy.jpg",
+            "yokohama/negy.jpg",
+            "yokohama/posz.jpg",
+            "yokohama/negz.jpg"
+            ]
+    },
+    
+    "ClearColor": [ 0.5, 0.5, 0.5, 1.0 ]
+}

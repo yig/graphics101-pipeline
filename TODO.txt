@@ -1,0 +1,54 @@
+NEW
+---
+
+- For skeleton: Remove Mesh.cpp solution and Halfedge.cpp solution and say to use your Mesh.cpp from the meshes assignment, adding a new function at the bottom: void Mesh::computeTangentBitangent() {}. This code makes use of computeNormals(), normalizingTransformation(), and applyTransformation().
+
+- For skeleton: Don't forget the extra note about invalid gl_Position.
+
+-(not relevant) Simplify parsing like I did for raycasting
+
++ GLSL 3.3 (texture function and gl_FragColor)
+
+- Framebuffer object https://open.gl/framebuffers
+    - Drawable has a Framebuffer
+    - Framebuffer can be default (need a captureDefaultID() to be called at init time): https://stackoverflow.com/questions/11617013/why-would-glbindframebuffergl-framebuffer-0-result-in-blank-screen-in-cocos2d
+        
+        // glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+        GLint dfb;
+        glGetIntegerv( GL_FRAMEBUFFER_BINDING, &dfb );
+        glBindFramebuffer( GL_FRAMEBUFFER, dfb );
+        
+    - Framebuffer can set color and depth textures
+        - Texture2D needs a constructor that takes width and height and leaves m_image_path blank; reload() needs to skip the upload in this case.
+        - Texture2D could use a save( path ) method.
+
+- Framebuffer demos:
+    - render to face of cube
+    - 2D post-processing
+
+OLD
+---
+
+Example scenes
+    + lights
+Solution scenes
+    + toon shader
+    + phong + environment map reflection + tangent space normal map
+    - image processing
+    - ray marching a la shadertoy
+    - animation
+    - ambient occlusion
++ Mesh "transform" object from raycasting (+normalize)
++ Mesh commands/attributes (createNormals, createTangentSpace)
+
+-? Save Screenshot on Windows/Linux.
+-(unnecessary due to live reloading) Menu items to "Reload JSON/shaders/textures/mesh".
+
+-(why?) Remove UniformSet from basic Drawable.
++ Make Drawable a part of GLScene.
+- Factor out Framebuffer/Renderbuffer attachments for the Drawable.
+
+- Make a version based on glfw.
+
++ File > Open New Scene JSON
+    + Done. In the JSON, specify PipelineGUI: "MainWindow" instead of "GLGUI".

@@ -1,0 +1,33 @@
+{
+    "PipelineGUI": "GLGUI",
+    // -1 means no timer callback, 16 means 60fps.
+    // A uniform named uTime will be set storing seconds since launch.
+    "TimerMilliseconds": -1,
+    
+    "shaders": {
+        "vertex": [ "glgui_top.vs", "common.glsl", "glgui_bottom.vs" ],
+        "fragment": [ "glgui.fs" ]
+    },
+    
+    "uniforms": {
+        "name": { "type": "2f", "value": [ 10.0, -1.0 ] },
+        "another_name": { "type": "3f", "value": [ 10.0, -1.0, 2.0 ] },
+        "yaname": { "type": "4f", "value": [ 10.0, -1.0, 2.0, 1.5 ] },
+        "more_name": { "type": "2i", "value": [ 10, -1 ] },
+        "moar_name": { "type": "3i", "value": [ 10, -1, 2 ] },
+        "mur_name": { "type": "4i", "value": [ 10, -1, 2, 0 ] },
+        "a_constant_name": { "type": "1f", "value": 10.0 },
+        "another_constant_name": { "type": "1i", "value": 10 },
+        "uTex": { "type": "texture", "value": "name_for_a_texture" }
+        "uTexCube": { "type": "texture", "value": "name_for_a_cube_map_texture" }
+    },
+    
+    "mesh": "triangle.obj",
+    
+    "textures": {
+        "name_for_a_texture": "image path for a regular 2D image",
+        "name_for_a_cube_map_texture": [ "xplus path", "xminus path", "yplus path", "yminus", "zplus", "zminus" ]
+    },
+    
+    "ClearColor": [ 0.0, 1.0, 0.0, 1.0 ]
+}

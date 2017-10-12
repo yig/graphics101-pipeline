@@ -1,0 +1,27 @@
+{
+    "PipelineGUI": "GLGUI",
+    "TimerMilliseconds": -1,
+    
+    "shaders": {
+        "vertex": [ "phong.vs" ],
+        "fragment": [ "cel.fs" ]
+    },
+    
+    "uniforms": {
+        "material.color": { "type": "3f", "value": [ 1.0, 1.0, 1.0 ] },
+        "material.shininess": { "type": "1f", "value": 100.0 },
+        "material.bands": { "type": "1i", "value": 3 },
+        
+        "material.use_diffuse_texture": { "type": "1i", "value": 0 },
+        
+        "num_lights": { "type": "1i", "value": 1 },
+        
+        "lights[0].color_ambient": { "type": "1f", "value": 0.0 },
+        "lights[0].color": { "type": "1f", "value": 1.0 },
+        "lights[0].position": { "type": "3f", "value": [ 0.0, 0.0, 0.0 ] }
+    },
+    
+    "mesh": "bunny.obj",
+    
+    "ClearColor": [ 0.0, 1.0, 0.0, 1.0 ]
+}

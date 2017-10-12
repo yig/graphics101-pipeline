@@ -1,0 +1,29 @@
+{
+    "PipelineGUI": "GLGUI",
+    "TimerMilliseconds": -1,
+    
+    "shaders": {
+        "vertex": [ "normalmap.vs" ],
+        "fragment": [ "normalmap.fs" ]
+    },
+    
+    "uniforms": "normalmap_hercules_marble_uniforms.json",
+    
+    "mesh": "hercules/HerculesBust.obj",
+    
+    "textures": {
+        "skin": "hercules/HB_marble_diff.png",
+        "normals": "hercules/HB_marble_norm.png",
+        "grid": "uv_grid.png",
+        "yokohama": [
+            "yokohama/posx.jpg",
+            "yokohama/negx.jpg",
+            "yokohama/posy.jpg",
+            "yokohama/negy.jpg",
+            "yokohama/posz.jpg",
+            "yokohama/negz.jpg"
+            ]
+    },
+    
+    "ClearColor": [ 1.0, 1.0, 1.0, 1.0 ]
+}
