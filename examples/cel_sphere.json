@@ -12,7 +12,7 @@
         "material.shininess": { "type": "1f", "value": 100.0 },
         "material.bands": { "type": "1i", "value": 3 },
         
-        "material.diffuse_tex": { "type": "texture", "value": "earth" },
+        "material.diffuse_texture": { "type": "texture", "value": "earth" },
         "material.use_diffuse_texture": { "type": "1i", "value": 1 },
         
         "num_lights": { "type": "1i", "value": 1 },

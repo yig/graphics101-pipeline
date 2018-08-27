@@ -13,7 +13,7 @@ uniform struct Material {
     int bands;
     
     bool use_diffuse_texture;
-    sampler2D diffuse_tex;
+    sampler2D diffuse_texture;
 } material;
 
 struct Light {

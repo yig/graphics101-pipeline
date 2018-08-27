@@ -27,10 +27,10 @@ uniform struct Material {
     float index_of_refraction;
     
     bool use_diffuse_texture;
-    sampler2D diffuse_tex;
+    sampler2D diffuse_texture;
     
     bool use_normal_map;
-    sampler2D normal_tex;
+    sampler2D normal_map;
 } material;
 
 struct Light {

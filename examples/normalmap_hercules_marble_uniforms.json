@@ -13,8 +13,8 @@
     
     "material.use_diffuse_texture": { "type": "1i", "value": 1 },
     "material.use_normal_map": { "type": "1i", "value": 1 },
-    "material.diffuse_tex": { "type": "texture", "value": "skin" },
-    "material.normal_tex": { "type": "texture", "value": "normals" },
+    "material.diffuse_texture": { "type": "texture", "value": "skin" },
+    "material.normal_map": { "type": "texture", "value": "normals" },
     
     "num_lights": { "type": "1i", "value": 2 },
     

@@ -23,7 +23,7 @@
         "material.index_of_refraction": { "type": "1f", "value": 1.1 },
         
         "material.use_diffuse_texture": { "type": "1i", "value": 1 },
-        "material.diffuse_tex": { "type": "texture", "value": "earth" },
+        "material.diffuse_texture": { "type": "texture", "value": "earth" },
         
         "num_lights": { "type": "1i", "value": 2 },
         
