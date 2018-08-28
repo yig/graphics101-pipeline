@@ -146,9 +146,9 @@ at all. The simplified formula is:
 
     $$K_R I_R + K_T I_T + \sum_L \big( K_A I_{AL} + \big[ K_D I_L ( N \cdot L ) + K_S I_L ( V \cdot R )^n \big] \big)$$
     
-    *K<sub>R</sub> * I<sub>R</sub>
-    + K<sub>T</sub> * I<sub>T</sub>
-    + sum<sub>L</sub> (
+    *K<sub>R</sub> * I<sub>R</sub> +
+    K<sub>T</sub> * I<sub>T</sub> +
+    sum<sub>L</sub> (
         K<sub>A</sub> * I<sub>AL</sub>
         + [ K<sub>D</sub> * I<sub>L</sub> * ( N · L ) + K<sub>S</sub> * I<sub>L</sub> * ( V · R )<sup>n</sup> ] )*
 
