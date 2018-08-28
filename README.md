@@ -47,7 +47,7 @@ file named `pipeline.pro`. This should launch the Qt Creator development
 environment (IDE).
 
 * There are separate downloads for three large examples. Unzip them and
-move the head, lemon, and hercules directories into your
+move the `head`, `lemon`, and `hercules` directories into your
 `pipeline/examples/` directory so that you end up with
 `pipeline/examples/head`, `pipeline/examples/lemon`, and
 `pipeline/examples/hercules`.
@@ -263,7 +263,7 @@ use *K* = `material.color_diffuse` times the color stored in the texture map:
 *K* = `material.color_diffuse*texture( material.diffuse_texture, fTexCoord )`.
 You will re-use your `phong.vs` and only write a different `cel.fs`.
 
-3. **(40 points)** Normal mapping (normalmap.vs/normalmap.vs). This is an
+3. **(40 points)** Normal mapping (`normalmap.vs` and `normalmap.vs`). This is an
 extension of your Phong reflectance model shader. With normal mapping,
 the texture stores a normal vector. Because lighting is entirely
 determined by the normal vector, high resolution normals make a surface
@@ -271,16 +271,16 @@ look incredibly detailed. The normals in a normal maps are typically
 stored as vectors in the *tangent space* of the surface. This technique
 requires you to compute a "tangent frame" for each vertex (tangent and
 bitangent vectors to accompany the normal) and upload that to the GPU as
-additional attributes. To do this, you will implement mesh.cpp
-computeTangentBitangent() to compute the tangent frame and glscene.cpp
-vaoFromOBJPath() to upload the additional attributes to the GPU.
+additional attributes. To do this, you will implement `mesh.cpp`
+`computeTangentBitangent()` to compute the tangent frame and `glscene.cpp`
+`vaoFromOBJPath()` to upload the additional attributes to the GPU.
 (Computing and uploading this additional data for this shader won't get
 in the way of the other shaders.) Each face has a well-defined tangent
 frame derived from the texture coordinates of its vertices; see the
 accompanying handout for details. Just like with per-vertex normals, you
 will pre-compute each face's tangent frame vectors and average them at
 the vertices. In the vertex shader, you will convert the tangent and
-bitangent vectors from world-space to eye-space (using uViewMatrix) and
+bitangent vectors from world-space to eye-space (using `uViewMatrix`) and
 pass them to the fragment shader. In the fragment shader, you will
 extract the tangent-space normal from the texture and convert it to
 world-space with the tangent frame matrix. That will be the normal you
@@ -288,124 +288,136 @@ use for your lighting calculations. (You can reconstruct the
 tangent-frame matrix from the tangent, bitangent, and normal. Don't
 forget to normalize them.) Implementation note: Normal components range
 from [-1,1], while colors range from [0,1], so each normal component
-is stored in the texture as 0.5*(n+1). Convert the color back to a
-normal via 2*color-1.
+is stored in the texture as `0.5*(n+1)`. Convert the color back to a
+normal via `2*color-1`.
 
-**(10 points)** Be creative! Create a time-varying artistic shader of
-your own design. Make use of the uniform uTime, which stores the seconds
-since the program was launched. Be sure to change TimerMilliseconds in
+    * For a deeper explanation of the coordinate systems
+    involved in tangent-space normal mapping, see [this PDF](docs/tangent_space_normal_and_bump_mapping.pdf).
+    
+    * For a video explanation of normal mapping, see [this YouTube video](https://www.youtube.com/watch?v=yHzIx41eiD4).
+
+4. **(10 points)** Be creative! Create a time-varying artistic shader of
+your own design. Make use of the uniform `uTime`, which stores the seconds
+since the program was launched. Be sure to change `TimerMilliseconds` in
 the scene JSON file to something like 16 (which corresponds to 60
 frames-per-second).
 
-**Bonus (variable points):**
+5. **Bonus (variable points):**
 
-Image Processing (blur, edge detect, etc.). Draw a full-screen textured
+    * Image Processing (blur, edge detect, etc.). Draw a full-screen textured
 square. Your vertex shader should pass along the position and texture
 coordinates, ignoring the view and projection transformations. Your
 fragment shader accesses the texture value at the pixel and at nearby
-pixels. You will need to set up two additional uniforms, the texture
+pixels. You can use the GLSL function `textureSize( tex, 0 )` to get the texture
 width and height in pixels so that you can generate texture coordinates
 for the surrounding pixels.
 
-Ray Tracer or Signed Distance Field renderer. Implement ray tracing or
-ray marching (as in some of the ShaderToy examples we saw in class).
+    * Ray Tracer or Signed Distance Field renderer. Implement ray tracing or
+ray marching (as in some [ShaderToy](https://www.shadertoy.com) examples).
 Just like with Image Processing, the vertex shader does nothing. The
 fragment shader implements an entire ray tracer or ray marching. All
 geometry is specified via uniforms.
 
-Animation. You can create a sequence of transformation matrices and
+    * Animation. You can create a sequence of transformation matrices and
 interpolate between them (linearly or with an easing function). You can
 go further and implement linear blend skinning, in which there are
 multiple sequences of transformation matrices animating in parallel, and
 each vertex has a set of associated "skin" weights. The vertex is
 transformed by the weighted average transformation matrix.
 
-Ambient Occlusion. This provides a much more accurate surface ambient
-color $K_{A}$ by computing the fraction of directions that are blocked
+    * Ambient Occlusion. This provides a much more accurate surface ambient
+color *K<sub>A</sub>* by computing the fraction of directions that are blocked
 by the mesh (a ray exiting the point with that direction would intersect
-the mesh). You can compute this in a pre computation step or approximate
+the mesh). You can compute this in a pre-computation step or approximate
 it with a multi-pass shader. When computing it as a pre-process, you can
 store per-vertex attributes or a texture map.
 
-Procedural textures. Generate a wood or marble color as a 3D function of
+    * Procedural textures. Generate a wood or marble color as a 3D function of
 position.
 
-Geometry or tessellation shaders. We haven't talked about these more
+    * Geometry or tessellation shaders. We haven't talked about these more
 exotic shaders, but the framework supports them.
 
-Something else!
+    * Physically-Based Rendering. There are many ways to pursue this. Note that the `lemon`
+    example comes with a gloss map.
+
+    * Something else!
 
 Tips
 ----
 
-The glm library is modeled after the OpenGL shading language GLSL.
-Anything involving vec2, vec3, vec4, mat3, mat4, etc. and virtually any
-GLSL functions should be accessible in C++ with the glm:: prefix.
+* The glm library is modeled after the OpenGL shading language GLSL.
+Anything involving `vec2`, `vec3`, `vec4`, `mat3`, `mat4`, etc. and virtually any
+GLSL functions should be accessible in C++ with the `glm::` prefix.
 
-In C++ you can call the constructor of an object when you declare it,
+* In C++ you can call the constructor of an object when you declare it,
 like so:
-vec4 foo( 1.0, 2.0, 3.0, 4.0 );
-GLSL does not allow this and you will get a compile error. Instead, you
-have to write:
-vec4 foo = vec4( 1.0, 2.0, 3.0, 4.0 );
 
-There is a simple, sample 3D shader in sphere.json / sphere.vs /
-sphere.fs. (The simplest possible shader is in simplegui.json /
-simplest.vs / simplest.fs and is based off the simplegui.h/cpp C++ setup
+        vec4 foo( 1.0, 2.0, 3.0, 4.0 );
+
+    GLSL does not allow this and you will get a compile error. Instead, you
+have to write:
+
+        vec4 foo = vec4( 1.0, 2.0, 3.0, 4.0 );
+
+* There is a simple, sample 3D shader in `sphere.json` / `sphere.vs` /
+`sphere.fs`. (The simplest possible shader is in `simplegui.json` /
+`simplest.vs` / `simplest.fs` and is based off the `simplegui.h/cpp` C++ setup
 code.)
 
-To convert a position from world-space to eye-space, left-multiply the
-provided uniform uViewMatrix by the position. To convert a normal from
-world-space to eye-space, use the provided uniform uNormalMatrix, which
-is the inverse-transpose of the upper-left 3x3 portion of uViewMatrix.
-To convert a position or direction from eye-to-world, use inverse(
-uViewMatrix ). To convert a direction (other than a normal) from
-eye-to-world, you can be more efficient and use transpose( uNormalMatrix
-).
+* To convert a position from world-space to eye-space, left-multiply the
+provided uniform `uViewMatrix` by the position. To convert a normal from
+world-space to eye-space, use the provided uniform `uNormalMatrix`, which
+is the inverse-transpose of the upper-left 3x3 portion of `uViewMatrix`.
+To convert a position or direction from eye-to-world, use `inverse( uViewMatrix )`.
+To convert a direction (other than a normal) from eye-to-world, you can be
+more efficient and use `transpose( uNormalMatrix )`.
 
-The GLSL function texture(...), which loads a value from a texture,
-returns a vec4. Some overly permissive OpenGL drivers will allow you to
-use it as a vec3, but that behavior is wrong. Use texture(...).rgb to
-get the RGB components as a vec3 or call
-vec3(texture(...)).![](media/image11.png){width="2.61287510936133in"
-height="0.818089457567804in"}
+* The GLSL function `texture(...)`, which loads a value from a texture,
+returns a `vec4`. Some overly permissive OpenGL drivers will allow you to
+use it as a `vec3`, but that behavior is wrong. Use `texture(...).rgb` to
+get the RGB components as a `vec3` or call
+`vec3(texture(...))`.
 
-To reflect a (not necessarily normalized) vector **v** across a
+* To reflect a (not necessarily normalized) vector **v** across a
 normalized vector **n**, the formula for the reflected vector **r** is
-**r = -v + 2(v·n)n**. GLSL's reflect() function is different than the
-formula and diagram above. GLSL's reflect() takes v pointed towards the
-surface, not away from it (that is, negated), so r=reflect(-v,n).
+**r = -v + 2(v·n)n**.
 
-All of the required portions of the assignment can use the same C++
-setup code (defined in glscene.cpp/glscene.h) and differ only in which
-shaders and uniforms are specified in the JSON file. (For normal
-mapping, you will need to modify some of it.)
+    ![illustration of the relationship between r, v, and n](docs/eqs/reflect.png)
 
-You can achieve better code re-use in the shaders if you split them up.
-When you specify a shader in the JSON file, you can pass an array of
-file paths which will be concatenated together in sequence and then
-compiled. This allows you to write common helper functions in a
-common.glsl file if you so desire. The first line must always be a
-#version directive, so I often split my complex shaders into [
-shaderTop.vs, common.glsl, shaderBottom.vs ]. It may also make sense to
-share a bottom but have different middles (e.g. normal mapping and Phong
-shading could share a bottom but have different middle files
-implementing an appropriate get_normal() function).
+    GLSL's `reflect()` function is different than the
+formula and above diagram. GLSL's `reflect()` takes **v** pointed towards the
+surface, not away from it (that is, negated), so `r=reflect(-v,n)`.
 
-You can create your own C++ scene if you want to customize the camera or
-attributes. You will need to duplicate the proxy class (SimpleGUI or
-GLGUI) and register it with pipelineguifactory.cpp. For reference, you
-can see/study the simplest-possible OpenGL scene in glsimplescene.h and
-glsimplescene.cpp.
+* All of the required portions of the assignment can use the same C++
+setup code (defined in `glscene.cpp`/`glscene.h`) and differ only in which
+shaders and uniforms are specified in the JSON file. (Only normal
+mapping requires you to modify some of the C++ setup code.)
 
-Almost everything in a JSON scene will live reload in if using a
-GLScene, including shaders, uniforms, and textures. The only two
-properties that will not live reload are PipelineGUI and
-TimerMilliseconds.
+* You can achieve better code re-use in the shaders if you split them up. When
+you specify a shader in the JSON file, you can pass an array of file paths which
+will be concatenated together in sequence and then compiled. This allows you to
+write common helper functions in a `common.glsl` file if you so desire. The
+first line must always be a `#version` directive, so I often split my complex
+shaders into `[ shaderTop.vs, common.glsl, shaderBottom.vs ]`. It may also make
+sense to share a bottom but have different middles (e.g. normal mapping and
+Phong shading could share a bottom but have different middle files implementing
+an appropriate `get_normal()` function).
 
-You can find lots of Creative Commons environment (cube) maps on the
+* You can create your own C++ scene if you want to customize the camera or
+attributes. You will need to duplicate the proxy class (`SimpleGUI` or
+`GLGUI`) and register it with `pipelineguifactory.cpp`. For reference, you
+can see/study the simplest-possible OpenGL scene in `glsimplescene.h` and
+`glsimplescene.cpp`.
+
+* Almost everything in a JSON scene will live reload in if using a
+`GLScene`, including shaders, uniforms, and textures. The only two
+properties that will not live reload are `PipelineGUI` and
+`TimerMilliseconds`.
+
+* You can find lots of Creative Commons environment (cube) maps on the
 website of Emil Persson, aka Humus:
-[[http://www.humus.name]{.underline}](http://www.humus.name)
+<http://www.humus.name>
 
 Qt functions you need for this assignment
 -----------------------------------------
