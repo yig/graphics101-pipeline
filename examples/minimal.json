@@ -1,0 +1,23 @@
+{
+    "PipelineGUI": "GLGUI",
+    "TimerMilliseconds": 16,
+    
+    "shaders": {
+        "vertex": [ "minimal.vs" ],
+        "fragment": [ "minimal.fs" ]
+    },
+    
+    "uniforms": {
+        "uColor": { "type": "3f", "value": [ 1.0, 1.0, 1.0 ] },
+        "uTex": { "type": "texture", "value": "earth" }
+    },
+    
+    "mesh": "sphere-y.obj",
+    
+    "textures": {
+        "earth": "earth.png",
+        "grid": "uv_grid.png"
+    },
+    
+    "ClearColor": [ 0.5, 0.5, 0.5, 1.0 ]
+}
