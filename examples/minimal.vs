@@ -17,7 +17,7 @@ void main()
     // Pass the normal in eye-space:
     // fNormal = uNormalMatrix * vNormal;
     // Pass the normal in world-space:
-    fNormal = vNormal;
+    // fNormal = vNormal;
     
     // fTexCoord = vTexCoord;
     
