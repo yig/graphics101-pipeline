@@ -72,6 +72,8 @@ the JSON scene files as needed. Tangent-space normal mapping will
 require you to modify C++ code (`mesh.cpp`'s `computeTangentBitangent()`
 and `glscene.cpp`'s `vaoFromOBJPath()`).
 
+    * You should have filled in `mesh.cpp`'s other functions in the previous homework on [meshes](../graphics101-meshes).
+
 * Build and run and test that it is working correctly. Here are the JSON
 scene files that will verify your output.
 The GUI supports saving screenshots. Save a screenshot for each of the JSON
