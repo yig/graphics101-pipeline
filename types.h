@@ -27,10 +27,15 @@ typedef unsigned char GLubyte;
 */
 
 #include <cmath> // std::sqrt(), M_PI
+// Not all platforms define M_PI
 #ifndef M_PI
 #define M_PI 3.14159265358979323846264338327950288
 #endif
 #include <algorithm> // std::min(), std::max()
+// To fix a windows header incompatibility with C++11
+// From: https://stackoverflow.com/questions/5004858/stdmin-gives-error
+#undef min
+#undef max
 
 #include <vector>
 
