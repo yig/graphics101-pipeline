@@ -261,8 +261,8 @@ for a pixel is *K* * *F<sub>discrete</sub>*, where *K* is the
 material color. 
 If the boolean `material.use_diffuse_texture` is false, then *K* =
 `material.color_diffuse`. If `material.use_diffuse_texture` is true,
-use *K* = `material.color_diffuse` times the color stored in the texture map:
-*K* = `material.color_diffuse*texture( material.diffuse_texture, fTexCoord )`.
+use *K* = `material.color` times the color stored in the texture map:
+*K* = `material.color*texture( material.diffuse_texture, fTexCoord )`.
 You will re-use your `phong.vs` and only write a different `cel.fs`.
 
 3. **(40 points)** Normal mapping (`normalmap.vs` and `normalmap.vs`). This is an
