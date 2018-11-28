@@ -175,6 +175,10 @@ GLuint create_and_compile_shader( GLenum shaderType, const std::vector< std::str
         
         cerr << "Shader compilation error: " << '\n' << getShaderInfoLog(shader) << '\n';
     }
+    else
+    {
+        cerr << name_from_shaderType( shaderType ) << " compiled successfully.\n";
+    }
     
     return shader;
 }
