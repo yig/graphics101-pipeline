@@ -1,0 +1,13 @@
+{
+    "PipelineGUI": "GLGUI",
+    "TimerMilliseconds": -1,
+    
+    "shaders": {
+        "vertex": [ "bake.vs" ],
+        "fragment": [ "bake.fs" ]
+    },
+    
+    "mesh": "head/head.obj",
+    
+    "ClearColor": [ 0.0, 0.0, 0.5, 1.0 ]
+}

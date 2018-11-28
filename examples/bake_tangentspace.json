@@ -1,0 +1,21 @@
+{
+    "PipelineGUI": "GLGUI",
+    "TimerMilliseconds": -1,
+    
+    "shaders": {
+        "vertex": [ "bake_tangentspace.vs" ],
+        "fragment": [ "bake_tangentspace.fs" ]
+    },
+    
+    "uniforms": {
+        "object_space_normal_map": { "type": "texture", "value": "object_space_normal_map" }
+    },
+    
+    "mesh": "head/head-200.obj",
+    
+    "textures": {
+        "object_space_normal_map": "head/object_space_normal_map.png"
+    },
+    
+    "ClearColor": [ 0.5, 0.5, 0.5, 1.0 ]
+}
