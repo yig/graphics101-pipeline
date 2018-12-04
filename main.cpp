@@ -19,6 +19,10 @@ int main( int argc, char* argv[] )
     format.setVersion( 3,3 );
     QSurfaceFormat::setDefaultFormat( format );
     
+    // Request desktop OpenGL drivers.
+    // From: http://doc.qt.io/qt-5/windows-requirements.html
+    QCoreApplication::setAttribute( Qt::AA_UseDesktopOpenGL, true );
+    
     QApplication app(argc, argv);
     
     // MainWindow window;
