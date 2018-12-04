@@ -11,8 +11,6 @@ uniform mat3 uNormalMatrix;
 
 uniform samplerCube uEnvironmentTex;
 
-uniform bool use_normal_map;
-
 uniform struct Material {
     vec3 color_ambient;
     vec3 color_diffuse;
