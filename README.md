@@ -255,7 +255,7 @@ are simplified into scalar intensities:
     *F = sum<sub>L</sub> I<sub>AL</sub> + I<sub>L</sub> * ( N · L ) + I<sub>L</sub> * ( V · R )<sup>n</sup>*
 
     Use the integer uniform `material.bands` to round *F* into discrete levels:
-*F<sub>discrete</sub>* = floor( *F* * *F* * `material.bands` )/( `material.bands` - 1).
+*F<sub>discrete</sub>* = min( floor( *F* * *F* * `material.bands` )/( `material.bands` - 1), `material.bands` - 1 ).
 (Squaring *F* makes the bands more uniformly spaced.) The final color
 for a pixel is *K* * *F<sub>discrete</sub>*, where *K* is the
 material color. 
