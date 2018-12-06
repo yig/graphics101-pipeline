@@ -260,7 +260,7 @@ are simplified into scalar intensities:
 for a pixel is *K* * *F<sub>discrete</sub>*, where *K* is the
 material color. 
 If the boolean `material.use_diffuse_texture` is false, then *K* =
-`material.color_diffuse`. If `material.use_diffuse_texture` is true,
+`material.color`. If `material.use_diffuse_texture` is true,
 use *K* = `material.color` times the color stored in the texture map:
 *K* = `material.color*texture( material.diffuse_texture, fTexCoord )`.
 You will re-use your `phong.vs` and only write a different `cel.fs`.
