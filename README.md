@@ -351,6 +351,14 @@ Tips
 * The glm library is modeled after the OpenGL shading language GLSL.
 Anything involving `vec2`, `vec3`, `vec4`, `mat3`, `mat4`, etc. and virtually any
 GLSL functions should be accessible in C++ with the `glm::` prefix.
+There are many convenience constructors and math operations.
+Here is a nice reference: [GLSL Programming: Vector and Matrix Operations](https://en.wikibooks.org/wiki/GLSL_Programming/Vector_and_Matrix_Operations).
+
+* The GLSL (and glm) matrix constructors that take vectors use those vectors
+as the columns of the matrix, not the rows.
+(If you want to fill out the rows, fill out the columns and then call `transpose()`.)
+In fact, all matrix indexing uses column-then-row (column-major) ordering,
+which is different from what mathematicians do.
 
 * In C++ you can call the constructor of an object when you declare it,
 like so:
