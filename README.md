@@ -265,7 +265,7 @@ use *K* = `material.color` times the color stored in the texture map:
 *K* = `material.color*texture( material.diffuse_texture, fTexCoord )`.
 You will re-use your `phong.vs` and only write a different `cel.fs`.
 
-3. **(40 points)** Normal mapping (`normalmap.vs` and `normalmap.vs`). This is an
+3. **(40 points)** Normal mapping (`normalmap.vs` and `normalmap.fs`). This is an
 extension of your Phong reflectance model shader. With normal mapping,
 the texture stores a normal vector. Because lighting is entirely
 determined by the normal vector, high resolution normals make a surface
