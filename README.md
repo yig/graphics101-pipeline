@@ -300,9 +300,9 @@ normal via `2*color-1`.
 
 4. **(10 points)** Be creative! Create a time-varying artistic shader of
 your own design. Make use of the uniform `uTime`, which stores the seconds
-since the program was launched. Be sure to change `TimerMilliseconds` in
-the scene JSON file to something like 16 (which corresponds to 60
-frames-per-second).
+since the program was launched. Declare it in your shader as `uniform float uTime;`
+Be sure to change `TimerMilliseconds` in the scene JSON file to something like 16
+(which corresponds to 60 frames-per-second). See `sphere.vs` for an example.
 
 5. **Bonus (variable points):**
 
