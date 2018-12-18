@@ -370,6 +370,12 @@ have to write:
 
         vec4 foo = vec4( 1.0, 2.0, 3.0, 4.0 );
 
+* Unless you assign a value, a local variable you declare will be uninitialized.
+While some implementations will initialize, for example, `vec3 foo;` to 0 by default,
+the GLSL specification does not require this. (The grader's graphics driver
+will probably initialize to random values.) Manually initialize to 0,
+`vec3 foo = vec3(0);`, if that's what you want.
+
 * There is a simple, sample 3D shader in `sphere.json` / `sphere.vs` /
 `sphere.fs`. (The simplest possible shader is in `simplegui.json` /
 `simplest.vs` / `simplest.fs` and is based off the `simplegui.h/cpp` C++ setup
