@@ -1,6 +1,6 @@
 #include "camera.h"
 
-#include <glm/gtc/matrix_transform.hpp> // glm::perspective, glm::lookAt, glm::rotate
+#include "glm/gtc/matrix_transform.hpp" // glm::perspective, glm::lookAt, glm::rotate
 #include <cmath>
 
 namespace graphics101 {

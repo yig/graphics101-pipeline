@@ -17,29 +17,27 @@ typedef unsigned char GLboolean;
 typedef unsigned char GLubyte;
 
 // We do this to get everything glm supports.
-#include <glm/glm.hpp>
+#include "glm/glm.hpp"
 // We could only include the subset we need to speed up compile times.
 /*
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
-#include <glm/mat4x4.hpp> // glm::mat4
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
+#include "glm/vec4.hpp"
+#include "glm/mat4x4.hpp" // glm::mat4
 */
 
+#include <vector>
+#include <string>
+
+#include <cassert>
+
 #include <cmath> // std::sqrt(), M_PI
-// Not all platforms define M_PI
-#ifndef M_PI
-#define M_PI 3.14159265358979323846264338327950288
-#endif
+#include <limits> // infinity
 #include <algorithm> // std::min(), std::max()
 // To fix a windows header incompatibility with C++11
 // From: https://stackoverflow.com/questions/5004858/stdmin-gives-error
 #undef min
 #undef max
-
-#include <vector>
-
-#include <cassert>
 
 namespace graphics101 {
     typedef float real;
@@ -65,6 +63,12 @@ namespace graphics101 {
     
     typedef ivec3 Triangle;
     typedef std::vector< Triangle > TriangleVec;
+    
+    typedef std::string string;
+    
+    // Constants
+    const real infinity = std::numeric_limits<real>::infinity();
+    const real pi = 3.14159265358979323846264338327950288;
 }
 
 #endif /* __types_h__ */
