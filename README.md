@@ -375,13 +375,9 @@ get the RGB components as a `vec3` or call
 
 * To reflect a (not necessarily normalized) vector **v** across a
 normalized vector **n**, the formula for the reflected vector **r** is
-**r = -v + 2(v·n)n**.
+**r = v - 2(v·n)n**.
 
-    ![illustration of the relationship between r, v, and n](docs/eqs/reflect.png)
-
-    GLSL's `reflect()` function is different than the
-formula and above diagram. GLSL's `reflect()` takes **v** pointed towards the
-surface, not away from it (that is, negated), so `r=reflect(-v,n)`.
+    ![Illustration of a vector v reflected across a vector n](docs/eqs/reflection.svg)
 
 * All of the required portions of the assignment can use the same C++
 setup code (defined in `fancyscene.cpp`/`fancyscene.h`) and differ only in which
