@@ -20,12 +20,11 @@ public:
     void unwatchPath( const std::string& path ) override;
     void unwatchAllPaths() override;
     
-    // This function will be called whenever any watched path changes.
-    // It will be called after the watchPath() callbacks are called.
-    // Returns a unique key that can be used to remove the callback via removeAnythingChangedCallback().
     int anythingChanged( const Callback& callback ) override;
     void removeAnythingChangedCallback( int key ) override;
     void removeAllAnythingChangedCallbacks() override;
+    
+    void poll() override {}
     
 private:
     QFileSystemWatcher m_qwatcher;

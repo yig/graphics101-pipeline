@@ -26,6 +26,9 @@ public:
     virtual int anythingChanged( const Callback& callback ) = 0;
     virtual void removeAnythingChangedCallback( int key ) = 0;
     virtual void removeAllAnythingChangedCallbacks() = 0;
+    
+    // Check for modified files and call any callbacks.
+    virtual void poll() = 0;
 };
 
 }
