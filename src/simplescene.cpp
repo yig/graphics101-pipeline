@@ -145,6 +145,7 @@ void SimpleScene::draw() {
 
 void SimpleScene::mousePressEvent( const Event& event ) {}
 void SimpleScene::mouseMoveEvent( const Event& event ) {}
+void SimpleScene::mouseDragEvent( const Event& event ) {}
 void SimpleScene::mouseReleaseEvent( const Event& event ) {}
 void SimpleScene::timerEvent( real seconds_since_creation ) {
     // Update uniforms here.

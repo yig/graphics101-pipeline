@@ -28,8 +28,7 @@ public:
     void draw() override;
 
     void mousePressEvent( const Event& event ) override;
-    void mouseMoveEvent( const Event& event ) override;
-    void mouseReleaseEvent( const Event& event ) override;
+    void mouseDragEvent( const Event& event ) override;
     void timerEvent( real seconds_since_creation ) override;
     int timerCallbackMilliseconds() override;
     
@@ -82,7 +81,6 @@ private:
     
     // Related to the camera and mouse movement.
     vec2 m_camera_rotation = vec2(0,0);
-    bool m_mouse_is_down = false;
     vec2 m_mouse_last_pos = vec2(-1,-1);
 };
 

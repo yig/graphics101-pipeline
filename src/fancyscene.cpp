@@ -363,10 +363,9 @@ void FancyScene::draw() {
 }
 
 void FancyScene::mousePressEvent( const Event& event ) {
-    m_mouse_is_down = true;
     m_mouse_last_pos = vec2( event.x, event.y );
 }
-void FancyScene::mouseMoveEvent( const Event& event ) {
+void FancyScene::mouseDragEvent( const Event& event ) {
     const auto width_and_height = window_dimensions();
 
     const auto mouse_pos = vec2( event.x, event.y );
@@ -380,9 +379,6 @@ void FancyScene::mouseMoveEvent( const Event& event ) {
     m_camera_rotation.y = glm::clamp( real( m_camera_rotation.y ), real( -pi/2 ), real( pi/2 ) );
     
     m_mouse_last_pos = mouse_pos;
-}
-void FancyScene::mouseReleaseEvent( const Event& event ) {
-    m_mouse_is_down = false;
 }
 void FancyScene::timerEvent( real seconds_since_creation ) {
     // Check the filesystem for changes.

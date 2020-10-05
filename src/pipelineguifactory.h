@@ -4,6 +4,8 @@
 #include <string>
 #include <memory> // unique_ptr
 
+namespace graphics101 {
+
 class PipelineGUI {
 public:
     typedef double real;
@@ -21,13 +23,12 @@ public:
 
     virtual void mousePressEvent( const Event& event ) {}
     virtual void mouseMoveEvent( const Event& event ) {}
+    virtual void mouseDragEvent( const Event& event ) {}
     virtual void mouseReleaseEvent( const Event& event ) {}
     virtual void timerEvent( real seconds_since_creation ) {}
     // Return a non-negative number to set the desired timerEvent() and draw() interval.
     virtual int timerCallbackMilliseconds() { return -1; }
 };
-
-namespace graphics101 {
 
 typedef std::unique_ptr< PipelineGUI > PipelineGUIPtr;
 

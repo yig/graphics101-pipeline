@@ -7,6 +7,51 @@
 #include "dialogs.h"
 #include "pipelineguifactory.h"
 
+namespace {
+    graphics101::PipelineGUIPtr gui = nullptr;
+    
+    void framebuffer_size_callback( GLFWwindow* window, int width, int height ) {
+        assert( gui );
+        gui->resize( width, height );
+    }
+    
+    void mouse_button_callback( GLFWwindow* window, int button, int action, int mods )
+    {
+        assert( gui );
+        
+        double x, y;
+        glfwGetCursorPos( window, &x, &y );
+        
+        graphics101::PipelineGUI::Event event;
+        event.x = x;
+        event.y = y;
+        
+        if( action == GLFW_PRESS ) gui->mousePressEvent( event );
+        else if( action == GLFW_RELEASE ) gui->mouseReleaseEvent( event );
+    }
+    void cursor_position_callback( GLFWwindow* window, double x, double y )
+    {
+        assert( gui );
+        
+        graphics101::PipelineGUI::Event event;
+        event.x = x;
+        event.y = y;
+        
+        bool drag = false;
+        for( int button = GLFW_MOUSE_BUTTON_1; button <= GLFW_MOUSE_BUTTON_LAST; ++button ) {
+            int state = glfwGetMouseButton( window, button );
+            if( state == GLFW_PRESS )
+            {
+                drag = true;
+                break;
+            }
+        }
+        
+        if( drag ) gui->mouseDragEvent( event );
+        else gui->mouseMoveEvent( event );
+    }
+}
+
 int main( int argc, char* argv[] )
 {
     // Initialize GLFW and request an OpenGL Core Profile
@@ -55,14 +100,24 @@ int main( int argc, char* argv[] )
         }
     }
     
-    graphics101::PipelineGUIPtr gui = graphics101::PipelineGUIFromScenePath( scene_path );
+    gui = graphics101::PipelineGUIFromScenePath( scene_path );
     if( !gui ) {
         graphics101::errorDialog( "Error", "Unable to load scene. Check console for details." );
         return -1;
     }
     
     gui->init();
+    {
+        // The framebuffer size will be different from the window size on high DPI screens.
+        int width, height;
+        glfwGetFramebufferSize( window, &width, &height );
+        gui->resize( width, height );
+    }
     
+    // Setup event callbacks.
+    glfwSetFramebufferSizeCallback( window, framebuffer_size_callback );
+    glfwSetMouseButtonCallback( window, mouse_button_callback );
+    glfwSetCursorPosCallback( window, cursor_position_callback );
     // TODO: Keyboard callback 's' for save screenshot.
     
     // The timer has never been called, so `lastTimer`

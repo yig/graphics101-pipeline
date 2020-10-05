@@ -24,6 +24,7 @@ public:
 
     void mousePressEvent( const Event& event ) override;
     void mouseMoveEvent( const Event& event ) override;
+    void mouseDragEvent( const Event& event ) override;
     void mouseReleaseEvent( const Event& event ) override;
     void timerEvent( real seconds_since_creation ) override;
     
