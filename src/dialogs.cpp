@@ -20,14 +20,19 @@ std::string loadFileDialog( const std::string& message, const std::string& start
     return path;
 }
 
-std::string saveFileDialog( const std::string& message, const std::string& start_dir, const std::string& filter ) {
+std::string saveFileDialog( const std::string& message, const std::string& suggested_path, const std::string& filter ) {
     std::cerr << message << '\n';
-    std::cerr << "Type a " << filter << " filename to save relative to the following path: " << start_dir << '\n';
+    std::cerr << "Type a " << filter << " filename to save or press return to accept the default path: " << suggested_path << '\n';
     std::string path;
     std::getline( std::cin, path );
     if( !path.empty() && path.back() == '\n' ) {
         path = path.substr( 0, path.size()-1 );
     }
+    
+    // If the path is empty, then the user accepts the default.
+    // This means there is no way to cancel.
+    if( path.empty() ) return suggested_path;
+    
     return path;
 }
 

@@ -62,7 +62,7 @@ and `fancyscene.cpp`'s `vaoFromOBJPath()`).
 
 * Build and run and test that it is working correctly. Here are the JSON
 scene files that will verify your output.
-The GUI supports saving screenshots. Save a screenshot for each of the JSON
+Save screenshots by pressing the `s` key. Save a screenshot for each of the JSON
 scenes into an output subdirectory `screenshots`.
 
     * `phong_bunny.json`
