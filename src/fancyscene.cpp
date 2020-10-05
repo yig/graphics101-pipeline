@@ -6,7 +6,6 @@
 using std::cerr;
 
 #include "parsing.h"
-#include "filewatcher.h"
 
 #include "debugging.h"
 
@@ -72,11 +71,9 @@ VertexAndFaceArraysPtr vaoFromOBJPath( const std::string& path, const ShaderProg
 
 namespace graphics101 {
 
-FancyScene::FancyScene( const std::string& scene_path, FileWatcher* watcher )
+FancyScene::FancyScene( const std::string& scene_path )
 {
     m_scene_path = scene_path;
-    
-    m_watcher = watcher;
 }
 // Without this line, we can't use the forward declaration of Drawable in a unique_ptr<>.
 // From: https://stackoverflow.com/questions/13414652/forward-declaration-with-unique-ptr
@@ -111,10 +108,8 @@ void FancyScene::loadScene() {
     this->m_scene_changed = false;
     
     // Unwatch all previous paths. Watch the scene.
-    if( m_watcher ) {
-        m_watcher->unwatchAllPaths();
-        m_watcher->watchPath( m_scene_path, [=]( const std::string& ) { this->m_scene_changed = true; } );
-    }
+    m_watcher.unwatchAllPaths();
+    m_watcher.watchPath( m_scene_path, [=]( const std::string& ) { this->m_scene_changed = true; } );
     
     
     // Parse the file into a json object.
@@ -136,7 +131,7 @@ void FancyScene::loadScene() {
     m_uniforms_changed = true;
     m_textures_changed = true;
     
-    // Finally, set the clear color.
+    // Set the clear color.
     glClearColor( 1.0, 0.0, 0.0, 1.0 );
     if( j.count("ClearColor" ) ) {
         auto col = j["ClearColor"];
@@ -145,6 +140,21 @@ void FancyScene::loadScene() {
         } else {
             // TODO: Check whether they are valid floating point numbers.
             glClearColor( col[0], col[1], col[2], col[3] );
+        }
+    }
+    
+    // Get the timer milliseconds.
+    m_timerMilliseconds = -1;
+    if( j.count("TimerMilliseconds") ) {
+        if( !j["TimerMilliseconds"].is_number() ) {
+            cerr << "ERROR: TimerMilliseconds is not a number.\n";
+        } else {
+            m_timerMilliseconds = j["TimerMilliseconds"];
+            if( m_timerMilliseconds < 0 ) {
+                cerr << "WARNING: TimerMilliseconds is negative.\n";
+            } else {
+                std::cout << "Draw will be called at least every " << m_timerMilliseconds << " milliseconds.\n";
+            }
         }
     }
 }
@@ -168,10 +178,8 @@ void FancyScene::loadShaders() {
     const StringSet paths_accessed = parseShader( j["shaders"], *m_drawable->program, nativePathFromJSONPathTransformer() );
     
     // Add shader paths to the file watcher.
-    if( m_watcher ) {
-        for( const auto& path : paths_accessed ) {
-            m_watcher->watchPath( path, [=]( const std::string& ) { this->m_shader_changed = true; } );
-        }
+    for( const auto& path : paths_accessed ) {
+        m_watcher.watchPath( path, [=]( const std::string& ) { this->m_shader_changed = true; } );
     }
 }
 
@@ -198,9 +206,7 @@ void FancyScene::loadMesh() {
     m_drawable->vao = vaoFromOBJPath( meshpath, *m_drawable->program );
     
     // Add the mesh path to the filewatcher.
-    if( m_watcher ) {
-        m_watcher->watchPath( meshpath, [=]( const std::string& ) { this->m_mesh_changed = true; } );
-    }
+    m_watcher.watchPath( meshpath, [=]( const std::string& ) { this->m_mesh_changed = true; } );
 }
 
 void FancyScene::loadUniforms() {
@@ -233,9 +239,7 @@ void FancyScene::loadUniforms() {
         }
         
         // Add the mesh path to the filewatcher.
-        if( m_watcher ) {
-            m_watcher->watchPath( uniformpath, [=]( const std::string& ) { this->m_uniforms_changed = true; } );
-        }
+        m_watcher.watchPath( uniformpath, [=]( const std::string& ) { this->m_uniforms_changed = true; } );
     }
     // Otherwise uniforms is JSON.
     else {
@@ -274,7 +278,7 @@ void FancyScene::loadTextures() {
                 const auto fullpath = nativePathFromJSONPath( j_textures[name].get<std::string>() );
                 m_drawable->textures.at(i) = Texture2D::makePtr( fullpath );
                 // Add the texture path to the filewatcher.
-                if( m_watcher ) m_watcher->watchPath( fullpath, [=]( const std::string& ) { this->m_textures_changed = true; } );
+                m_watcher.watchPath( fullpath, [=]( const std::string& ) { this->m_textures_changed = true; } );
             }
             else if( j_textures[name].is_array() && j_textures[name].size() == 6 ) {
                 StringVec fullpaths;
@@ -282,7 +286,7 @@ void FancyScene::loadTextures() {
                 for( int i = 0; i < 6; ++i ) {
                     fullpaths.at(i) = nativePathFromJSONPath( j_textures[name][i].get<std::string>() );
                     // Add the texture path to the filewatcher.
-                    if( m_watcher ) m_watcher->watchPath( fullpaths.at(i), [=]( const std::string& ) { this->m_textures_changed = true; } );
+                    m_watcher.watchPath( fullpaths.at(i), [=]( const std::string& ) { this->m_textures_changed = true; } );
                 }
                 m_drawable->textures.at(i) = TextureCube::makePtr(
                     fullpaths[0], fullpaths[1],
@@ -381,9 +385,16 @@ void FancyScene::mouseReleaseEvent( const Event& event ) {
     m_mouse_is_down = false;
 }
 void FancyScene::timerEvent( real seconds_since_creation ) {
+    // Check the filesystem for changes.
+    m_watcher.poll();
+    
     // Update uniforms here.
     // draw() will be called afterwards.
     m_drawable->uniforms.storeUniform( "uTime", GLfloat( seconds_since_creation ) );
+    std::cerr << "FancyScene::timerEvent( " << seconds_since_creation << " )\n";
+}
+int FancyScene::timerCallbackMilliseconds() {
+    return m_timerMilliseconds;
 }
 
 std::string FancyScene::nativePathFromJSONPath( const std::string& path ) const {

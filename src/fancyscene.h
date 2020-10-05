@@ -3,10 +3,10 @@
 
 #include "types.h"
 #include "pipelineguifactory.h"
+#include "filewatchermtime.h"
 
 // Forward declarations.
 #include "glfwd.h"
-namespace graphics101 { class FileWatcher; }
 
 #include <string>
 
@@ -20,17 +20,18 @@ namespace graphics101 {
 class FancyScene : public PipelineGUI
 {
 public:
-    FancyScene( const std::string& scene_path, FileWatcher* watcher = nullptr );
+    FancyScene( const std::string& scene_path );
     ~FancyScene();
 
-    void init();
-    void resize( int w, int h );
-    void draw();
+    void init() override;
+    void resize( int w, int h ) override;
+    void draw() override;
 
-    void mousePressEvent( const Event& event );
-    void mouseMoveEvent( const Event& event );
-    void mouseReleaseEvent( const Event& event );
-    void timerEvent( real seconds_since_creation );
+    void mousePressEvent( const Event& event ) override;
+    void mouseMoveEvent( const Event& event ) override;
+    void mouseReleaseEvent( const Event& event ) override;
+    void timerEvent( real seconds_since_creation ) override;
+    int timerCallbackMilliseconds() override;
     
 private:
     // Sets uViewMatrix and uNormalMatrix (the inverse transpose of its upper-left 3x3).
@@ -68,7 +69,7 @@ private:
     DrawablePtr m_drawable;
     
     // Related to loading the scene.
-    FileWatcher* m_watcher = nullptr;
+    FileWatcherMTime m_watcher;
     std::string m_scene_path;
     json m_scene;
     bool m_scene_changed = true;
@@ -77,6 +78,7 @@ private:
     bool m_uniforms_changed = true;
     bool m_textures_changed = true;
     StringVec m_texture_names_in_bind_order;
+    int m_timerMilliseconds = -1;
     
     // Related to the camera and mouse movement.
     vec2 m_camera_rotation = vec2(0,0);

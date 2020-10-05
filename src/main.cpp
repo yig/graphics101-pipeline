@@ -63,10 +63,11 @@ int main( int argc, char* argv[] )
     
     gui->init();
     
+    // TODO: Keyboard callback 's' for save screenshot.
+    
     // The timer has never been called, so `lastTimer`
     // is earlier than the program start time.
-    const double timerCallbackSeconds = gui->timerCallbackMilliseconds()/1000.;
-    double lastTimer = -2*timerCallbackSeconds;
+    double lastTimer = -2*( gui->timerCallbackMilliseconds()/1000. );
     while( !glfwWindowShouldClose(window) ) {
         // Draw
         gui->draw();
@@ -76,6 +77,8 @@ int main( int argc, char* argv[] )
         
         // Poll for and process events. Wait timerCallbackMilliseconds.
         // If timerCallbackSeconds is negative, then we don't refresh.
+        // Get this number inside the loop so the gui can change it dynamically if needed.
+        const double timerCallbackSeconds = gui->timerCallbackMilliseconds()/1000.;
         if( timerCallbackSeconds < 0 ) glfwWaitEvents();
         else {
             double now = glfwGetTime();
