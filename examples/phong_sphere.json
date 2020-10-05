@@ -1,5 +1,5 @@
 {
-    "PipelineGUI": "GLGUI",
+    "PipelineGUI": "FancyScene",
     "TimerMilliseconds": -1,
     
     "shaders": {

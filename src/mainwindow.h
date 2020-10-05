@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <string>
 
-namespace graphics101 { class GLGUI; }
+namespace graphics101 { class FancyScene; }
 
 class MainWindow : public QMainWindow
 {
@@ -23,7 +23,7 @@ private:
     void createMenus();
     bool saveFile(const QByteArray &fileFormat);
 
-    graphics101::GLGUI *glGUI;
+    graphics101::FancyScene *glGUI;
 
     QMenu *fileMenu;
     QMenu *helpMenu;

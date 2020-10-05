@@ -1,12 +1,10 @@
-#ifndef __glscene_h__
-#define __glscene_h__
+#ifndef __fancyscene_h__
+#define __fancyscene_h__
 
 #include "types.h"
+#include "pipelineguifactory.h"
 
 // Forward declarations.
-// This header can't directly include any OpenGL or Qt headers,
-// because it gets included by Qt and anti-Qt compilation units.
-class QMouseEvent;
 #include "glfwd.h"
 namespace graphics101 { class FileWatcher; }
 
@@ -19,19 +17,19 @@ using json = nlohmann::json;
 
 namespace graphics101 {
 
-class GLScene
+class FancyScene : public PipelineGUI
 {
 public:
-    GLScene( const std::string& scene_path, FileWatcher* watcher = nullptr );
-    ~GLScene();
+    FancyScene( const std::string& scene_path, FileWatcher* watcher = nullptr );
+    ~FancyScene();
 
-    void initializeGL();
-    void resizeGL( int w, int h );
-    void paintGL();
+    void init();
+    void resize( int w, int h );
+    void draw();
 
-    void mousePressEvent( QMouseEvent* event );
-    void mouseMoveEvent( QMouseEvent* event );
-    void mouseReleaseEvent( QMouseEvent* event );
+    void mousePressEvent( const Event& event );
+    void mouseMoveEvent( const Event& event );
+    void mouseReleaseEvent( const Event& event );
     void timerEvent( real seconds_since_creation );
     
 private:

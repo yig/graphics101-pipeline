@@ -5,7 +5,7 @@
 
 MainWindow::MainWindow( const std::string& scene_path )
 {
-    glGUI = new graphics101::GLGUI( scene_path );
+    glGUI = new graphics101::FancyScene( scene_path );
     setCentralWidget( glGUI );
 
     createActions();
@@ -27,7 +27,7 @@ void MainWindow::open()
     if( filePath.isEmpty() ) return;
     
     // https://stackoverflow.com/questions/4214369/how-to-convert-qstring-to-stdstring
-    glGUI = new graphics101::GLGUI( filePath.toUtf8().constData() );
+    glGUI = new graphics101::FancyScene( filePath.toUtf8().constData() );
     setCentralWidget( glGUI );
 }
 

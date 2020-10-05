@@ -1,12 +1,10 @@
-#include "glsimplescene.h"
+#include "simplescene.h"
 
 #include "types.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
 using std::cerr;
-
-#include <QMouseEvent>
 
 #include <unordered_set>
 
@@ -18,16 +16,13 @@ using std::cerr;
 #include "mesh.h"
 #include "drawable.h"
 #include "camera.h"
+#include "parsing.h"
 
 #include "glcompat.h"
 
 // For parsing scene JSON files.
 #include "json.hpp"
 using json = nlohmann::json;
-
-// To get relative paths.
-#include <QDir>
-#include <QFileInfo>
 
 using namespace graphics101;
 
@@ -82,33 +77,28 @@ std::string file_as_string( const std::string& path ) {
     buffer << infile.rdbuf();
     return buffer.str();
 }
+
 std::string path_relative_to_scene( const std::string& scene_path, const std::string& path ) {
-    return QDir::toNativeSeparators( ( QFileInfo( QString( scene_path.c_str() ) ).dir().path() + "/" ) + path.c_str() ).toStdString();
+    return pathRelativeToFile( path, scene_path );
+    // const std::string result = pathRelativeToFile( path, scene_path );
+    // std::cerr << "path_relative_to_scene( " << scene_path << ", " << path << " ): " << result << '\n';
+    // return result;
 }
 
 }
 
 namespace graphics101 {
 
-GLSimpleScene::GLSimpleScene( const std::string& scene_path )
+SimpleScene::SimpleScene( const std::string& scene_path )
 {
     m_scene_path = scene_path;
 }
 // Without this line, we can't use the forward declaration of Drawable in a unique_ptr<>.
 // From: https://stackoverflow.com/questions/13414652/forward-declaration-with-unique-ptr
 // From: https://stackoverflow.com/questions/6012157/is-stdunique-ptrt-required-to-know-the-full-definition-of-t
-GLSimpleScene::~GLSimpleScene() = default;
+SimpleScene::~SimpleScene() = default;
 
-void GLSimpleScene::initializeGL() {
-    
-    // Initialize gl3w.
-    if( gl3wInit() ) {
-        std::cerr << "Failed to initialize OpenGL\n";
-    }
-    if( !gl3wIsSupported(3,3) ) {
-        std::cerr << "OpenGL 3.3 is not supported\n";
-    }
-    std::cout << "OpenGL " << glGetString(GL_VERSION) << ", GLSL " << glGetString(GL_SHADING_LANGUAGE_VERSION) << "\n";
+void SimpleScene::init() {
     
     // Turn on some standard OpenGL stuff.
     
@@ -122,7 +112,7 @@ void GLSimpleScene::initializeGL() {
     this->loadScene( m_scene_path );
 }
 
-void GLSimpleScene::loadScene( const std::string& scene_path ) {
+void SimpleScene::loadScene( const std::string& scene_path ) {
     
     m_drawable = Drawable::makePtr();
     
@@ -142,23 +132,23 @@ void GLSimpleScene::loadScene( const std::string& scene_path ) {
     glClearColor( 1.0, 0.0, 0.0, 1.0 );
 }
 
-void GLSimpleScene::resizeGL( int w, int h ) {
+void SimpleScene::resize( int w, int h ) {
     glViewport(0,0,w,h);
 }
 
-void GLSimpleScene::paintGL() {
+void SimpleScene::draw() {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     
     m_drawable->bind();
     m_drawable->draw();
 }
 
-void GLSimpleScene::mousePressEvent( QMouseEvent* event ) {}
-void GLSimpleScene::mouseMoveEvent( QMouseEvent* event ) {}
-void GLSimpleScene::mouseReleaseEvent( QMouseEvent* event ) {}
-void GLSimpleScene::timerEvent( real seconds_since_creation ) {
+void SimpleScene::mousePressEvent( const Event& event ) {}
+void SimpleScene::mouseMoveEvent( const Event& event ) {}
+void SimpleScene::mouseReleaseEvent( const Event& event ) {}
+void SimpleScene::timerEvent( real seconds_since_creation ) {
     // Update uniforms here.
-    // paintGL() will be called afterwards.
-    m_drawable->uniforms.storeUniform( "uTime", seconds_since_creation );
+    // draw() will be called afterwards.
+    m_drawable->uniforms.storeUniform( "uTime", GLfloat( seconds_since_creation ) );
 }
 }

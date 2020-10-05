@@ -1,5 +1,5 @@
 {
-    "PipelineGUI": "GLGUI",
+    "PipelineGUI": "FancyScene",
     // -1 means no timer callback, 16 means 60fps.
     // A uniform named uTime will be set storing seconds since launch.
     "TimerMilliseconds": -1,

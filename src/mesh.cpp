@@ -8,6 +8,7 @@
 
 // For glm::scale() and glm::translate().
 #include <glm/gtc/matrix_transform.hpp>
+using namespace glm;
 
 namespace {
 // Helper functions
@@ -44,8 +45,8 @@ void Mesh::computeTangentBitangent() {
     
     
     // Normalize all vectors.
-    for( auto& n : tangents ) { n = glm::normalize(n); }
-    for( auto& n : bitangents ) { n = glm::normalize(n); }
+    for( auto& n : tangents ) { n = normalize(n); }
+    for( auto& n : bitangents ) { n = normalize(n); }
 }
 
 void Mesh::computeNormals( MeshNormalStrategy strategy ) {
@@ -83,7 +84,7 @@ void Mesh::applyTransformation( const mat4& transform ) {
     // Your code goes here.
     
     // Don't forget to multiply the normals by the inverse-transpose of `mat3(transform)`.
-    // Don't forget to glm::normalize() your normals, too.
+    // Don't forget to normalize() your normals, too.
     
     // A convenient way to iterate over positions with a modifiable reference is:
     // for( vec3& pos : positions ) { pos = ... }

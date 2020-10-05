@@ -3,22 +3,20 @@ find_package(glfw3 3.3 REQUIRED)
 
 add_executable(pipeline
     camera.cpp
+    dialogs.cpp
     drawable.cpp
     filewatchermtime.cpp
     gl3w.c
+    main.cpp
     mesh.cpp
     parsing.cpp
     shaderprogram.cpp
     texture.cpp
     vao.cpp
     
-    glgui.cpp
-    glscene.cpp
-    glsimplescene.cpp
-    main.cpp
-    mainwindow.cpp
-    simplegui.cpp
+    simplescene.cpp
     pipelineguifactory.cpp
+    fancyscene.cpp
 
 )
 

@@ -1,13 +1,9 @@
-#include "glscene.h"
+#include "fancyscene.h"
 
 #include "types.h"
 #include <fstream>
 #include <iostream>
 using std::cerr;
-
-#include <QMouseEvent>
-#include <QFileInfo>
-#include <QDir>
 
 #include "parsing.h"
 #include "filewatcher.h"
@@ -76,7 +72,7 @@ VertexAndFaceArraysPtr vaoFromOBJPath( const std::string& path, const ShaderProg
 
 namespace graphics101 {
 
-GLScene::GLScene( const std::string& scene_path, FileWatcher* watcher )
+FancyScene::FancyScene( const std::string& scene_path, FileWatcher* watcher )
 {
     m_scene_path = scene_path;
     
@@ -85,9 +81,9 @@ GLScene::GLScene( const std::string& scene_path, FileWatcher* watcher )
 // Without this line, we can't use the forward declaration of Drawable in a unique_ptr<>.
 // From: https://stackoverflow.com/questions/13414652/forward-declaration-with-unique-ptr
 // From: https://stackoverflow.com/questions/6012157/is-stdunique-ptrt-required-to-know-the-full-definition-of-t
-GLScene::~GLScene() = default;
+FancyScene::~FancyScene() = default;
 
-void GLScene::initializeGL() {
+void FancyScene::init() {
     
     // Initialize gl3w.
     if( gl3wInit() ) {
@@ -110,7 +106,7 @@ void GLScene::initializeGL() {
     this->loadScene();
 }
 
-void GLScene::loadScene() {
+void FancyScene::loadScene() {
     // Mark that we are no longer out-of-date with the parsed info.
     this->m_scene_changed = false;
     
@@ -153,7 +149,7 @@ void GLScene::loadScene() {
     }
 }
 
-void GLScene::loadShaders() {
+void FancyScene::loadShaders() {
     assert( m_drawable && m_drawable->program );
     
     // Mark that we are no longer out-of-date with the parsed info.
@@ -179,7 +175,7 @@ void GLScene::loadShaders() {
     }
 }
 
-void GLScene::loadMesh() {
+void FancyScene::loadMesh() {
     assert( m_drawable && m_drawable->program );
     
     // Mark that we are no longer out-of-date with the parsed info.
@@ -207,7 +203,7 @@ void GLScene::loadMesh() {
     }
 }
 
-void GLScene::loadUniforms() {
+void FancyScene::loadUniforms() {
     assert( m_drawable && m_drawable->program );
     
     // Mark that we are no longer out-of-date with the parsed info.
@@ -250,7 +246,7 @@ void GLScene::loadUniforms() {
     if( last_texture_names_in_bind_order != m_texture_names_in_bind_order ) m_textures_changed = true;
 }
 
-void GLScene::loadTextures() {
+void FancyScene::loadTextures() {
     assert( m_drawable && m_drawable->program );
     
     // Mark that we are no longer out-of-date with the parsed info.
@@ -301,7 +297,7 @@ void GLScene::loadTextures() {
     }
 }
 
-void GLScene::reloadChanged() {
+void FancyScene::reloadChanged() {
     // loadScene() first, because it marks the others dirty.
     if( this->m_scene_changed   ) this->loadScene();
     if( this->m_shader_changed  ) this->loadShaders();
@@ -320,10 +316,10 @@ ivec2 window_dimensions() {
 }
 }
 
-void GLScene::resizeGL( int w, int h ) {
+void FancyScene::resize( int w, int h ) {
     glViewport(0,0,w,h);
 }
-void GLScene::setPerspectiveMatrix() {
+void FancyScene::setPerspectiveMatrix() {
     const auto width_and_height = window_dimensions();
     const int w = width_and_height[0];
     const int h = width_and_height[1];
@@ -335,7 +331,7 @@ void GLScene::setPerspectiveMatrix() {
     const mat4 projection = Camera::perspective_matrix_for_unit_cube( w, h, 3 );
     m_drawable->uniforms.storeUniform( "uProjectionMatrix", projection );
 }
-void GLScene::setCameraUniforms() {
+void FancyScene::setCameraUniforms() {
     // We want to set uniforms. We need a drawable.
     assert( m_drawable );
 
@@ -349,7 +345,7 @@ void GLScene::setCameraUniforms() {
     m_drawable->uniforms.storeUniform( "uNormalMatrix", mat3(view) );
 }
 
-void GLScene::paintGL() {
+void FancyScene::draw() {
     reloadChanged();
     
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -362,42 +358,38 @@ void GLScene::paintGL() {
     }
 }
 
-namespace {
-vec2 vecFromQPoint( const QPoint& p ) { return vec2( p.x(), p.y() ); }
-}
-
-void GLScene::mousePressEvent( QMouseEvent* event ) {
+void FancyScene::mousePressEvent( const Event& event ) {
     m_mouse_is_down = true;
-    m_mouse_last_pos = vecFromQPoint( event->pos() );
+    m_mouse_last_pos = vec2( event.x, event.y );
 }
-void GLScene::mouseMoveEvent( QMouseEvent* event ) {
+void FancyScene::mouseMoveEvent( const Event& event ) {
     const auto width_and_height = window_dimensions();
 
-    const auto mouse_pos = vecFromQPoint( event->pos() );
+    const auto mouse_pos = vec2( event.x, event.y );
     auto diff = mouse_pos - m_mouse_last_pos;
-    diff *= M_PI / std::min( width_and_height[0], width_and_height[1] );
+    diff *= pi / std::min( width_and_height[0], width_and_height[1] );
     
     m_camera_rotation += diff;
     // Don't rotate past the north or south pole,
     // or else we will see the object upside-down
     // and then rotating left and right will be backwards.
-    m_camera_rotation.y = glm::clamp( m_camera_rotation.y, real( -M_PI/2 ), real( M_PI/2 ) );
+    m_camera_rotation.y = glm::clamp( real( m_camera_rotation.y ), real( -pi/2 ), real( pi/2 ) );
     
     m_mouse_last_pos = mouse_pos;
 }
-void GLScene::mouseReleaseEvent( QMouseEvent* event ) {
+void FancyScene::mouseReleaseEvent( const Event& event ) {
     m_mouse_is_down = false;
 }
-void GLScene::timerEvent( real seconds_since_creation ) {
+void FancyScene::timerEvent( real seconds_since_creation ) {
     // Update uniforms here.
-    // paintGL() will be called afterwards.
-    m_drawable->uniforms.storeUniform( "uTime", seconds_since_creation );
+    // draw() will be called afterwards.
+    m_drawable->uniforms.storeUniform( "uTime", GLfloat( seconds_since_creation ) );
 }
 
-std::string GLScene::nativePathFromJSONPath( const std::string& path ) const {
-    return QDir::toNativeSeparators( ( QFileInfo( QString( m_scene_path.c_str() ) ).dir().path() + "/" ) + path.c_str() ).toStdString();
+std::string FancyScene::nativePathFromJSONPath( const std::string& path ) const {
+    return pathRelativeToFile( path, m_scene_path );
 }
-StringTransformer GLScene::nativePathFromJSONPathTransformer() const {
+StringTransformer FancyScene::nativePathFromJSONPathTransformer() const {
     return [=]( const std::string& path ) { return this->nativePathFromJSONPath( path ); };
 }
 

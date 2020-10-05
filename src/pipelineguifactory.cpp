@@ -1,9 +1,8 @@
 #include "pipelineguifactory.h"
 
 // Add the headers for your pipelines here.
-#include "simplegui.h"
-#include "mainwindow.h"
-#include "glgui.h"
+#include "simplescene.h"
+#include "fancyscene.h"
 
 #include "parsing.h" // loadJSONFromPath()
 
@@ -14,14 +13,11 @@ using std::cerr;
 namespace graphics101 {
 
 PipelineGUIPtr PipelineGUIFromClassName( const std::string& class_name, const std::string& scene_path ) {
-    if( class_name == "SimpleGUI" ) {
-        return PipelineGUIPtr( new SimpleGUI( scene_path ) );
+    if( class_name == "SimpleScene" ) {
+        return PipelineGUIPtr( new SimpleScene( scene_path ) );
     }
-    else if( class_name == "MainWindow" ) {
-        return PipelineGUIPtr( new MainWindow( scene_path ) );
-    }
-    else if( class_name == "GLGUI" ) {
-        return PipelineGUIPtr( new GLGUI( scene_path ) );
+    else if( class_name == "FancyScene" ) {
+        return PipelineGUIPtr( new FancyScene( scene_path ) );
     }
     // Add your classes here in another "else if" statement.
     else {

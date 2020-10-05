@@ -35,6 +35,21 @@ StringSet parseShader( const json& j, ShaderProgram& program, const StringTransf
 // Returns true if parsing succeeded and false otherwise.
 bool loadJSONFromPath( const std::string& path, json& json_out );
 
+/*
+Given:
+    path: A relative path string.
+    relativeToFile: A path to a file.
+Returns:
+    A string containing `path` relative to the file `relativeToFile`.
+Examples:
+    pathRelativeToFile( "bar.png", "/foo/bar.json" ) -> "/foo/bar.png"
+    pathRelativeToFile( "bar.png", "C:\foo\bar.json" ) -> "C:\foo\bar.png"
+    pathRelativeToFile( "bar.png", "foo/bar.json" ) -> "foo/bar.png"
+    pathRelativeToFile( "bar.png", "bar.json" ) -> "./bar.png"
+    pathRelativeToFile( "/bar.png", "bar.json" ) -> "./bar.png"
+*/
+std::string pathRelativeToFile( const std::string& path, const std::string& relativeToFile );
+
 }
 
 #endif /* __parsing_h__ */

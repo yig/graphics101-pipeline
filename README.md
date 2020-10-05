@@ -21,30 +21,16 @@ Goals:
 Getting Started & Handing In:
 -----------------------------
 
-* This is a programming assignment. The code framework is provided here.
-framework from Piazza.
+* Download or clone this code repository. Don't fork it on GitHub, or else your code will be visible to everyone.
+
+* Follow the instructions to install a working development environment: <https://github.com/yig/graphics101> . You will need to install the [glfw](https://www.glfw.org/) library for this assignment.
+
+  * Mac with Homebrew package manager: `brew install glfw`.
+  * Ubuntu Linux: `sudo apt-get install libglfw3-dev`.
+  * Windows: Use the [binary installer](https://www.glfw.org/).
 
 * The code will be written in GLSL (OpenGL shading language) and C++. You
 are encouraged to write helper functions as you like.
-
-* The program is GUI-based. I have included a Qt Creator project file
-(`pipeline.pro`) so you can write, compile, debug, and run your program in
-this IDE which you are familiar with. The code for this project makes
-use of Qt only to setup an OpenGL window and deal with cross-platform
-file system access. The rest is C++ standard library, glm, and GLSL.
-
-* You should have already successfully installed the open source version
-of the Qt environment from the last assignment:
-<https://www.qt.io/download-open-source>
-(At the time of writing, version 5.11 is the newest version. Any 5.x
-version should work. The installer, by default, includes all versions of
-Qt. Save space by installing only the most recent version and a
-compiler.) Mac users with [Homebrew](https://brew.sh/)
-can alternatively install via: `brew install qt` and `brew cask install qt-creator`.
-
-* Download the assignment. This will create a folder named `pipeline`. Open the
-file named `pipeline.pro`. This should launch the Qt Creator development
-environment (IDE).
 
 * There are separate downloads for three large examples. Unzip them and
 move the `head`, `lemon`, and `hercules` directories into your
@@ -59,18 +45,18 @@ file. That way you can specify a command-line argument in Qt Creator and
 simply run. Run these two JSON scene files to verify that everything is
 working. They don't depend on any code you write:
 
-        simplegui.json
+        simplescene.json
         sphere.json
 
     You should see:
 
-    ![simplegui.json](docs/images/simplegui.png)
+    ![simplescene.json](docs/images/simplescene.png)
     ![sphere.json](docs/images/sphere.jpg)
 
 * Create your vertex shader and fragment shaders for each shader. Modify
 the JSON scene files as needed. Tangent-space normal mapping will
 require you to modify C++ code (`mesh.cpp`'s `computeTangentBitangent()`
-and `glscene.cpp`'s `vaoFromOBJPath()`).
+and `fancyscene.cpp`'s `vaoFromOBJPath()`).
 
     * You should have filled in `mesh.cpp`'s other functions in the previous homework on [meshes](https://github.com/yig/graphics101-meshes).
 
@@ -93,14 +79,16 @@ scenes into an output subdirectory `screenshots`.
 trickier. When there is a GLSL error, you will see the shader code and
 the line number printed out to *Application Output* in Qt Creator.
 
+* Create a file named `Notes.txt` in the folder. Describe any known issues or extra features or things you attempted but did not finish.
+Name people in the class who deserve a star for
+helping you (not by giving your their code!).
+
 * When done, zip your `pipeline` directory (except for the large
 `head`, `hercules`, and `lemon` folders) along with the `screenshots`
 subdirectory and a *Notes.txt* file as
-*hw06_lastname_firstname.zip* and upload your solution to Blackboard
-before the deadline. Your *Notes.txt* should describe any known issues,
-including things you attempted but did not finish, and extra features.
-Your *Notes.txt* should also note the names of people in the class who
-deserve a star for helping you (not by giving your their code!).
+*hw06_lastname_firstname.zip*.
+Do not include your `build` directory. It is large and unnecessary.
+Upload your solution to Blackboard before the deadline.
 
 * **THIS IS AN INDIVIDUAL, NOT A GROUP ASSIGNMENT. That means all code
 written for this assignment should be original! Although you are
@@ -144,15 +132,11 @@ the global illumination terms the same way (shadow and reflection and
 refraction). In this assignment, you won't be able to implement shadows
 at all. The simplified formula is:
     
-    ![](docs/eqs/phong.png)
-
-    $$K_R I_R + K_T I_T + \sum_L \big( K_A I_{AL} + \big[ K_D I_L ( N \cdot L ) + K_S I_L ( V \cdot R )^n \big] \big)$$
-    
-    *K<sub>R</sub> * I<sub>R</sub> +
-    K<sub>T</sub> * I<sub>T</sub> +
-    sum<sub>L</sub> (
-        K<sub>A</sub> * I<sub>AL</sub>
-        + [ K<sub>D</sub> * I<sub>L</sub> * ( N · L ) + K<sub>S</sub> * I<sub>L</sub> * ( V · R )<sup>n</sup> ] )*
+    *K<sub>R</sub> I<sub>R</sub> +
+    K<sub>T</sub> I<sub>T</sub> +
+    ∑<sub>L</sub> (
+        K<sub>A</sub> I<sub>AL</sub>
+        + [ K<sub>D</sub> I<sub>L</sub> ( N · L ) + K<sub>S</sub> I<sub>L</sub> ( V · R )<sup>n</sup> ] )*
 
     (Some equations are shown 3 ways because GitHub's Markdown processing doesn't handle math well.)
 
@@ -202,17 +186,15 @@ coordinates.
     * **(20 points)** Fragment shader `phong.fs`. Implement ambient, diffuse,
 and specular illumination.
 
-        * **(2 points)** Ambient lighting: *K<sub>A</sub> I<sub>AL</sub>*. (In TeX, $K_A I_{AL}$.)
+        * **(2 points)** Ambient lighting: *K<sub>A</sub> I<sub>AL</sub>*.
 
-        * **(8 point)** Diffuse lighting: *K<sub>D</sub> * I<sub>L</sub> * ( N · L )*.
-(In TeX, $K_D I_L ( N \cdot L )$).
+        * **(8 point)** Diffuse lighting: *K<sub>D</sub> I<sub>L</sub> ( N · L )*.
 *N* is the (normalized) surface normal vector
 and *L* is the (normalized) vector from the surface position to the light's position.
 Note that if this dot product is negative, then the light is behind the surface
 and you should not add diffuse OR specular lighting.
 
-        * **(10 points)** Specular lighting: K<sub>S</sub> * I<sub>L</sub> * ( V · R )<sup>n</sup>.
-(In TeX, $K_S I_L ( V \cdot R )^n$.)
+        * **(10 points)** Specular lighting: K<sub>S</sub> I<sub>L</sub> ( V · R )<sup>n</sup>.
 *V* is the (normalized) vector from the surface position to the eye position.
 In eye-space the eye is located at the origin. *R* is the (normalized)
 direction from the surface position to the light position, reflected
@@ -248,11 +230,7 @@ The scalar brightness value *F* is computed with a simplified Phong reflectance
 in which no material colors *K* appear and the light color terms `.color_ambient` and `.color`
 are simplified into scalar intensities:
 
-    ![](docs/eqs/cel.png)
-    
-    $$F = \sum_L \big( I_{AL} + \big[ I_L ( N \cdot L ) + I_L ( V \cdot R )^n  \big] \big)$$
-
-    *F = sum<sub>L</sub> I<sub>AL</sub> + I<sub>L</sub> * ( N · L ) + I<sub>L</sub> * ( V · R )<sup>n</sup>*
+    *F = ∑<sub>L</sub> (I<sub>AL</sub> + [I<sub>L</sub> ( N · L ) + I<sub>L</sub> ( V · R )<sup>n</sup>])*
 
     Use the integer uniform `material.bands` to round *F* into discrete levels:
 *F<sub>discrete</sub>* = min( floor( *F* * *F* * `material.bands` ), `material.bands` - 1 )/( `material.bands` - 1).
@@ -274,7 +252,7 @@ stored as vectors in the *tangent space* of the surface. This technique
 requires you to compute a "tangent frame" for each vertex (tangent and
 bitangent vectors to accompany the normal) and upload that to the GPU as
 additional attributes. To do this, you will implement `mesh.cpp`
-`computeTangentBitangent()` to compute the tangent frame and `glscene.cpp`
+`computeTangentBitangent()` to compute the tangent frame and `fancyscene.cpp`
 `vaoFromOBJPath()` to upload the additional attributes to the GPU.
 (Computing and uploading this additional data for this shader won't get
 in the way of the other shaders.) Each face has a well-defined tangent
@@ -377,8 +355,8 @@ will probably initialize to random values.) Manually initialize to 0,
 `vec3 foo = vec3(0);`, if that's what you want.
 
 * There is a simple, sample 3D shader in `sphere.json` / `sphere.vs` /
-`sphere.fs`. (The simplest possible shader is in `simplegui.json` /
-`simplest.vs` / `simplest.fs` and is based off the `simplegui.h/cpp` C++ setup
+`sphere.fs`. (The simplest possible shader is in `simplescene.json` /
+`simplest.vs` / `simplest.fs` and is based off the `simplescene.h/cpp` C++ setup
 code.)
 
 * To convert a position from world-space to eye-space, left-multiply the
@@ -406,7 +384,7 @@ formula and above diagram. GLSL's `reflect()` takes **v** pointed towards the
 surface, not away from it (that is, negated), so `r=reflect(-v,n)`.
 
 * All of the required portions of the assignment can use the same C++
-setup code (defined in `glscene.cpp`/`glscene.h`) and differ only in which
+setup code (defined in `fancyscene.cpp`/`fancyscene.h`) and differ only in which
 shaders and uniforms are specified in the JSON file. (Only normal
 mapping requires you to modify some of the C++ setup code.)
 
@@ -421,21 +399,16 @@ Phong shading could share a bottom but have different middle files implementing
 an appropriate `get_normal()` function).
 
 * You can create your own C++ scene if you want to customize the camera or
-attributes. You will need to duplicate the proxy class (`SimpleGUI` or
-`GLGUI`) and register it with `pipelineguifactory.cpp`. For reference, you
-can see/study the simplest-possible OpenGL scene in `glsimplescene.h` and
-`glsimplescene.cpp`.
+attributes. You will need to duplicate the scene class (`SimpleScene` or
+`FancyScene`) and register it with `pipelineguifactory.cpp`. For reference, you
+can see/study the simplest-possible OpenGL scene in `simplescene.h` and
+`simplescene.cpp`.
 
-* Almost everything in a JSON scene will live reload in if using a
-`GLScene`, including shaders, uniforms, and textures. The only two
+* Almost everything in a JSON scene will live reload if using a
+`FancyScene`, including shaders, uniforms, and textures. The only two
 properties that will not live reload are `PipelineGUI` and
 `TimerMilliseconds`.
 
 * You can find lots of Creative Commons environment (cube) maps on the
 website of Emil Persson, aka Humus:
 <http://www.humus.name>
-
-Qt functions you need for this assignment
------------------------------------------
-
-**None**

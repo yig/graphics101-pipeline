@@ -249,4 +249,37 @@ bool loadJSONFromPath( const std::string& path, json& json_out ) {
     return true;
 }
 
+namespace {
+// Returns the directory prefix part of the path to the file.
+// Always returns the trailing slash if there is a directory.
+// Examples:
+// getDirectoryPrefix( "/foo/bar.json" ) -> "/foo/"
+// getDirectoryPrefix( "C:\foo\bar.json" ) -> "C:\foo\"
+// getDirectoryPrefix( "foo/bar.json" ) -> "foo/"
+// getDirectoryPrefix( "bar.json" ) -> "./"
+std::string getDirectoryPrefix( const std::string& path_to_file ) {
+    // https://stackoverflow.com/questions/3071665/getting-a-directory-name-from-a-filename/3071694#3071694
+    const auto found = path_to_file.find_last_of(
+#ifdef _WIN32
+        // Both kinds of slashes are valid path separators on Windows.
+        "/\\"
+#else
+        "/"
+#endif
+        );
+    // If there are no directory separators, then `path_to_file` is in the
+    // current working directory.
+    if( found == std::string::npos ) {
+        return "./";
+    }
+    
+    // The prefix is everything up to and including the last slash.
+    return path_to_file.substr( 0, found+1 );
+}
+}
+
+std::string pathRelativeToFile( const std::string& path, const std::string& relativeToFile ) {
+    return getDirectoryPrefix( relativeToFile ) + path;
+}
+
 }

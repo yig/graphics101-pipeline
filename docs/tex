@@ -1,0 +1,10 @@
+    ![](docs/eqs/phong.png)
+
+    $$K_R I_R + K_T I_T + \sum_L \big( K_A I_{AL} + \big[ K_D I_L ( N \cdot L ) + K_S I_L ( V \cdot R )^n \big] \big)$$
+    
+
+    ![](docs/eqs/cel.png)
+    
+    $$F = \sum_L \big( I_{AL} + \big[ I_L ( N \cdot L ) + I_L ( V \cdot R )^n  \big] \big)$$
+
+    

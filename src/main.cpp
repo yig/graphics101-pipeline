@@ -1,54 +1,103 @@
-#include <QApplication>
-#include <QSurfaceFormat>
-#include <QFileDialog>
-#include <QMessageBox>
+#define GLFW_INCLUDE_NONE
+#include "GLFW/glfw3.h"
+#include "glcompat.h"
 
-#include "mainwindow.h"
+#include <iostream>
+
+#include "dialogs.h"
 #include "pipelineguifactory.h"
 
 int main( int argc, char* argv[] )
 {
-    // Request OpenGL Core Profile.
-    // According to the docs, we need to set the default format
-    // before QApplication is created.
-    // From: http://doc.qt.io/qt-5/qopenglwidget.html#details
-    QSurfaceFormat format;
-    format.setRenderableType( QSurfaceFormat::OpenGL );
-    format.setProfile( QSurfaceFormat::CoreProfile );
-    // 3.3 has a bunch of shading language improvements we want.
-    format.setVersion( 3,3 );
-    QSurfaceFormat::setDefaultFormat( format );
+    // Initialize GLFW and request an OpenGL Core Profile
+    if( !glfwInit() ) {
+        std::cerr << "Failed to initialize GLFW\n";
+        return -1;
+    }
+    glfwWindowHint(GLFW_SAMPLES, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     
-    // Request desktop OpenGL drivers.
-    // From: http://doc.qt.io/qt-5/windows-requirements.html
-    QCoreApplication::setAttribute( Qt::AA_UseDesktopOpenGL, true );
+    // Create a window
+    GLFWwindow *window = glfwCreateWindow( 500, 500, "GPU Pipeline", 0, 0 );
+    if( !window )
+    {
+        std::cerr << "Failed to create a window\n";
+        glfwTerminate();
+        return -1;
+    }
+    glfwMakeContextCurrent( window );
+    glfwSwapInterval( 1 );
     
-    QApplication app(argc, argv);
-    
-    // MainWindow window;
-    // window.show();
+    // Initialize gl3w.
+    if( gl3wInit() ) {
+        std::cerr << "Failed to initialize OpenGL\n";
+        return -1;
+    }
+    if( !gl3wIsSupported(3,3) ) {
+        std::cerr << "OpenGL 3.3 is not supported\n";
+        return -1;
+    }
+    std::cout << "OpenGL " << glGetString(GL_VERSION) << ", GLSL " << glGetString(GL_SHADING_LANGUAGE_VERSION) << "\n";
     
     std::string scene_path;
     if( argc == 2 ) {
         scene_path = argv[1];
     } else {
-        const QString qscene_path = QFileDialog::getOpenFileName( 0, "Open Scene", QString(), "Scene JSON Files (*.js *.json)");
+        const std::string scene_path = graphics101::loadFileDialog( "Open Scene", "", "Scene JSON Files (*.js *.json)" );
         // If the user cancels, length will be zero.
-        if( qscene_path.length() == 0 ) {
+        if( scene_path.size() == 0 ) {
             // If the user cancels, don't show them an error. They cancelled. Just let them quit.
-            // QMessageBox::critical( 0, "Error", "You must select a JSON scene file to proceed." );
+            // errorDialog( "Error", "You must select a JSON scene file to proceed." );
             return -1;
         }
-        scene_path = qscene_path.toStdString();
     }
     
     graphics101::PipelineGUIPtr gui = graphics101::PipelineGUIFromScenePath( scene_path );
     if( !gui ) {
-        QMessageBox::critical( 0, "Error", "Unable to load scene. Check console for details." );
+        graphics101::errorDialog( "Error", "Unable to load scene. Check console for details." );
         return -1;
     }
     
-    gui->show();
-
-    return app.exec();
+    gui->init();
+    
+    // The timer has never been called, so `lastTimer`
+    // is earlier than the program start time.
+    const double timerCallbackSeconds = gui->timerCallbackMilliseconds()/1000.;
+    double lastTimer = -2*timerCallbackSeconds;
+    while( !glfwWindowShouldClose(window) ) {
+        // Draw
+        gui->draw();
+        
+        // Swap front and back buffers
+        glfwSwapBuffers(window);
+        
+        // Poll for and process events. Wait timerCallbackMilliseconds.
+        // If timerCallbackSeconds is negative, then we don't refresh.
+        if( timerCallbackSeconds < 0 ) glfwWaitEvents();
+        else {
+            double now = glfwGetTime();
+            const double waitTime = lastTimer + timerCallbackSeconds - now;
+            
+            // glfwWaitEventsTimeout() requires a positive number.
+            if( waitTime > 0 ) glfwWaitEventsTimeout( waitTime );
+            else glfwPollEvents();
+            
+            now = glfwGetTime();
+            if( now - lastTimer > timerCallbackSeconds ) {
+                gui->timerEvent( now );
+                
+                // If we can't keep up with the frame rate, we slow down but don't
+                // try to catch up later.
+                lastTimer = now;
+                // Try to catch up. If we can't keep up, we will run as fast as possible.
+                // lastTimer += timerCallbackSeconds;
+            }
+        }
+    }
+    
+    glfwTerminate();
+    return 0;
 }

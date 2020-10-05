@@ -33,7 +33,7 @@ public:
     
     void use() const;
 
-    // Called by the GLScene or whomever.
+    // Called by the FancyScene or whomever.
     void setUniform( const std::string& name, GLfloat value );
     void setUniform( const std::string& name, const vec2& value );
     void setUniform( const std::string& name, const vec3& value );
