@@ -126,7 +126,7 @@ int main( int argc, char* argv[] ) {
     if( argc == 2 ) {
         scene_path = argv[1];
     } else {
-        const std::string scene_path = graphics101::loadFileDialog( "Open Scene", "", "Scene JSON Files (*.js *.json)" );
+        scene_path = graphics101::loadFileDialog( "Open Scene", "", "Scene JSON Files (*.js *.json)" );
         // If the user cancels, length will be zero.
         if( scene_path.size() == 0 ) {
             // If the user cancels, don't show them an error. They cancelled. Just let them quit.

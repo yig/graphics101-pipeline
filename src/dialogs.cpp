@@ -10,10 +10,12 @@
 namespace graphics101 {
 
 std::string loadFileDialog( const std::string& message, const std::string& start_dir, const std::string& filter ) {
-    std::cerr << message << '\n';
-    std::cerr << "Type a " << filter << " filename to load relative to the following path: " << start_dir << '\n';
+    std::cout << message << '\n';
+    std::cout << "Type a " << filter << " filename to load: ";
+    std::cout.flush();
     std::string path;
     std::getline( std::cin, path );
+    // getline() returns a string with the newline appended. Trim it off.
     if( !path.empty() && path.back() == '\n' ) {
         path = path.substr( 0, path.size()-1 );
     }
@@ -21,16 +23,21 @@ std::string loadFileDialog( const std::string& message, const std::string& start
 }
 
 std::string saveFileDialog( const std::string& message, const std::string& suggested_path, const std::string& filter ) {
-    std::cerr << message << '\n';
-    std::cerr << "Type a " << filter << " filename to save or press return to accept the default path: " << suggested_path << '\n';
+    std::cout << message << '\n';
+    std::cout << "Type a " << filter << " filename to save or press return to accept the default path: " << suggested_path << '\n';
+    std::cout << "Filename: ";
+    std::cout.flush();
     std::string path;
     std::getline( std::cin, path );
+    // getline() returns a string with the newline appended. Trim it off.
     if( !path.empty() && path.back() == '\n' ) {
         path = path.substr( 0, path.size()-1 );
     }
     
-    // If the path is empty, then the user accepts the default.
-    // This means there is no way to cancel.
+    // If the user inputs an empty string, then path is empty.
+    // We take that to mean that the user accepts the `suggested_path`.
+    // This means we don't provide the user a way to cancel,
+    // which is an option they usually have with a dialog box.
     if( path.empty() ) return suggested_path;
     
     return path;
