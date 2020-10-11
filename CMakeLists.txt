@@ -28,4 +28,4 @@ add_executable(pipeline
 )
 
 target_include_directories(pipeline PUBLIC include)
-target_link_libraries(pipeline glfw)
+target_link_libraries(pipeline glfw ${CMAKE_DL_LIBS})
