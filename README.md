@@ -84,10 +84,9 @@ Name people in the class who deserve a star for
 helping you (not by giving your their code!).
 
 * When done, zip your `pipeline` directory (except for the large
-`head`, `hercules`, and `lemon` folders) along with the `screenshots`
-subdirectory and a *Notes.txt* file as
-*hw06_lastname_firstname.zip*.
-Do not include your `build` directory. It is large and unnecessary.
+`build`, `examples/head`, `examples/hercules`, and `examples/lemon` directories)
+along with the `screenshots` subdirectory and a *Notes.txt* file as *pipeline.zip*.
+Use the `cpack` command from inside your build directory to do all this for you.
 Upload your solution to Blackboard before the deadline.
 
 * **THIS IS AN INDIVIDUAL, NOT A GROUP ASSIGNMENT. That means all code
