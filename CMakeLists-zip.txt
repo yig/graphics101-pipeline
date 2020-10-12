@@ -1,0 +1,33 @@
+# A custom target to create a zip file to handin.
+
+# Describe the package to create. Run "make package" or "cpack".
+
+# Install only what we specify.
+install(FILES
+    "Notes.txt"
+    "CMakeLists.txt"
+    "CMakeLists-zip.txt"
+    DESTINATION .
+)
+install(FILES
+    ${SRCS}
+    DESTINATION "src"
+)
+# No trailing slash after "${SCREENSHOTS}" preserves the "output" directory in the zip.
+install(DIRECTORY "${SCREENSHOTS}"
+    DESTINATION .
+    PATTERN ".DS_Store" EXCLUDE
+)
+install(DIRECTORY "${EXAMPLES}"
+    DESTINATION .
+    REGEX "${EXAMPLES}/head" EXCLUDE
+    REGEX "${EXAMPLES}/hercules" EXCLUDE
+    REGEX "${EXAMPLES}/lemon" EXCLUDE
+    PATTERN ".DS_Store" EXCLUDE
+)
+
+set(CPACK_GENERATOR "ZIP")
+set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}")
+set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
+set(CPACK_VERBATIM_VARIABLES YES)
+include(CPack)
