@@ -1,6 +1,8 @@
 #ifndef __kinematics_h__
 #define __kinematics_h__
 
+#include "types.h"
+
 namespace graphics101 {
 
 struct bone {
