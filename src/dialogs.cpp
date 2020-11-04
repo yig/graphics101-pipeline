@@ -6,6 +6,8 @@
 // https://stackoverflow.com/questions/6145910/cross-platform-native-open-save-file-dialogs
 // https://github.com/AndrewBelt/osdialog
 // https://github.com/mlabbe/nativefiledialog
+// https://github.com/guillaumechereau/noc/blob/master/noc_file_dialog.h
+// https://sourceforge.net/projects/tinyfiledialogs/
 
 namespace graphics101 {
 
