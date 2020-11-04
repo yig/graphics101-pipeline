@@ -5,27 +5,34 @@
 
 namespace graphics101 {
 
-struct bone {
+struct Bone {
     // The child end point of the bone's rest pose.
     vec3 end = vec3(0,0,0);
     
-    // The start point of the bone line segment is `bones[parent_index].end`.
+    // The start point of the bone line segment is `skeleton[parent_index].end`.
     // The root has `parent_index` = -1. It does not have an associated line segment.
     int parent_index = -1;
-    
-    // The local transformation matrix associated with the bone.
-    // The default value is an identity matrix (ones along the diagonal).
-    mat4 transform = mat4(1);
 };
-typedef std::vector< bone > Skeleton;
+// A Skeleton is a collection of Bones.
+typedef std::vector< Bone > Skeleton;
+/*
+A MatrixPose is an array of transformations matrices, one per bone.
+The matrices can transform each bone's local coordinates to
+its parent's coordinate system or to world-space.
+The function `forward_kinematics()` converts a bone-to-parent Pose to a bone-to-world Pose.
+*/
+typedef std::vector< mat4 > MatrixPose;
 
 /*
 Given:
-    skeleton: A Skeleton
+    skeleton: A Skeleton.
+    bone2parent: A Pose with transformations from each bone's local coordinates
+                 to its parent's coordinates.
 Returns:
-    A matrix for each `bone` in `skeleton` computed using forward kinematics.
+    bone2world: A Pose with transformation from each bone's local coordinates
+                to world-space, computed using forward kinematics.
 */
-std::vector< mat4 > forward_kinematics( const Skeleton& skeleton );
+MatrixPose forward_kinematics( const Skeleton& skeleton, const MatrixPose& bone2parent );
 
 }
 

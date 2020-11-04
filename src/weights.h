@@ -27,8 +27,8 @@ Returns two elements via `std::make_pair( a, b )`. Each element can be accessed 
     .second: A vec4 whose elements are the distances to the closest line segments in `segments`,
              in the same order.
     
-    If k < 4, some elements in the `ivec4` will be -1 and the corresponding elements
-    in the `vec4` are undefined.
+    If k < 4 or there are less than 4 segments, some elements in the `ivec4`
+    will be -1 and the corresponding elements in the `vec4` are undefined.
 */
 std::pair< ivec4, vec4 > k_closest_distances( vec3 point, const std::vector< vec3 >& line_points, const std::vector< ivec2 >& segments, int k );
 
