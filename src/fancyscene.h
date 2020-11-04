@@ -55,11 +55,11 @@ protected:
     void loadUniforms();
     void loadTextures();
     
-    // Transforms a path in the JSON file to a native path that can
-    // be opened with a file system call. This does two things:
-    // 1) Prepends the base directory of the scene file.
-    //    For example, "my_scene_files/scene.json" would prepend "my_scene_files/".
-    // 2) Converts slashes `/` to the native path separator (`\` on Windows).
+    // Transforms a path in the JSON file to a path that can
+    // be opened with a file system call by prepending
+    // the base directory of the scene file. For example,
+    // the scene path "my_scene_files/scene.json" prepends "my_scene_files/"
+    // to paths.
     std::string nativePathFromJSONPath( const std::string& path ) const;
     StringTransformer nativePathFromJSONPathTransformer() const;
     

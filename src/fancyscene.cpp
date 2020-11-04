@@ -302,6 +302,9 @@ void FancyScene::loadTextures() {
 }
 
 void FancyScene::reloadChanged() {
+    // Check the filesystem for changes.
+    m_watcher.poll();
+    
     // loadScene() first, because it marks the others dirty.
     if( this->m_scene_changed   ) this->loadScene();
     if( this->m_shader_changed  ) this->loadShaders();
@@ -381,9 +384,6 @@ void FancyScene::mouseDragEvent( const Event& event ) {
     m_mouse_last_pos = mouse_pos;
 }
 void FancyScene::timerEvent( real seconds_since_creation ) {
-    // Check the filesystem for changes.
-    m_watcher.poll();
-    
     // Update uniforms here.
     // draw() will be called afterwards.
     m_drawable->uniforms.storeUniform( "uTime", GLfloat( seconds_since_creation ) );

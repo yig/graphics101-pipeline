@@ -154,11 +154,10 @@ int main( int argc, char* argv[] ) {
     glfwSetMouseButtonCallback( window, mouse_button_callback );
     glfwSetCursorPosCallback( window, cursor_position_callback );
     glfwSetKeyCallback( window, key_callback );
-    // TODO: Keyboard callback 's' for save screenshot: https://vallentin.dev/2013/09/02/opengl-screenshot
     
-    // The timer has never been called, so `lastTimer`
-    // is earlier than the program start time.
-    double lastTimer = -2*( gui->timerCallbackMilliseconds()/1000. );
+    // The timer has never been called, so initialize `lastTimer`
+    // to a time earlier than the program start time minus the callback interval.
+    double lastTimer = -2*( fabs(gui->timerCallbackMilliseconds()/1000.) );
     while( !glfwWindowShouldClose(window) ) {
         // Draw
         gui->draw();
