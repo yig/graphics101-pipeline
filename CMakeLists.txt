@@ -9,6 +9,8 @@ set (CMAKE_CXX_STANDARD 11)
 find_package(glfw3 3.3 REQUIRED)
 
 set(SRCS
+    src/animation.cpp
+    src/animation.h
     src/camera.cpp
     src/camera.h
     src/debugging.h
@@ -22,6 +24,8 @@ set(SRCS
     src/gl3w.c
     src/glcompat.h
     src/glfwd.h
+    src/kinematics.cpp
+    src/kinematics.h
     src/main.cpp
     src/mesh.cpp
     src/mesh.h
