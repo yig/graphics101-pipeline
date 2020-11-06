@@ -175,7 +175,7 @@ void FancyScene::loadShaders() {
     }
     
     // Load shaders.
-    const StringSet paths_accessed = parseShader( j["shaders"], *m_drawable->program, nativePathFromJSONPathTransformer() );
+    const StringSet paths_accessed = parseShader( j["shaders"], *m_drawable->program, relativePathFromJSONPathTransformer() );
     
     // Add shader paths to the file watcher.
     for( const auto& path : paths_accessed ) {
@@ -202,7 +202,7 @@ void FancyScene::loadMesh() {
     }
     
     // Pass the program so we have locations for the positions, normals, and texcoords.
-    const auto meshpath = nativePathFromJSONPath( j["mesh"].get<std::string>() );
+    const auto meshpath = relativePathFromJSONPath( j["mesh"].get<std::string>() );
     m_drawable->vao = vaoFromOBJPath( meshpath, *m_drawable->program );
     
     // Add the mesh path to the filewatcher.
@@ -231,7 +231,7 @@ void FancyScene::loadUniforms() {
     
     // If "uniforms" is a string, it's a path to another JSON file. Load it and watch it.
     if( j["uniforms"].is_string() ) {
-        const auto uniformpath = nativePathFromJSONPath( j["uniforms"].get<std::string>() );
+        const auto uniformpath = relativePathFromJSONPath( j["uniforms"].get<std::string>() );
         json j_uniforms;
         const bool success = loadJSONFromPath( uniformpath, j_uniforms );
         if( success ) {
@@ -275,7 +275,7 @@ void FancyScene::loadTextures() {
             
             // Add the texture paths to the filewatcher.
             if( j_textures[name].is_string() ) {
-                const auto fullpath = nativePathFromJSONPath( j_textures[name].get<std::string>() );
+                const auto fullpath = relativePathFromJSONPath( j_textures[name].get<std::string>() );
                 m_drawable->textures.at(i) = Texture2D::makePtr( fullpath );
                 // Add the texture path to the filewatcher.
                 m_watcher.watchPath( fullpath, [=]( const std::string& ) { this->m_textures_changed = true; } );
@@ -284,7 +284,7 @@ void FancyScene::loadTextures() {
                 StringVec fullpaths;
                 fullpaths.resize(6);
                 for( int i = 0; i < 6; ++i ) {
-                    fullpaths.at(i) = nativePathFromJSONPath( j_textures[name][i].get<std::string>() );
+                    fullpaths.at(i) = relativePathFromJSONPath( j_textures[name][i].get<std::string>() );
                     // Add the texture path to the filewatcher.
                     m_watcher.watchPath( fullpaths.at(i), [=]( const std::string& ) { this->m_textures_changed = true; } );
                 }
@@ -393,11 +393,11 @@ int FancyScene::timerCallbackMilliseconds() {
     return m_timerMilliseconds;
 }
 
-std::string FancyScene::nativePathFromJSONPath( const std::string& path ) const {
+std::string FancyScene::relativePathFromJSONPath( const std::string& path ) const {
     return pathRelativeToFile( path, m_scene_path );
 }
-StringTransformer FancyScene::nativePathFromJSONPathTransformer() const {
-    return [=]( const std::string& path ) { return this->nativePathFromJSONPath( path ); };
+StringTransformer FancyScene::relativePathFromJSONPathTransformer() const {
+    return [=]( const std::string& path ) { return this->relativePathFromJSONPath( path ); };
 }
 
 }

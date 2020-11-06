@@ -62,8 +62,8 @@ protected:
     // the base directory of the scene file. For example,
     // the scene path "my_scene_files/scene.json" prepends "my_scene_files/"
     // to paths.
-    std::string nativePathFromJSONPath( const std::string& path ) const;
-    StringTransformer nativePathFromJSONPathTransformer() const;
+    std::string relativePathFromJSONPath( const std::string& path ) const;
+    StringTransformer relativePathFromJSONPathTransformer() const;
     
 private:
     // The object to draw.
