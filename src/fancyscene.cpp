@@ -206,10 +206,11 @@ void FancyScene::loadMesh() {
     
     // Pass the program so we have locations for the positions, normals, and texcoords.
     const auto meshpath = relativePathFromJSONPath( j["mesh"].get<std::string>() );
-    m_drawable->vao = vaoFromOBJPath( meshpath, *m_drawable->program );
-    
     // Add the mesh path to the filewatcher.
     m_watcher.watchPath( meshpath, [=]( const std::string& ) { this->m_mesh_changed = true; } );
+    
+    // Upload the mesh to the GPU.
+    m_drawable->vao = vaoFromOBJPath( meshpath, *m_drawable->program );
 }
 
 void FancyScene::loadUniforms() {
@@ -324,9 +325,12 @@ void FancyScene::loadAnimation() {
     }
     
     const auto BVHpath = relativePathFromJSONPath( j["animation"].get<std::string>() );
-    loadBVH( BVHpath, m_skeleton, m_animation );
     // Add the animation path to the filewatcher.
     m_watcher.watchPath( BVHpath, [=]( const std::string& ) { this->m_animation_changed = true; } );
+    if( !loadBVH( BVHpath, m_skeleton, m_animation ) ) {
+        cerr << "Error loading BVH file: " << BVHpath << '\n';
+        return;
+    }
     
     // Your code goes here.
     

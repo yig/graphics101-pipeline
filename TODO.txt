@@ -1,6 +1,9 @@
 # TODO
 ## Code changes and examples that would benefit the framework
 
+- "Your code goes here" in different files.
+- Drawables of a pyramid, one per bone transformed to its rest orientation, with a copy of the uniforms and an extra index that says which to apply.
+
 + Make a version based on glfw.
     + Qt is used for windowing and some cross-platform path manipulation. The interesting code should all be separated across the GLGUI (Qt) to GLScene (no Qt) divide. The mouse event class does leak across, but that should be easy to change. To rip out path manipulation, one can either assume "/" as the path separator, which windows can actually handle, or one can use the C++17 filesystem class. To implement live reloading, one can implement filewatcher with polling (stat() is pretty much cross platform or there is C++17 filesystem::last_write_time) or else James Wynn's FileWatcher is cross-platform: https://github.com/jameswynn/simplefilewatcher
 
