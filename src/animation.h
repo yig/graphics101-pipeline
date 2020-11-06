@@ -36,6 +36,8 @@ struct BoneAnimation {
     // Frames are spaced this far apart in time.
     // By default, 60 frames/second.
     real seconds_per_frame = 1./60.;
+    
+    void clear() { *this = BoneAnimation(); }
 };
 // Returns the pose obtained by interpolating the Animation's poses
 TRSPose interpolate( const BoneAnimation& animation, real t );

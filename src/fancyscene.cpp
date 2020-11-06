@@ -130,6 +130,7 @@ void FancyScene::loadScene() {
     m_mesh_changed = true;
     m_uniforms_changed = true;
     m_textures_changed = true;
+    m_animation_changed = true;
     
     // Set the clear color.
     glClearColor( 1.0, 0.0, 0.0, 1.0 );
@@ -188,6 +189,8 @@ void FancyScene::loadMesh() {
     
     // Mark that we are no longer out-of-date with the parsed info.
     this->m_mesh_changed = false;
+    // A change in the mesh means that the animation is out-of-date.
+    this->m_animation_changed = true;
     
     // The following code wants the scene JSON called `j`.
     const auto& j = m_scene;
@@ -301,16 +304,49 @@ void FancyScene::loadTextures() {
     }
 }
 
+void FancyScene::loadAnimation() {
+    assert( m_drawable && m_drawable->program );
+    
+    // Mark that we are no longer out-of-date with the parsed info.
+    this->m_animation_changed = true;
+    
+    // The following code wants the scene JSON called `j`.
+    const auto& j = m_scene;
+    
+    /// Load the animation.
+    m_skeleton.clear();
+    m_animation.clear();
+    
+    // Load the skeleton and animation from the BVH.
+    if( j.count("animation") == 0 || !j["animation"].is_string() ) {
+        cerr << "Scene JSON has no animation: " << m_scene_path << '\n';
+        return;
+    }
+    
+    const auto BVHpath = relativePathFromJSONPath( j["animation"].get<std::string>() );
+    loadBVH( BVHpath, m_skeleton, m_animation );
+    // Add the animation path to the filewatcher.
+    m_watcher.watchPath( BVHpath, [=]( const std::string& ) { this->m_animation_changed = true; } );
+    
+    // Your code goes here.
+    
+    // 1. Compute the weights and weight indices.
+    
+    // 2. Upload the weights and weight indices to the GPU.
+    // m_drawable->vao.uploadAttribute( ... );
+}
+
 void FancyScene::reloadChanged() {
     // Check the filesystem for changes.
     m_watcher.poll();
     
     // loadScene() first, because it marks the others dirty.
-    if( this->m_scene_changed   ) this->loadScene();
-    if( this->m_shader_changed  ) this->loadShaders();
-    if( this->m_mesh_changed   ) this->loadMesh();
-    if( this->m_uniforms_changed ) this->loadUniforms();
-    if( this->m_textures_changed ) this->loadTextures();
+    if( this->m_scene_changed     ) this->loadScene();
+    if( this->m_shader_changed    ) this->loadShaders();
+    if( this->m_mesh_changed      ) this->loadMesh();
+    if( this->m_uniforms_changed  ) this->loadUniforms();
+    if( this->m_textures_changed  ) this->loadTextures();
+    if( this->m_animation_changed ) this->loadAnimation();
 }
 
 namespace {
@@ -384,10 +420,20 @@ void FancyScene::mouseDragEvent( const Event& event ) {
     m_mouse_last_pos = mouse_pos;
 }
 void FancyScene::timerEvent( real seconds_since_creation ) {
+    std::cerr << "FancyScene::timerEvent( " << seconds_since_creation << " )\n";
+
     // Update uniforms here.
     // draw() will be called afterwards.
+
     m_drawable->uniforms.storeUniform( "uTime", GLfloat( seconds_since_creation ) );
-    std::cerr << "FancyScene::timerEvent( " << seconds_since_creation << " )\n";
+    
+    // Update the animation.
+    if( !m_skeleton.empty() && !m_animation.poses.empty() ) {
+        // Your code goes here.
+        
+        // 1. Interpolate the animation.
+        // 2. Upload the transformation matrices to the GPU.
+    }
 }
 int FancyScene::timerCallbackMilliseconds() {
     return m_timerMilliseconds;

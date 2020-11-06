@@ -27,8 +27,7 @@ bool loadBVH( const std::string& path, Skeleton& skeleton, BoneAnimation& animat
     using namespace std;
     
     skeleton.clear();
-    animation.poses.clear();
-    animation.seconds_per_frame = -1;
+    animation.clear();
     
     // TODO: Error checking with a printout to std::cerr and return false.
     
