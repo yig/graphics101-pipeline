@@ -22,8 +22,9 @@ inline T strto( const std::string& str, bool& success )
 { std::istringstream converter( str ); T result = T(); success = bool(converter >> result); return result; }
 
 // Return the next word in a stream.
-template< typename T >
-inline T next( std::istream& in ) { T result; in >> result; return result; }
+std::string next( std::istream& in ) { std::string result; in >> result; return result; }
+// We don't need this templated complexity:
+// template< typename T > inline T next( std::istream& in ) { T result; in >> result; return result; }
 }
 
 namespace {
@@ -69,13 +70,13 @@ bool parseBVHHierarchy( std::istream& in, Skeleton& skeleton, std::vector< std::
     // To store the output for the animation.
     
     // Header
-    if( next<string>( in ) != "HIERARCHY" ) {
+    if( next( in ) != "HIERARCHY" ) {
         cerr << "ERROR: BVH file doesn't start with HIERARCHY.\n";
         return false;
     }
     
     while( true ) {
-        const string joint_or_brace = next<string>( in );
+        const string joint_or_brace = next( in );
         // If there is a closing brace, we should eat it and move up the hierarchy.
         if( joint_or_brace == "}" ) {
             parent_index -= 1;
@@ -88,7 +89,7 @@ bool parseBVHHierarchy( std::istream& in, Skeleton& skeleton, std::vector< std::
         Bone bone;
         
         // Read the node type and name.
-        const string node_type = next<string>( in );
+        const string node_type = next( in );
         if( !( node_type == "ROOT" || node_type == "JOINT" || node_type == "End" ) ) {
             cerr << "ERROR: Node type expected.\n";
             return false;
@@ -97,7 +98,7 @@ bool parseBVHHierarchy( std::istream& in, Skeleton& skeleton, std::vector< std::
         // Read the node's name.
         in >> bone.name;
         
-        if( next<string>( in ) != "{" ) {
+        if( next( in ) != "{" ) {
             cerr << "ERROR: { doesn't follow Node declaration.\n";
             return false;
         }
@@ -119,7 +120,7 @@ bool parseBVHHierarchy( std::istream& in, Skeleton& skeleton, std::vector< std::
         }
         
         // Read the offset from the parent.
-        if( next<string>( in ) != "OFFSET" ) {
+        if( next( in ) != "OFFSET" ) {
             cerr << "ERROR: OFFSET doesn't follow {.\n";
             return false;
         }
@@ -136,7 +137,7 @@ bool parseBVHHierarchy( std::istream& in, Skeleton& skeleton, std::vector< std::
         skeleton.push_back( bone );
         
         // If there are channels, read them.
-        if( next<string>( in ) == "CHANNELS" ) {
+        if( next( in ) == "CHANNELS" ) {
             int num_channels;
             in >> num_channels;
             if( !in || num_channels < 0 ) {
@@ -144,7 +145,7 @@ bool parseBVHHierarchy( std::istream& in, Skeleton& skeleton, std::vector< std::
                 return false;
             }
             for( int i = 0; i < num_channels; ++i ) {
-                channels.push_back( std::make_pair( bone_index, ChannelTypeFromString( next<string>(in) ) ) );
+                channels.push_back( std::make_pair( bone_index, ChannelTypeFromString( next(in) ) ) );
             }
         }
     }
@@ -166,12 +167,12 @@ bool parseBVHAnimation( std::istream& in, const std::vector< std::pair< int, Cha
     
     animation.clear();
     
-    if( !( next<string>( in ) == "MOTION" ) ) {
+    if( !( next( in ) == "MOTION" ) ) {
         cerr << "ERROR: Expected keyword MOTION.\n";
         return false;
     }
     
-    if( !( next<string>( in ) == "Frames:" ) ) {
+    if( !( next( in ) == "Frames:" ) ) {
         cerr << "ERROR: Expected keyword Frames:.\n";
         return false;
     }
@@ -183,7 +184,7 @@ bool parseBVHAnimation( std::istream& in, const std::vector< std::pair< int, Cha
     }
     animation.poses.reserve( num_frames );
     
-    if( !( next<string>( in ) == "Frame" && next<string>( in ) == "Time:" ) ) {
+    if( !( next( in ) == "Frame" && next( in ) == "Time:" ) ) {
         cerr << "ERROR: Expected keyword Frame Time:.\n";
         return false;
     }
