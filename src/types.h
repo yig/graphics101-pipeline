@@ -31,7 +31,7 @@ typedef unsigned char GLubyte;
 
 #include <cassert>
 
-#include <cmath> // std::sqrt(), M_PI
+#include <cmath> // std::sqrt(), std::fmod()
 #include <limits> // infinity
 #include <algorithm> // std::min(), std::max()
 // To fix a windows header incompatibility with C++11

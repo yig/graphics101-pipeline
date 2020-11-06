@@ -4,6 +4,7 @@
 #include "types.h"
 #include "pipelineguifactory.h"
 #include "filewatchermtime.h"
+#include "animation.h"
 
 // Forward declarations.
 #include "glfwd.h"
@@ -54,6 +55,7 @@ protected:
     void loadMesh();
     void loadUniforms();
     void loadTextures();
+    void loadAnimation();
     
     // Transforms a path in the JSON file to a path that can
     // be opened with a file system call by prepending
@@ -76,8 +78,13 @@ private:
     bool m_mesh_changed = true;
     bool m_uniforms_changed = true;
     bool m_textures_changed = true;
+    bool m_animation_changed = true;
     StringVec m_texture_names_in_bind_order;
     int m_timerMilliseconds = -1;
+    
+    // Related to animation
+    Skeleton m_skeleton;
+    BoneAnimation m_animation;
     
     // Related to the camera and mouse movement.
     vec2 m_camera_rotation = vec2(0,0);

@@ -11,6 +11,7 @@ find_package(glfw3 3.3 REQUIRED)
 set(SRCS
     src/animation.cpp
     src/animation.h
+    src/animation_parser.cpp
     src/camera.cpp
     src/camera.h
     src/debugging.h

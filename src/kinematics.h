@@ -12,6 +12,9 @@ struct Bone {
     // The start point of the bone line segment is `skeleton[parent_index].end`.
     // The root has `parent_index` = -1. It does not have an associated line segment.
     int parent_index = -1;
+    
+    // An optional name for the bone.
+    std::string name;
 };
 // A Skeleton is a collection of Bones.
 typedef std::vector< Bone > Skeleton;
@@ -36,4 +39,4 @@ MatrixPose forward_kinematics( const Skeleton& skeleton, const MatrixPose& bone2
 
 }
 
-#define /* __kinematics_h__ */
+#endif /* __kinematics_h__ */
