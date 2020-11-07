@@ -29,9 +29,10 @@ typedef std::vector< TRS > TRSPose;
 MatrixPose MatrixPoseFromTRSPose( const TRSPose& pose );
 
 struct BoneAnimation {
-    // A bone animation stores a sequence of Poses.
-    // The Poses stores the local 
-    std::vector< TRSPose > poses;
+    // A bone animation stores a sequence of frames. Each frame is a pose.
+    // The Poses store decomposed transformations for easier interpolation.
+    // The transformations are bone-to-parent, not bone-to-world.
+    std::vector< TRSPose > frames;
     
     // Frames are spaced this far apart in time.
     // By default, 60 frames/second.
@@ -39,8 +40,24 @@ struct BoneAnimation {
     
     void clear() { *this = BoneAnimation(); }
 };
-// Returns the pose obtained by interpolating the Animation's poses
+/*
+Given:
+    animation: A BoneAnimation
+    t: A time in seconds
+Returns:
+    The pose obtained by interpolating the Animation's frames at time `t`,
+    where each frame lasts for `animation.seconds_per_frame`.
+    The returned pose is still bone-to-parent, not bone-to-world.
+    To get a bone-to-world `MatrixPose` at time `t`, use:
+    `forward_kinematics( skeleton, MatrixPoseFromTRSPose( interpolate( animation, t ) ) )`
+*/
 TRSPose interpolate( const BoneAnimation& animation, real t );
+
+/// These two functions can be helpful when interpolating rotations.
+// Interpolate from axis*radians rotation `a` to `b` according to `t` in [0,1].
+vec3 slerp( const vec3& a, const vec3& b, real t );
+// Weighted average of axis*radians rotations.
+vec3 average_rotation( const std::vector< vec3 >& rotations, const std::vector< real >& weights );
 
 /*
 Given:

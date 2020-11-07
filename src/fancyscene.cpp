@@ -432,7 +432,7 @@ void FancyScene::timerEvent( real seconds_since_creation ) {
     m_drawable->uniforms.storeUniform( "uTime", GLfloat( seconds_since_creation ) );
     
     // Update the animation.
-    if( !m_skeleton.empty() && !m_animation.poses.empty() ) {
+    if( !m_skeleton.empty() && !m_animation.frames.empty() ) {
         // Your code goes here.
         
         // 1. Interpolate the animation.

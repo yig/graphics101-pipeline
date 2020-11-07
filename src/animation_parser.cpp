@@ -5,6 +5,9 @@
 #include <sstream>
 #include <set>
 
+#include <glm/ext/matrix_transform.hpp> // translate, rotate, scale
+#include <glm/gtx/matrix_interpolation.hpp> // axisAngle
+
 using namespace graphics101;
 
 namespace {
@@ -162,7 +165,7 @@ bool parseBVHHierarchy( std::istream& in, Skeleton& skeleton, std::vector< std::
     
     This function calls `.clear()` on the animation.
 */
-bool parseBVHAnimation( std::istream& in, const std::vector< std::pair< int, ChannelType > >& channels, BoneAnimation& animation ) {
+bool parseBVHAnimation( std::istream& in, const int num_bones, const std::vector< std::pair< int, ChannelType > >& channels, BoneAnimation& animation ) {
     using namespace std;
     
     animation.clear();
@@ -182,7 +185,7 @@ bool parseBVHAnimation( std::istream& in, const std::vector< std::pair< int, Cha
         cerr << "ERROR: Could not read number of frames.\n";
         return false;
     }
-    animation.poses.reserve( num_frames );
+    animation.frames.reserve( num_frames );
     
     if( !( next( in ) == "Frame" && next( in ) == "Time:" ) ) {
         cerr << "ERROR: Expected keyword Frame Time:.\n";
@@ -195,7 +198,8 @@ bool parseBVHAnimation( std::istream& in, const std::vector< std::pair< int, Cha
     }
     
     for( int i = 0; i < num_frames; ++i ) {
-        MatrixPose pose;
+        // Initialize each transform in the pose as the identity matrix.
+        MatrixPose pose( num_bones, mat4(1) );
         
         for( const auto& ch : channels ) {
             real param;
@@ -205,25 +209,33 @@ bool parseBVHAnimation( std::istream& in, const std::vector< std::pair< int, Cha
                 return false;
             }
             
-            mat4 op;
+            // A reference, because we will modify it.
+            mat4& xform = pose.at(ch.first);
             switch( ch.second ) {
                 Xposition:
-                    /// Build `op`. Then left or right multiply it:
+                    /// Build the new operation `op`. Then left or right multiply it
+                    /// with the operation so-far:
                     // pose.at(ch.first) = pose.at(ch.first)*op;
                     // pose.at(ch.first) = op*pose.at(ch.first);
                     
-                    /// Or use glm functions. Is this the wrong order?
+                    /// Use glm functions. Is this the wrong order?
                     // pose.at(ch.first) = translate( pose.at(ch.first), vec3(param,0,0) );
+                    xform = glm::translate( xform, vec3(param,0,0) );
                     break;
                 Yposition:
+                    xform = glm::translate( xform, vec3(0,param,0) );
                     break;
                 Zposition:
+                    xform = glm::translate( xform, vec3(0,0,param) );
                     break;
                 Xrotation:
+                    xform = glm::rotate( xform, param, vec3(1,0,0) );
                     break;
                 Yrotation:
+                    xform = glm::rotate( xform, param, vec3(0,1,0) );
                     break;
                 Zrotation:
+                    xform = glm::rotate( xform, param, vec3(0,0,1) );
                     break;
                 default:
                     cerr << "ERROR: Unknown channel type.\n";
@@ -232,7 +244,22 @@ bool parseBVHAnimation( std::istream& in, const std::vector< std::pair< int, Cha
         }
         
         // Convert the MatrixPose to a TRSPose.
-        
+        TRSPose decomposed( num_bones );
+        assert( decomposed.size() == pose.size() );
+        for( int i = 0; i < decomposed.size(); ++i ) {
+            const mat4& M = pose.at(i);
+            // Extract the translation.
+            decomposed.at(i).translation = vec3(M[3]);
+            // There is no scale.
+            // Extract the rotation as radians*axis.
+            vec3 axis;
+            real angle;
+            // "If a larger matrix is constructed from a smaller matrix, the additional
+            // rows and columns are set to the values they would have in an identity matrix."
+            glm::axisAngle( mat4(mat3(M)), axis, angle );
+            decomposed.at(i).rotation = angle*axis;
+        }
+        animation.frames.push_back( decomposed );
     }
     
     return false;
@@ -269,7 +296,7 @@ bool loadBVH( const std::string& path, Skeleton& skeleton, BoneAnimation& animat
         return false;
     }
     
-    if( !parseBVHAnimation( bvh, channels, animation ) ) {
+    if( !parseBVHAnimation( bvh, skeleton.size(), channels, animation ) ) {
         cerr << "ERROR: Could not parse BVH animation in file: " << path << '\n';
         return false;
     }
