@@ -27,6 +27,8 @@ set(SRCS
     src/glfwd.h
     src/kinematics.cpp
     src/kinematics.h
+    src/kinematics_visualizer.cpp
+    src/kinematics_visualizer.h
     src/main.cpp
     src/mesh.cpp
     src/mesh.h

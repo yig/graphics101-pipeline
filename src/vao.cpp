@@ -5,6 +5,8 @@
 
 #include <glm/gtc/type_ptr.hpp> // value_ptr()
 
+#include "mesh.h" // makeFromOBJPath, makeFromMesh
+
 #include <iostream>
 
 namespace {
@@ -208,6 +210,8 @@ std::vector< ivec3 > flatten_face_indices( int num_faces ) {
 	return flat_faces_out;
 }
 
+namespace vao {
+
 VertexAndFaceArrays::VertexAndFaceArraysPtr makeSquare( GLuint position_location, GLuint texcoord_location )
 {
     std::vector< vec3 > V;
@@ -247,5 +251,46 @@ VertexAndFaceArrays::VertexAndFaceArraysPtr makeTriangle( GLuint position_locati
     vao->uploadFaces( F );
     return vao;
 }
+VertexAndFaceArrays::VertexAndFaceArraysPtr makeFromOBJPath( const std::string& OBJpath, bool create_normals_if_needed, bool normalize, GLuint position_location, GLuint normal_location, GLuint texcoord_location ) {
+    // Load the mesh from the OBJ.
+    Mesh mesh;
+    const bool success = mesh.loadFromOBJ( OBJpath );
+    if( !success ) {
+        std::cerr << "ERROR: Unable to load OBJ file: " << OBJpath << '\n';
+        return nullptr;
+    }
+    
+    // Create normals if we don't have them.
+    if( create_normals_if_needed && mesh.normals.size() == 0 ) {
+        mesh.computeNormals();
+    }
+    // Normalize the mesh to fit within the unit cube [-1,1]^3 centered at the origin.
+    if( normalize ) mesh.applyTransformation( mesh.normalizingTransformation() );
+    
+    return makeFromMesh( mesh, position_location, normal_location, texcoord_location );
+}
 
+VertexAndFaceArrays::VertexAndFaceArraysPtr makeFromMesh( const graphics101::Mesh& mesh, GLuint position_location, GLuint normal_location, GLuint texcoord_location ) {
+    // Upload the mesh to the GPU.
+    VertexAndFaceArrays::VertexAndFaceArraysPtr vao = VertexAndFaceArrays::makePtr();
+    auto flat_positions = flatten_attribute( mesh.face_positions, mesh.positions );
+    vao->uploadAttribute( flat_positions, position_location );
+    
+    if( normal_location != -1 ) {
+        auto flat_normals = flatten_attribute( mesh.face_normals, mesh.normals );
+        vao->uploadAttribute( flat_normals, normal_location );
+    }
+    
+    if( texcoord_location != -1 && !mesh.face_texcoords.empty() ) {
+        auto flat_texcoords = flatten_attribute( mesh.face_texcoords, mesh.texcoords );
+        vao->uploadAttribute( flat_texcoords, texcoord_location );
+    }
+
+    auto flat_faces = flatten_face_indices( mesh.face_positions.size() );
+    vao->uploadFaces( flat_faces );
+
+    return vao;
+}
+
+}
 }

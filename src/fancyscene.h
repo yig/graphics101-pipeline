@@ -5,6 +5,7 @@
 #include "pipelineguifactory.h"
 #include "filewatchermtime.h"
 #include "animation.h"
+#include "kinematics_visualizer.h"
 
 // Forward declarations.
 #include "glfwd.h"
@@ -85,6 +86,8 @@ private:
     // Related to animation
     Skeleton m_skeleton;
     BoneAnimation m_animation;
+    KinematicsVisualizer m_skelview;
+    bool m_showSkeleton = true;
     
     // Related to the camera and mouse movement.
     vec2 m_camera_rotation = vec2(0,0);

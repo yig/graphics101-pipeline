@@ -157,10 +157,7 @@ void parseUniforms( const json& j, UniformSet& u, StringVec& texture_names_in_bi
     }
 }
 
-// An anonymous namespace for helpers.
-namespace {
-
-std::string file_as_string( const std::string& path ) {
+std::string fileAsString( const std::string& path ) {
     // Open the file from the string path.
     std::ifstream infile( path );
     if( !infile ) {
@@ -174,6 +171,9 @@ std::string file_as_string( const std::string& path ) {
     buffer << infile.rdbuf();
     return buffer.str();
 }
+
+// An anonymous namespace for helpers.
+namespace {
 void plus_equals( StringSet& lhs, const StringSet& rhs ) {
     for( const auto& item : rhs ) { lhs.insert( item ); }
 }
@@ -194,7 +194,7 @@ StringSet parseShaderType( const json& j, ShaderProgram& program, GLenum type, c
         for( const std::string& path : j ) {
             const auto fullpath = path_transformer( path );
             paths_accessed.insert( fullpath );
-            pieces.push_back( file_as_string( fullpath ) );
+            pieces.push_back( fileAsString( fullpath ) );
         }
         program.addShader( type, pieces );
     } else {

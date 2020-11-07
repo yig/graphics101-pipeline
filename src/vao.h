@@ -2,6 +2,7 @@
 #define __vao_h__
 
 #include "types.h"
+namespace graphics101 { class Mesh; }
 
 #include <vector>
 #include <memory> // shared_ptr
@@ -113,6 +114,7 @@ data order described in flatten_attribute().
 */
 std::vector< ivec3 > flatten_face_indices( int num_faces );
 
+namespace vao {
 /*
 Makes a VertexAndFaceArrays with position and texture coordinate attributes
 for a square. The positions range from (-1,-1) to (1,1) and the corresponding
@@ -124,6 +126,15 @@ Makes a VertexAndFaceArrays with positions for a right triangle: (0,0), (1,0), (
 Possibly useful for debugging.
 */
 VertexAndFaceArrays::VertexAndFaceArraysPtr makeTriangle( GLuint position_location );
+/*
+Makes a VertexAndFaceArrays from an OBJ file, including position, normal, and texture coordinates if present.
+*/
+VertexAndFaceArrays::VertexAndFaceArraysPtr makeFromOBJPath( const std::string& OBJpath, bool create_normals_if_needed, bool normalize, GLuint position_location, GLuint normal_location = -1, GLuint texcoord_location = -1 );
+/*
+Makes a VertexAndFaceArrays from a Mesh, including position, normal, and texture coordinates if present.
+*/
+VertexAndFaceArrays::VertexAndFaceArraysPtr makeFromMesh( const graphics101::Mesh& mesh, GLuint position_location, GLuint normal_location = -1, GLuint texcoord_location = -1 );
+}
 
 }
 

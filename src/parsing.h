@@ -50,6 +50,8 @@ Examples:
 */
 std::string pathRelativeToFile( const std::string& path, const std::string& relativeToFile );
 
+// Returns the contents of `path` as a string.
+std::string fileAsString( const std::string& path );
 }
 
 #endif /* __parsing_h__ */

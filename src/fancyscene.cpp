@@ -23,7 +23,6 @@ using namespace graphics101;
 // Helper function
 namespace {
 VertexAndFaceArraysPtr vaoFromOBJPath( const std::string& path, const ShaderProgram& program ) {
-    
     // Load the mesh from the OBJ.
     Mesh mesh;
     const bool success = mesh.loadFromOBJ( path );
@@ -32,26 +31,25 @@ VertexAndFaceArraysPtr vaoFromOBJPath( const std::string& path, const ShaderProg
         return nullptr;
     }
     
+    // Create normals if we don't have them.
+    if( mesh.normals.size() == 0 ) {
+        mesh.computeNormals();
+    }
     // Normalize the mesh to fit within the unit cube [-1,1]^3 centered at the origin.
     mesh.applyTransformation( mesh.normalizingTransformation() );
     
-
-    // Create normals if we don't have them.
-    if( mesh.normals.size() == 0 ) {
-        mesh.computeNormals( Mesh::AngleWeighted );
-    }
-    
-    // Upload the mesh to the GPU.
-    VertexAndFaceArraysPtr vao = VertexAndFaceArrays::makePtr();
-    auto flat_positions = flatten_attribute( mesh.face_positions, mesh.positions );
-    vao->uploadAttribute( flat_positions, program.getAttribLocation( "vPos" ) );
-
-    auto flat_normals = flatten_attribute( mesh.face_normals, mesh.normals );
-    vao->uploadAttribute( flat_normals, program.getAttribLocation( "vNormal" ) );
+    VertexAndFaceArraysPtr vao = vao::makeFromMesh(
+        mesh,
+        program.getAttribLocation( "vPos" ),
+        program.getAttribLocation( "vNormal" ),
+        program.getAttribLocation( "vTexCoord" )
+        );
     
     if( !mesh.face_texcoords.empty() ) {
-        auto flat_texcoords = flatten_attribute( mesh.face_texcoords, mesh.texcoords );
-        vao->uploadAttribute( flat_texcoords, program.getAttribLocation( "vTexCoord" ) );
+        /// The code in vao::makeFromMesh() does the following to flatten and upload
+        /// texture coordinates:
+        // auto flat_texcoords = flatten_attribute( mesh.face_texcoords, mesh.texcoords );
+        // vao->uploadAttribute( flat_texcoords, program.getAttribLocation( "vTexCoord" ) );
         
         // Create tangent frame.
         mesh.computeTangentBitangent();
@@ -61,10 +59,7 @@ VertexAndFaceArraysPtr vaoFromOBJPath( const std::string& path, const ShaderProg
         // 1 Flatten.
         // 2 Upload to "vTangent" and "vBitangent".
     }
-
-    auto flat_faces = flatten_face_indices( mesh.face_positions.size() );
-    vao->uploadFaces( flat_faces );
-
+    
     return vao;
 }
 }
@@ -317,6 +312,7 @@ void FancyScene::loadAnimation() {
     /// Load the animation.
     m_skeleton.clear();
     m_animation.clear();
+    m_skelview.reset();
     
     // Load the skeleton and animation from the BVH.
     if( j.count("animation") == 0 || !j["animation"].is_string() ) {
@@ -331,6 +327,8 @@ void FancyScene::loadAnimation() {
         cerr << "Error loading BVH file: " << BVHpath << '\n';
         return;
     }
+    // Visualize the skeleton.
+    m_skelview.reset( m_scene_path, m_skeleton );
     
     // Your code goes here.
     
@@ -377,6 +375,9 @@ void FancyScene::setPerspectiveMatrix() {
     // The perspective matrix projects camera coordinates to canonical device coordinates.
     const mat4 projection = Camera::perspective_matrix_for_unit_cube( w, h, 3 );
     m_drawable->uniforms.storeUniform( "uProjectionMatrix", projection );
+    
+    // Also update the skeleton visualizer.
+    m_skelview.setProjectionMatrix( projection );
 }
 void FancyScene::setCameraUniforms() {
     // We want to set uniforms. We need a drawable.
@@ -390,6 +391,9 @@ void FancyScene::setCameraUniforms() {
     // Because view is just a rotation, the normal matrix is the same.
     // m_drawable->uniforms.storeUniform( "uNormal", glm::inverse( glm::transpose( mat3(view) ) ) );
     m_drawable->uniforms.storeUniform( "uNormalMatrix", mat3(view) );
+    
+    // Also update the skeleton visualizer.
+    m_skelview.setViewMatrix( view );
 }
 
 void FancyScene::draw() {
@@ -403,6 +407,9 @@ void FancyScene::draw() {
         m_drawable->bind();
         m_drawable->draw();
     }
+    
+    // Draw the skeleton for visualization.
+    if( m_showSkeleton ) m_skelview.draw();
 }
 
 void FancyScene::mousePressEvent( const Event& event ) {
@@ -433,10 +440,26 @@ void FancyScene::timerEvent( real seconds_since_creation ) {
     
     // Update the animation.
     if( !m_skeleton.empty() && !m_animation.frames.empty() ) {
-        // Your code goes here.
+        // Interpolate the animation.
+        MatrixPose bone2parent = MatrixPoseFromTRSPose( interpolate( m_animation, seconds_since_creation ) );
         
-        // 1. Interpolate the animation.
-        // 2. Upload the transformation matrices to the GPU.
+        // Turn off the root's translation so that the animation happens in-place where
+        // we can visualize it.
+        assert( m_skeleton.size() == bone2parent.size() );
+        for( int i = 0; i < m_skeleton.size(); ++i ) {
+            if( m_skeleton.at(i).parent_index >= 0 ) {
+                bone2parent.at(i)[3] = vec4(0,0,0,1);
+            }
+        }
+        
+        // Call forward kinematics to get bone2world matrices.
+        const MatrixPose bone2world = forward_kinematics( m_skeleton, bone2parent );
+        
+        // Upload the transformation matrices to the GPU.
+        m_drawable->uniforms.storeUniform( "uBoneToWorld", bone2world );
+        
+        // Update the skeleton visualizer.
+        m_skelview.setPose( bone2world );
     }
 }
 int FancyScene::timerCallbackMilliseconds() {
