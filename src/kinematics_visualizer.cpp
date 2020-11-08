@@ -25,13 +25,13 @@ void KinematicsVisualizer::reset( const std::string& scene_path, const Skeleton&
     // Create a shader program.
     // Everyone else expects it to have been created so we can get binding locations.
     m_drawable->program = ShaderProgram::makePtr();
-    m_drawable->program->addShader( GL_VERTEX_SHADER, fileAsString( pathRelativeToFile( scene_path, "bone.vs" ) ) );
-    m_drawable->program->addShader( GL_FRAGMENT_SHADER, fileAsString( pathRelativeToFile( scene_path, "bone.fs" ) ) );
+    m_drawable->program->addShader( GL_VERTEX_SHADER, fileAsString( pathRelativeToFile( "bone.vs", scene_path ) ) );
+    m_drawable->program->addShader( GL_FRAGMENT_SHADER, fileAsString( pathRelativeToFile( "bone.fs", scene_path ) ) );
     m_drawable->program->link();
     
     // Upload the `bone.obj` Mesh data.
     m_drawable->vao = vao::makeFromOBJPath(
-        pathRelativeToFile( scene_path, "bone.obj" ),
+        pathRelativeToFile( "bone.obj", scene_path ),
         // Don't create normals if not present.
         false,
         // Don't normalize.

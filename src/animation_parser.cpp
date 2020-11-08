@@ -64,13 +64,9 @@ ChannelType ChannelTypeFromString( const std::string& s ) {
 bool parseBVHHierarchy( std::istream& in, Skeleton& skeleton, std::vector< std::pair< int, ChannelType > >& channels ) {
     using namespace std;
     
-    // To track the hierarchy.
-    // The parent_index starts at -2, so that it can increase to -1 when we read the root.
-    int parent_index = -2;
-    // Since this can be called for multiple hierarchies, we need to keep track
-    // of the offset of the root node.
-    const int skeleton0 = skeleton.size();
-    // To store the output for the animation.
+    // To track the hierarchy, we need to keep track of the current parent bone.
+    // We initialize the parent_index to -1 for the root.
+    int parent_index = -1;
     
     // Header
     if( next( in ) != "HIERARCHY" ) {
@@ -79,12 +75,19 @@ bool parseBVHHierarchy( std::istream& in, Skeleton& skeleton, std::vector< std::
     }
     
     while( true ) {
+        // Read the next word.
         const string joint_or_brace = next( in );
+        
         // If there is a closing brace, we should eat it and move up the hierarchy.
         if( joint_or_brace == "}" ) {
-            parent_index -= 1;
+            if( parent_index < 0 ) {
+                cerr << "ERROR: Closing brace found before the root node.\n";
+                return false;
+            }
+            // Move up the hierarchy.
+            parent_index = skeleton.at(parent_index).parent_index;
             // If we are back to the root, we are done.
-            if( parent_index < 0 ) break;
+            if( parent_index == -1 ) break;
             // Otherwise, continue;
             else continue;
         }
@@ -92,7 +95,7 @@ bool parseBVHHierarchy( std::istream& in, Skeleton& skeleton, std::vector< std::
         Bone bone;
         
         // Read the node type and name.
-        const string node_type = next( in );
+        const string node_type = joint_or_brace;
         if( !( node_type == "ROOT" || node_type == "JOINT" || node_type == "End" ) ) {
             cerr << "ERROR: Node type expected.\n";
             return false;
@@ -100,26 +103,23 @@ bool parseBVHHierarchy( std::istream& in, Skeleton& skeleton, std::vector< std::
         
         // Read the node's name.
         in >> bone.name;
+        // Set the parent index.
+        bone.parent_index = parent_index;
         
+        // Some error checking. The root node should be the only node
+        // with a parent_index of -1.
+        if( parent_index == -1 && node_type != "ROOT" ) {
+            cerr << "ERROR: Top-node is not ROOT.\n";
+            return false;
+        } else if( parent_index >= 0 && node_type == "ROOT" ) {
+            cerr << "ERROR: ROOT node appears nested.\n";
+            return false;
+        }
+        
+        // Enter the node.
         if( next( in ) != "{" ) {
             cerr << "ERROR: { doesn't follow Node declaration.\n";
             return false;
-        }
-        // We read an opening brace. Increase our nesting level.
-        parent_index += 1;
-        // Set the parent index.
-        if( parent_index < 0 ) {
-            if( node_type != "ROOT" ) {
-                cerr << "ERROR: Top-node is not ROOT.\n";
-                return false;
-            }
-            bone.parent_index = parent_index;
-        } else {
-            if( node_type == "ROOT" ) {
-                cerr << "ERROR: ROOT node appears nested.\n";
-                return false;
-            }
-            bone.parent_index = parent_index + skeleton0;
         }
         
         // Read the offset from the parent.
@@ -133,14 +133,19 @@ bool parseBVHHierarchy( std::istream& in, Skeleton& skeleton, std::vector< std::
             return false;
         }
         // Convert from an offset to an absolute position for everything but the root.
-        if( parent_index >= 0 ) bone.end += skeleton.at( parent_index ).end;
+        if( bone.parent_index >= 0 ) bone.end += skeleton.at( bone.parent_index ).end;
         
         // Push the bone into the skeleton and store its index.
         const int bone_index = skeleton.size();
         skeleton.push_back( bone );
+        // This bone is the parent of all nodes inside.
+        parent_index = bone_index;
         
         // If there are channels, read them.
-        if( next( in ) == "CHANNELS" ) {
+        if( (in >> ws).peek() == 'C' ) {
+            // We need fancier parsing if this assumption fails.
+            assert( next(in) == "CHANNELS" );
+            
             int num_channels;
             in >> num_channels;
             if( !in || num_channels < 0 ) {
@@ -212,7 +217,7 @@ bool parseBVHAnimation( std::istream& in, const int num_bones, const std::vector
             // A reference, because we will modify it.
             mat4& xform = pose.at(ch.first);
             switch( ch.second ) {
-                Xposition:
+                case Xposition:
                     /// Build the new operation `op`. Then multiply it on the right
                     /// of the operation so-far:
                     // pose.at(ch.first) = pose.at(ch.first)*op;
@@ -221,19 +226,19 @@ bool parseBVHAnimation( std::istream& in, const int num_bones, const std::vector
                     // pose.at(ch.first) = translate( pose.at(ch.first), vec3(param,0,0) );
                     xform = glm::translate( xform, vec3(param,0,0) );
                     break;
-                Yposition:
+                case Yposition:
                     xform = glm::translate( xform, vec3(0,param,0) );
                     break;
-                Zposition:
+                case Zposition:
                     xform = glm::translate( xform, vec3(0,0,param) );
                     break;
-                Xrotation:
+                case Xrotation:
                     xform = glm::rotate( xform, param, vec3(1,0,0) );
                     break;
-                Yrotation:
+                case Yrotation:
                     xform = glm::rotate( xform, param, vec3(0,1,0) );
                     break;
-                Zrotation:
+                case Zrotation:
                     xform = glm::rotate( xform, param, vec3(0,0,1) );
                     break;
                 default:
@@ -249,7 +254,10 @@ bool parseBVHAnimation( std::istream& in, const int num_bones, const std::vector
             const mat4& M = pose.at(i);
             // Extract the translation.
             decomposed.at(i).translation = vec3(M[3]);
-            // There is no scale.
+            // There is no scale. That means the first three columns of M should be normalized.
+            assert( fabs( length(M[0]) - 1 ) < 1e-5 );
+            assert( fabs( length(M[1]) - 1 ) < 1e-5 );
+            assert( fabs( length(M[2]) - 1 ) < 1e-5 );
             // Extract the rotation as radians*axis.
             vec3 axis;
             real angle;
@@ -261,7 +269,7 @@ bool parseBVHAnimation( std::istream& in, const int num_bones, const std::vector
         animation.frames.push_back( decomposed );
     }
     
-    return false;
+    return true;
 }
 }
 

@@ -3,6 +3,7 @@
 
 - "Your code goes here" in different files.
 - A way to turn on or off the visualization of the skeleton itself.
+- mesh normalization matrix goes into view, not applyTransformation
 - GUI dialogs
 + Drawables of a pyramid, one per bone transformed to its rest orientation, with a copy of the uniforms and an extra index that says which to apply.
 
