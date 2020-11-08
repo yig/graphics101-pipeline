@@ -304,7 +304,7 @@ void FancyScene::loadAnimation() {
     assert( m_drawable && m_drawable->program );
     
     // Mark that we are no longer out-of-date with the parsed info.
-    this->m_animation_changed = true;
+    this->m_animation_changed = false;
     
     // The following code wants the scene JSON called `j`.
     const auto& j = m_scene;

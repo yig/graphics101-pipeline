@@ -78,20 +78,27 @@ void KinematicsVisualizer::reset( const std::string& scene_path, const Skeleton&
 }
 
 void KinematicsVisualizer::setProjectionMatrix( const mat4& projection ) {
-    assert( m_drawable );
+    if( !m_drawable ) return;
     
     m_drawable->uniforms.storeUniform( "uProjectionMatrix", projection );
 }
 void KinematicsVisualizer::setViewMatrix( const mat4& view ) {
+    if( !m_drawable ) return;
+    
     m_drawable->uniforms.storeUniform( "uViewMatrix", view );
     m_drawable->uniforms.storeUniform( "uNormal", glm::inverse( glm::transpose( mat3(view) ) ) );
 }
 void KinematicsVisualizer::setPose( const MatrixPose& bone2world ) {
+    // This shouldn't be called if a skeleton was never given.
+    assert( m_drawable );
+    
     // Set uniforms, a matrix for each bone that transforms from bone2world.
     m_drawable->program->setUniform( "uBoneToWorld", bone2world );
 }
 
 void KinematicsVisualizer::draw() {
+    if( !m_drawable ) return;
+    
     m_drawable->bind();
     
     // Turn on wireframe drawing mode.
