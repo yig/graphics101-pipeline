@@ -455,9 +455,6 @@ void FancyScene::timerEvent( real seconds_since_creation ) {
         // Call forward kinematics to get bone2world matrices.
         const MatrixPose bone2world = forward_kinematics( m_skeleton, bone2parent );
         
-        // Upload the transformation matrices to the GPU.
-        m_drawable->uniforms.storeUniform( "uBoneToWorld", bone2world );
-        
         // Update the skeleton visualizer.
         m_skelview.setPose( bone2world );
     }

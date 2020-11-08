@@ -93,7 +93,7 @@ void KinematicsVisualizer::setPose( const MatrixPose& bone2world ) {
     assert( m_drawable );
     
     // Set uniforms, a matrix for each bone that transforms from bone2world.
-    m_drawable->program->setUniform( "uBoneToWorld", bone2world );
+    m_drawable->uniforms.storeUniform( "uBoneToWorld", bone2world );
 }
 
 void KinematicsVisualizer::draw() {
