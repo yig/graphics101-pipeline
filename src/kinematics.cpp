@@ -14,11 +14,10 @@ MatrixPose forward_kinematics( const Skeleton& skeleton, const MatrixPose& bone2
     
     // Your code goes here.
     
-    /// 1. Iterate in ascending order, which guarantees the parents are visited before
-    ///    the children.
-    /// 2. For each bone.
-    /// 2a. Get its parent transform P and its bone-to-parent transform B.
-    /// 2b. Set its bone-to-world transform to PB.
+    /// 1. Iterate over each bone in ascending order. This guarantees we visit parents
+    ///    before children. As a result, the parent transform is already bone-to-world.
+    /// 2. Get the bone's bone-to-parent transform B and its parent's bone-to-world transform P.
+    /// 3. Set the bone's bone-to-world transform to: PB.
     
     return bone2world;
 }
