@@ -444,7 +444,7 @@ void FancyScene::timerEvent( real seconds_since_creation ) {
         MatrixPose bone2parent = MatrixPoseFromTRSPose( interpolate( m_animation, seconds_since_creation ) );
         
         // Turn off the root's translation so that the animation happens in-place where
-        // we can visualize it.
+        // we can better see it.
         assert( m_skeleton.size() == bone2parent.size() );
         for( int i = 0; i < m_skeleton.size(); ++i ) {
             if( m_skeleton.at(i).parent_index >= 0 ) {

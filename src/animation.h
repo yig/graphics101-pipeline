@@ -66,6 +66,9 @@ Given:
     animation_out: An output parameter animation_out in which to store the loaded BoneAnimation.
 Returns:
     success: A boolean that is true if parsing completed successfully and false otherwise.
+
+The Skeleton will always store parents with smaller indices than children.
+This is suitable for passing to `forward_kinematics()`.
 */
 bool loadBVH( const std::string& path, Skeleton& skeleton_out, BoneAnimation& animation_out );
 

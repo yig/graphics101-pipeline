@@ -34,6 +34,9 @@ Given:
 Returns:
     bone2world: A Pose with transformation from each bone's local coordinates
                 to world-space, computed using forward kinematics.
+
+This function assumes that the bones in the skeleton are topologically sorted,
+meaning that parents always have smaller indices than children.
 */
 MatrixPose forward_kinematics( const Skeleton& skeleton, const MatrixPose& bone2parent );
 

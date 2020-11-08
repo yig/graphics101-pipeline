@@ -213,12 +213,11 @@ bool parseBVHAnimation( std::istream& in, const int num_bones, const std::vector
             mat4& xform = pose.at(ch.first);
             switch( ch.second ) {
                 Xposition:
-                    /// Build the new operation `op`. Then left or right multiply it
-                    /// with the operation so-far:
+                    /// Build the new operation `op`. Then multiply it on the right
+                    /// of the operation so-far:
                     // pose.at(ch.first) = pose.at(ch.first)*op;
-                    // pose.at(ch.first) = op*pose.at(ch.first);
                     
-                    /// Use glm functions. Is this the wrong order?
+                    /// Use glm functions.
                     // pose.at(ch.first) = translate( pose.at(ch.first), vec3(param,0,0) );
                     xform = glm::translate( xform, vec3(param,0,0) );
                     break;
