@@ -2,12 +2,8 @@
 
 uniform mat4 uProjectionMatrix;
 uniform mat4 uViewMatrix;
-// uniform mat3 uNormalMatrix;
-// uniform float uTime;
 
 in vec3 vPos;
-
-// out vec3 fNormal;
 
 void main()
 {
