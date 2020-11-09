@@ -83,11 +83,13 @@ the line number printed out to *Application Output* in Qt Creator.
 Name people in the class who deserve a star for
 helping you (not by giving your their code!).
 
-* When done, zip your `pipeline` directory (except for the large
-`build`, `examples/head`, `examples/hercules`, and `examples/lemon` directories)
-along with the `screenshots` subdirectory and a *Notes.txt* file as *pipeline.zip*.
-Use the `cpack` command from inside your build directory to do all this for you.
-Upload your solution to Blackboard before the deadline.
+* When done, run the the `cpack` command from inside your build directory
+to generate an appropriate zip file of your `pipeline` project.
+The zip file it creates, `pipeline.zip`, will include
+the `screenshots` subdirectory and your `Notes.txt` file.
+It will ignore unneeded large and numerous directories
+(e.g. `build`, `examples/head`, `examples/hercules`, `examples/lemon`, `glm`).
+Upload your `pipeline.zip` to Blackboard before the deadline.
 
 * **THIS IS AN INDIVIDUAL, NOT A GROUP ASSIGNMENT. That means all code
 written for this assignment should be original! Although you are
