@@ -389,7 +389,7 @@ void FancyScene::setCameraUniforms() {
     const mat4 view = Camera::orbiting_world_to_camera( 3, m_camera_rotation[0], m_camera_rotation[1] );
     m_drawable->uniforms.storeUniform( "uViewMatrix", view );
     // Because view is just a rotation, the normal matrix is the same.
-    // m_drawable->uniforms.storeUniform( "uNormal", glm::inverse( glm::transpose( mat3(view) ) ) );
+    // m_drawable->uniforms.storeUniform( "uNormalMatrix", glm::inverse( glm::transpose( mat3(view) ) ) );
     m_drawable->uniforms.storeUniform( "uNormalMatrix", mat3(view) );
     
     // Also update the skeleton visualizer.

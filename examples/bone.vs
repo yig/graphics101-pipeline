@@ -11,5 +11,6 @@ in vec3 vPos;
 
 void main()
 {
-    gl_Position = uProjectionMatrix * ( uViewMatrix * ( uBoneToWorld[uBoneIndex] * ( uObjectToBone[uBoneIndex] * vec4(vPos, 1.0) )));
+    // gl_Position = uProjectionMatrix * ( uViewMatrix * ( uBoneToWorld[uBoneIndex] * ( uObjectToBone[uBoneIndex] * vec4(vPos, 1.0) )));
+    gl_Position = uProjectionMatrix * ( uViewMatrix * ( vec4(vPos, 1.0) ));
 }

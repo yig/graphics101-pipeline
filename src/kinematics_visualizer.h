@@ -5,6 +5,7 @@
 // Forward declarations.
 #include "glfwd.h"
 #include <string>
+#include <vector>
 
 namespace graphics101 {
 
