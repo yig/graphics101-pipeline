@@ -163,6 +163,7 @@ bool parseBVHHierarchy( std::istream& in, Skeleton& skeleton, std::vector< std::
 /*
     Given:
         in: An istream
+        skeleton: A Skeleton.
         channels: The description of the channels.
         animation: An output parameter for the animation.
     Returns:
@@ -170,7 +171,7 @@ bool parseBVHHierarchy( std::istream& in, Skeleton& skeleton, std::vector< std::
     
     This function calls `.clear()` on the animation.
 */
-bool parseBVHAnimation( std::istream& in, const int num_bones, const std::vector< std::pair< int, ChannelType > >& channels, BoneAnimation& animation ) {
+bool parseBVHAnimation( std::istream& in, const Skeleton& skeleton, const std::vector< std::pair< int, ChannelType > >& channels, BoneAnimation& animation ) {
     using namespace std;
     
     animation.clear();
@@ -204,7 +205,15 @@ bool parseBVHAnimation( std::istream& in, const int num_bones, const std::vector
     
     for( int i = 0; i < num_frames; ++i ) {
         // Initialize each transform in the pose as the identity matrix.
-        MatrixPose pose( num_bones, mat4(1) );
+        MatrixPose pose( skeleton.size(), mat4(1) );
+        // Set the translation to its offset from its parent's endpoint.
+        for( int i = 0; i < pose.size(); ++i ) {
+            const int parent_index = skeleton.at(i).parent_index;
+            if( parent_index != -1 ) {
+                const vec3 off = skeleton.at(i).end - skeleton.at( parent_index ).end;
+                pose.at(i)[3] = vec4( off, 1 );
+            }
+        }
         
         for( const auto& ch : channels ) {
             real param;
@@ -233,13 +242,13 @@ bool parseBVHAnimation( std::istream& in, const int num_bones, const std::vector
                     xform = glm::translate( xform, vec3(0,0,param) );
                     break;
                 case Xrotation:
-                    xform = glm::rotate( xform, param, vec3(1,0,0) );
+                    xform = glm::rotate( xform, glm::radians(param), vec3(1,0,0) );
                     break;
                 case Yrotation:
-                    xform = glm::rotate( xform, param, vec3(0,1,0) );
+                    xform = glm::rotate( xform, glm::radians(param), vec3(0,1,0) );
                     break;
                 case Zrotation:
-                    xform = glm::rotate( xform, param, vec3(0,0,1) );
+                    xform = glm::rotate( xform, glm::radians(param), vec3(0,0,1) );
                     break;
                 default:
                     cerr << "ERROR: Unknown channel type.\n";
@@ -248,7 +257,7 @@ bool parseBVHAnimation( std::istream& in, const int num_bones, const std::vector
         }
         
         // Convert the MatrixPose to a TRSPose.
-        TRSPose decomposed( num_bones );
+        TRSPose decomposed( skeleton.size() );
         assert( decomposed.size() == pose.size() );
         for( int i = 0; i < decomposed.size(); ++i ) {
             const mat4& M = pose.at(i);
@@ -303,7 +312,7 @@ bool loadBVH( const std::string& path, Skeleton& skeleton, BoneAnimation& animat
         return false;
     }
     
-    if( !parseBVHAnimation( bvh, skeleton.size(), channels, animation ) ) {
+    if( !parseBVHAnimation( bvh, skeleton, channels, animation ) ) {
         cerr << "ERROR: Could not parse BVH animation in file: " << path << '\n';
         return false;
     }
