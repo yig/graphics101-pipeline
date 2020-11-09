@@ -21,7 +21,7 @@ Goals:
 Getting Started & Handing In:
 -----------------------------
 
-* Download or clone this code repository. Don't fork it on GitHub, or else your code will be visible to everyone.
+* Download or clone this code repository. I recommend cloning so you can easily integrate updates I release while you are working on the project. Don't fork it on GitHub, or else your code will be visible to everyone.
 
 * Follow the instructions to install a working development environment: <https://github.com/yig/graphics101> . You will need to install the [glfw](https://www.glfw.org/) library for this assignment.
 
