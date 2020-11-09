@@ -403,7 +403,6 @@ can see/study the simplest-possible OpenGL scene in `simplescene.h` and
 
 * Almost everything in a JSON scene will live reload if using a
 `FancyScene`, including shaders, uniforms, and textures.
-This happens every `TimerMilliseconds`, which must be non-negative.
 The only property that will not live reload is `PipelineGUI`.
 
 * You can find lots of Creative Commons environment (cube) maps on the
