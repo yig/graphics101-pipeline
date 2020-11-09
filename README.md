@@ -27,7 +27,7 @@ Getting Started & Handing In:
 
   * Mac with Homebrew package manager: `brew install glfw`.
   * Ubuntu Linux: `sudo apt-get install libglfw3-dev`.
-  * Windows: Use the [binary installer](https://www.glfw.org/).
+  * Windows: Use the [binary installer](https://www.glfw.org/download.html).
 
 * The code will be written in GLSL (OpenGL shading language) and C++. You
 are encouraged to write helper functions as you like.
