@@ -6,6 +6,7 @@ project(pipeline LANGUAGES CXX C)
 set (CMAKE_CXX_STANDARD 11)
 
 # We need GLFW
+# See: https://www.glfw.org/docs/3.3/build.html#build_link_cmake_package
 find_package(glfw3 3.3 REQUIRED)
 
 # Some platforms need OpenGL. Most don't, because we are using the gl3w loader library.
