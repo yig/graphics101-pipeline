@@ -8,6 +8,9 @@ set (CMAKE_CXX_STANDARD 11)
 # We need GLFW
 find_package(glfw3 3.3 REQUIRED)
 
+# Some platforms need OpenGL. Most don't, because we are using the gl3w loader library.
+# find_package(OpenGL REQUIRED)
+
 set(SRCS
     src/animation.cpp
     src/animation.h
@@ -54,6 +57,11 @@ set(SRCS
 add_executable(pipeline ${SRCS})
 target_include_directories(pipeline PUBLIC include)
 target_link_libraries(pipeline glfw ${CMAKE_DL_LIBS})
+
+## We don't want to include the OpenGL directories because we are using gl3w.
+# target_include_directories(pipeline ${OPENGL_INCLUDE_DIRS})
+## On some platforms we still need to link directly.
+# target_link_libraries(pipeline OpenGL::GL)
 
 # Create the screenshots directory and remember its location.
 set(SCREENSHOTS "${PROJECT_SOURCE_DIR}/screenshots")
