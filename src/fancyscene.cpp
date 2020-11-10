@@ -431,7 +431,7 @@ void FancyScene::mouseDragEvent( const Event& event ) {
     m_mouse_last_pos = mouse_pos;
 }
 void FancyScene::timerEvent( real seconds_since_creation ) {
-    std::cerr << "FancyScene::timerEvent( " << seconds_since_creation << " )\n";
+    // std::cerr << "FancyScene::timerEvent( " << seconds_since_creation << " )\n";
 
     // Update uniforms here.
     // draw() will be called afterwards.
