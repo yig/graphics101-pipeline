@@ -84,7 +84,7 @@ void KinematicsVisualizer::reset( const std::string& scene_path, const Skeleton&
                     glm::translate( mat4(1),
                         bone_start
                         ),
-                    acos( glm::clamp( cos_theta, -1.f, 1.f ) ),
+                    real(acos( glm::clamp( cos_theta, -1.f, 1.f ) )),
                     axis
                     ),
                 vec3(bone_length)
