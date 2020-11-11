@@ -27,7 +27,19 @@ Getting Started & Handing In:
 
   * Mac with Homebrew package manager: `brew install glfw`.
   * Ubuntu Linux: `sudo apt-get install libglfw3-dev`.
-  * Windows: Use the [binary installer](https://www.glfw.org/download.html).
+  * Windows: Use the [binary installer](https://www.glfw.org/download.html) or use a package manager. With [vcpkg](https://github.com/microsoft/vcpkg), in `C:\src\vcpkg`:
+  
+        git clone https://github.com/microsoft/vcpkg
+        .\vcpkg\bootstrap-vcpkg.bat
+        .\vcpkg\vcpkg install glfw3
+    
+    and then either:
+    
+        .\vcpkg\vcpkg integrate install
+    
+    or run add the following flag to your `cmake ..`:
+    
+        -DCMAKE_TOOLCHAIN_FILE=C:\src\vcpkg/scripts/buildsystems/vcpkg.cmake
 
 * The code will be written in GLSL (OpenGL shading language) and C++. You
 are encouraged to write helper functions as you like.
