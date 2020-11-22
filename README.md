@@ -23,23 +23,21 @@ Getting Started & Handing In:
 
 * Download or clone this code repository. I recommend cloning so you can easily integrate updates I release while you are working on the project. Don't fork it on GitHub, or else your code will be visible to everyone.
 
-* Follow the instructions to install a working development environment: <https://github.com/yig/graphics101> . You will need to install the [glfw](https://www.glfw.org/) library for this assignment.
+* Follow the instructions to install a working development environment: <https://github.com/yig/graphics101>.
 
-  * Mac with Homebrew package manager: `brew install glfw`.
-  * Ubuntu Linux: `sudo apt-get install libglfw3-dev`.
-  * Windows: Use the [binary installer](https://www.glfw.org/download.html) or use a package manager. With [vcpkg](https://github.com/microsoft/vcpkg), in `C:\src\vcpkg`:
-  
-        git clone https://github.com/microsoft/vcpkg
-        .\vcpkg\bootstrap-vcpkg.bat
-        .\vcpkg\vcpkg install glfw3
-    
-    and then either:
-    
-        .\vcpkg\vcpkg integrate install
-    
-    or run add the following flag to your `cmake ..`:
-    
-        -DCMAKE_TOOLCHAIN_FILE=C:\src\vcpkg/scripts/buildsystems/vcpkg.cmake
+  * Optional: Install the [glfw](https://www.glfw.org/) library for creating an OpenGL window. If you don't install it this way, the `CMakeLists.txt` will download and compile `glfw` on the fly.
+
+      * Mac with Homebrew package manager: `brew install glfw`.
+      * Ubuntu Linux: `sudo apt-get install libglfw3-dev`.
+      * Windows: It's complicated. Just let the `CMakeLists.txt` compile it for you. If you really want to, you can use [vcpkg](https://github.com/microsoft/vcpkg). If you cloned `vcpkg` as `C:\src\vcpkg`:
+      
+            git clone https://github.com/microsoft/vcpkg
+            .\vcpkg\bootstrap-vcpkg.bat
+            .\vcpkg\vcpkg install glfw3
+        
+        and then copy the `glfw` folder to your `Program Files` or add the following flag to your `cmake ..`:
+        
+            -DCMAKE_TOOLCHAIN_FILE=C:\src\vcpkg/scripts/buildsystems/vcpkg.cmake
 
 * The code will be written in GLSL (OpenGL shading language) and C++. You
 are encouraged to write helper functions as you like.

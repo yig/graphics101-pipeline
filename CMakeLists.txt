@@ -7,7 +7,27 @@ set (CMAKE_CXX_STANDARD 11)
 
 # We need GLFW
 # See: https://www.glfw.org/docs/3.3/build.html#build_link_cmake_package
-find_package(glfw3 3.2 REQUIRED)
+# find_package(glfw3 3.2 REQUIRED)
+
+# GLFW is non-trivial to install on Windows.
+## There's not a great system package manager for Windows.
+## Let's use a CMake package manager.
+# The CPM dependency manager: https://github.com/TheLartians/CPM.cmake
+# The Hunter package manager: https://github.com/cpp-pm/hunter
+
+include(cmake/CPM.cmake)
+CPMFindPackage(
+    NAME glfw3
+    GITHUB_REPOSITORY glfw/glfw
+    GIT_TAG 3.3.2
+    VERSION 3.2
+    OPTIONS
+        "ENKITS_BUILD_EXAMPLES OFF"
+        "GLFW_BUILD_EXAMPLES OFF"
+        "GLFW_BUILD_TESTS OFF"
+        "GLFW_BUILD_DOCS OFF"
+        "GLFW_BUILD_INSTALL OFF"
+        )
 
 # Some platforms need OpenGL. Most don't, because we are using the gl3w loader library.
 find_package(OpenGL REQUIRED)

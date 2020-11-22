@@ -13,6 +13,9 @@ install(FILES
     ${SRCS}
     DESTINATION "src"
 )
+install(DIRECTORY "cmake"
+    DESTINATION .
+)
 # No trailing slash after "${SCREENSHOTS}" preserves the "output" directory in the zip.
 install(DIRECTORY "${SCREENSHOTS}"
     DESTINATION .
