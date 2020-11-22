@@ -35,7 +35,11 @@ Getting Started & Handing In:
             .\vcpkg\bootstrap-vcpkg.bat
             .\vcpkg\vcpkg install glfw3
         
-        and then copy the `glfw` folder to your `Program Files` or add the following flag to your `cmake ..`:
+        if you are using a 64-bit Windows compiler toolchain, replace the last command with:
+        
+            .\vcpkg\vcpkg install glfw3:x64-windows
+        
+        and then copy the GLFW folder `vcpkg` installs to your `Program Files` or else add the following flag to your `cmake ..`:
         
             -DCMAKE_TOOLCHAIN_FILE=C:\src\vcpkg/scripts/buildsystems/vcpkg.cmake
 
