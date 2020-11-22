@@ -50,6 +50,8 @@ move the `head`, `lemon`, and `hercules` directories into your
 `pipeline/examples/head`, `pipeline/examples/lemon`, and
 `pipeline/examples/hercules`.
 
+* Copy the `mesh.cpp`'s functions `computeNormals()`, `normalizingTransformation()`, and `applyTransformation()` from the `mesh.cpp` you wrote for the previous homework on [meshes](https://github.com/yig/graphics101-meshes).
+
 * Build and run the code. The code should compile. When it runs, it will
 ask you to choose a JSON file specifying a scene. It can also be run
 as a command-line program taking a single argument, the path to the JSON
@@ -69,8 +71,6 @@ working. They don't depend on any code you write:
 the JSON scene files as needed. Tangent-space normal mapping will
 require you to modify C++ code (`mesh.cpp`'s `computeTangentBitangent()`
 and `fancyscene.cpp`'s `vaoFromOBJPath()`).
-
-    * You should have filled in `mesh.cpp`'s other functions in the previous homework on [meshes](https://github.com/yig/graphics101-meshes).
 
 * Build and run and test that it is working correctly. Here are the JSON
 scene files that will verify your output.
