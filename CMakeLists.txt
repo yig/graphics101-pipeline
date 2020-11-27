@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.14)
 
 project(pipeline LANGUAGES CXX C)
 
@@ -18,8 +18,10 @@ set (CMAKE_CXX_STANDARD 11)
 include(cmake/CPM.cmake)
 CPMFindPackage(
     NAME glfw3
-    GITHUB_REPOSITORY glfw/glfw
-    GIT_TAG 3.3.2
+    # GITHUB_REPOSITORY glfw/glfw
+    # GIT_TAG 3.3.2
+    URL https://github.com/glfw/glfw/releases/download/3.3.2/glfw-3.3.2.zip
+    URL_HASH SHA256=08a33a512f29d7dbf78eab39bd7858576adcc95228c9efe8e4bc5f0f3261efc7
     VERSION 3.2
     OPTIONS
         "ENKITS_BUILD_EXAMPLES OFF"
