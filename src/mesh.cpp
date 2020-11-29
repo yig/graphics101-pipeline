@@ -153,6 +153,9 @@ bool Mesh::loadFromOBJ( const std::string& path ) {
     
     // TODO: Error checking with a printout to std::cerr and return false.
     
+    // Print the number of quads triangulated only once. Keep track of the count.
+    int num_quads_triangulated = 0;
+    
     // Open the file.
     ifstream mesh( path );
     if( !mesh ) {
@@ -227,7 +230,11 @@ bool Mesh::loadFromOBJ( const std::string& path ) {
             
             // Add all the faces.
             if( vb.size() != 3 ) {
-                cerr << "Triangulating a face with " << vb.size() << " vertices.\n";
+                if( vb.size() == 4 ) {
+                    num_quads_triangulated += 1;
+                } else {
+                    cerr << "Triangulating a face with " << vb.size() << " vertices.\n";
+                }
             }
             for( int i = 2; i < vb.size(); ++i ) {
                 // Add the position face.
@@ -251,6 +258,10 @@ bool Mesh::loadFromOBJ( const std::string& path ) {
                 }
             }
         }
+    }
+    
+    if( num_quads_triangulated > 0 ) {
+        cerr << "Triangulated " << num_quads_triangulated << " quadrilaterals.\n";
     }
     
     return true;
