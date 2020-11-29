@@ -12,8 +12,13 @@
 namespace {
 // attribute uploading helper function
 // specialized for GLfloat
-void upload_attribute( GLuint VAO, GLint dimension, const GLfloat* data, int num_vertices, GLuint location )
+void upload_attribute( GLuint VAO, GLint dimension, const GLfloat* data, int num_vertices, GLint location )
 {
+    if( location < 0 ) {
+        std::cerr << "WARNING: Not uploading attribute with a negative location\n";
+        return;
+    }
+    
     assert( num_vertices > 0 );
     assert( data );
     
@@ -45,8 +50,13 @@ void upload_attribute( GLuint VAO, GLint dimension, const GLfloat* data, int num
     glDeleteBuffers( 1, &VBO );
 }
 // specialized for GLint
-void upload_attribute( GLuint VAO, GLint dimension, const GLint* data, int num_vertices, GLuint location )
+void upload_attribute( GLuint VAO, GLint dimension, const GLint* data, int num_vertices, GLint location )
 {
+    if( location < 0 ) {
+        std::cerr << "WARNING: Not uploading attribute with a negative location\n";
+        return;
+    }
+    
     assert( num_vertices > 0 );
     assert( data );
     
@@ -124,28 +134,28 @@ void VertexAndFaceArrays::draw()
     glDrawElements( m_mode, m_num_face_indices, GL_UNSIGNED_INT, 0 );
 }
 
-void VertexAndFaceArrays::uploadAttribute( const GLfloat* data, int num_vertices, GLuint location ) {
+void VertexAndFaceArrays::uploadAttribute( const GLfloat* data, int num_vertices, GLint location ) {
     upload_attribute( m_VAO, 1, data, num_vertices, location );
 }
-void VertexAndFaceArrays::uploadAttribute( const vec2* data, int num_vertices, GLuint location ) {
+void VertexAndFaceArrays::uploadAttribute( const vec2* data, int num_vertices, GLint location ) {
     upload_attribute( m_VAO, 2, num_vertices > 0 ? glm::value_ptr(data[0]) : 0, num_vertices, location );
 }
-void VertexAndFaceArrays::uploadAttribute( const vec3* data, int num_vertices, GLuint location ) {
+void VertexAndFaceArrays::uploadAttribute( const vec3* data, int num_vertices, GLint location ) {
     upload_attribute( m_VAO, 3, num_vertices > 0 ? glm::value_ptr(data[0]) : 0, num_vertices, location );
 }
-void VertexAndFaceArrays::uploadAttribute( const vec4* data, int num_vertices, GLuint location ) {
+void VertexAndFaceArrays::uploadAttribute( const vec4* data, int num_vertices, GLint location ) {
     upload_attribute( m_VAO, 4, num_vertices > 0 ? glm::value_ptr(data[0]) : 0, num_vertices, location );
 }
-void VertexAndFaceArrays::uploadAttribute( const GLint* data, int num_vertices, GLuint location ) {
+void VertexAndFaceArrays::uploadAttribute( const GLint* data, int num_vertices, GLint location ) {
     upload_attribute( m_VAO, 1, data, num_vertices, location );
 }
-void VertexAndFaceArrays::uploadAttribute( const ivec2* data, int num_vertices, GLuint location ) {
+void VertexAndFaceArrays::uploadAttribute( const ivec2* data, int num_vertices, GLint location ) {
     upload_attribute( m_VAO, 2, num_vertices > 0 ? glm::value_ptr(data[0]) : 0, num_vertices, location );
 }
-void VertexAndFaceArrays::uploadAttribute( const ivec3* data, int num_vertices, GLuint location ) {
+void VertexAndFaceArrays::uploadAttribute( const ivec3* data, int num_vertices, GLint location ) {
     upload_attribute( m_VAO, 3, num_vertices > 0 ? glm::value_ptr(data[0]) : 0, num_vertices, location );
 }
-void VertexAndFaceArrays::uploadAttribute( const ivec4* data, int num_vertices, GLuint location ) {
+void VertexAndFaceArrays::uploadAttribute( const ivec4* data, int num_vertices, GLint location ) {
     upload_attribute( m_VAO, 4, num_vertices > 0 ? glm::value_ptr(data[0]) : 0, num_vertices, location );
 }
 
@@ -212,7 +222,7 @@ std::vector< ivec3 > flatten_face_indices( int num_faces ) {
 
 namespace vao {
 
-VertexAndFaceArrays::VertexAndFaceArraysPtr makeSquare( GLuint position_location, GLuint texcoord_location )
+VertexAndFaceArrays::VertexAndFaceArraysPtr makeSquare( GLint position_location, GLint texcoord_location )
 {
     std::vector< vec3 > V;
     V.push_back( vec3( -1, -1, 0 ) );
@@ -236,7 +246,7 @@ VertexAndFaceArrays::VertexAndFaceArraysPtr makeSquare( GLuint position_location
     vao->uploadFaces( F );
     return vao;
 }
-VertexAndFaceArrays::VertexAndFaceArraysPtr makeTriangle( GLuint position_location )
+VertexAndFaceArrays::VertexAndFaceArraysPtr makeTriangle( GLint position_location )
 {
     std::vector< vec3 > V;
     V.push_back( vec3( 0, 0, 0 ) );
@@ -251,7 +261,7 @@ VertexAndFaceArrays::VertexAndFaceArraysPtr makeTriangle( GLuint position_locati
     vao->uploadFaces( F );
     return vao;
 }
-VertexAndFaceArrays::VertexAndFaceArraysPtr makeFromOBJPath( const std::string& OBJpath, bool create_normals_if_needed, bool normalize, GLuint position_location, GLuint normal_location, GLuint texcoord_location ) {
+VertexAndFaceArrays::VertexAndFaceArraysPtr makeFromOBJPath( const std::string& OBJpath, bool create_normals_if_needed, bool normalize, GLint position_location, GLint normal_location, GLint texcoord_location ) {
     // Load the mesh from the OBJ.
     Mesh mesh;
     const bool success = mesh.loadFromOBJ( OBJpath );
@@ -270,7 +280,7 @@ VertexAndFaceArrays::VertexAndFaceArraysPtr makeFromOBJPath( const std::string& 
     return makeFromMesh( mesh, position_location, normal_location, texcoord_location );
 }
 
-VertexAndFaceArrays::VertexAndFaceArraysPtr makeFromMesh( const graphics101::Mesh& mesh, GLuint position_location, GLuint normal_location, GLuint texcoord_location ) {
+VertexAndFaceArrays::VertexAndFaceArraysPtr makeFromMesh( const graphics101::Mesh& mesh, GLint position_location, GLint normal_location, GLint texcoord_location ) {
     // Upload the mesh to the GPU.
     VertexAndFaceArrays::VertexAndFaceArraysPtr vao = VertexAndFaceArrays::makePtr();
     auto flat_positions = flatten_attribute( mesh.face_positions, mesh.positions );

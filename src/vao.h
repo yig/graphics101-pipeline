@@ -24,24 +24,24 @@ public:
     // To get the location parameter, either use the location property in GLSL declarations,
     // call ShaderProgram::getAttribLocation(), or call glGetAttribLocation( program, string ).
     // Call flatten_attribute() prior to passing data to these.
-    void uploadAttribute( const GLfloat*, int num_vertices, GLuint location );
-    void uploadAttribute( const vec2*, int num_vertices, GLuint location );
-    void uploadAttribute( const vec3*, int num_vertices, GLuint location );
-    void uploadAttribute( const vec4*, int num_vertices, GLuint location );
-    void uploadAttribute( const GLint*, int num_vertices, GLuint location );
-    void uploadAttribute( const ivec2*, int num_vertices, GLuint location );
-    void uploadAttribute( const ivec3*, int num_vertices, GLuint location );
-    void uploadAttribute( const ivec4*, int num_vertices, GLuint location );
+    void uploadAttribute( const GLfloat*, int num_vertices, GLint location );
+    void uploadAttribute( const vec2*, int num_vertices, GLint location );
+    void uploadAttribute( const vec3*, int num_vertices, GLint location );
+    void uploadAttribute( const vec4*, int num_vertices, GLint location );
+    void uploadAttribute( const GLint*, int num_vertices, GLint location );
+    void uploadAttribute( const ivec2*, int num_vertices, GLint location );
+    void uploadAttribute( const ivec3*, int num_vertices, GLint location );
+    void uploadAttribute( const ivec4*, int num_vertices, GLint location );
     
     // Convenience version of the above taking an std::vector<>.
-    void uploadAttribute( const std::vector< GLfloat >& attr, GLuint location ) { uploadAttribute( attr.data(), attr.size(), location ); }
-    void uploadAttribute( const std::vector< vec2 >& attr, GLuint location ) { uploadAttribute( attr.data(), attr.size(), location ); }
-    void uploadAttribute( const std::vector< vec3 >& attr, GLuint location ) { uploadAttribute( attr.data(), attr.size(), location ); }
-    void uploadAttribute( const std::vector< vec4 >& attr, GLuint location ) { uploadAttribute( attr.data(), attr.size(), location ); }
-    void uploadAttribute( const std::vector< GLint >& attr, GLuint location ) { uploadAttribute( attr.data(), attr.size(), location ); }
-    void uploadAttribute( const std::vector< ivec2 >& attr, GLuint location ) { uploadAttribute( attr.data(), attr.size(), location ); }
-    void uploadAttribute( const std::vector< ivec3 >& attr, GLuint location ) { uploadAttribute( attr.data(), attr.size(), location ); }
-    void uploadAttribute( const std::vector< ivec4 >& attr, GLuint location ) { uploadAttribute( attr.data(), attr.size(), location ); }
+    void uploadAttribute( const std::vector< GLfloat >& attr, GLint location ) { uploadAttribute( attr.data(), attr.size(), location ); }
+    void uploadAttribute( const std::vector< vec2 >& attr, GLint location ) { uploadAttribute( attr.data(), attr.size(), location ); }
+    void uploadAttribute( const std::vector< vec3 >& attr, GLint location ) { uploadAttribute( attr.data(), attr.size(), location ); }
+    void uploadAttribute( const std::vector< vec4 >& attr, GLint location ) { uploadAttribute( attr.data(), attr.size(), location ); }
+    void uploadAttribute( const std::vector< GLint >& attr, GLint location ) { uploadAttribute( attr.data(), attr.size(), location ); }
+    void uploadAttribute( const std::vector< ivec2 >& attr, GLint location ) { uploadAttribute( attr.data(), attr.size(), location ); }
+    void uploadAttribute( const std::vector< ivec3 >& attr, GLint location ) { uploadAttribute( attr.data(), attr.size(), location ); }
+    void uploadAttribute( const std::vector< ivec4 >& attr, GLint location ) { uploadAttribute( attr.data(), attr.size(), location ); }
     
     // Call flatten_face_indices() prior to this.
     // The default mode is GL_TRIANGLES.
@@ -120,20 +120,20 @@ Makes a VertexAndFaceArrays with position and texture coordinate attributes
 for a square. The positions range from (-1,-1) to (1,1) and the corresponding
 texture coordinates from (0,0) to (1,1).
 */
-VertexAndFaceArrays::VertexAndFaceArraysPtr makeSquare( GLuint position_location, GLuint texcoord_location );
+VertexAndFaceArrays::VertexAndFaceArraysPtr makeSquare( GLint position_location, GLint texcoord_location );
 /*
 Makes a VertexAndFaceArrays with positions for a right triangle: (0,0), (1,0), (0,1).
 Possibly useful for debugging.
 */
-VertexAndFaceArrays::VertexAndFaceArraysPtr makeTriangle( GLuint position_location );
+VertexAndFaceArrays::VertexAndFaceArraysPtr makeTriangle( GLint position_location );
 /*
 Makes a VertexAndFaceArrays from an OBJ file, including position, normal, and texture coordinates if present.
 */
-VertexAndFaceArrays::VertexAndFaceArraysPtr makeFromOBJPath( const std::string& OBJpath, bool create_normals_if_needed, bool normalize, GLuint position_location, GLuint normal_location = -1, GLuint texcoord_location = -1 );
+VertexAndFaceArrays::VertexAndFaceArraysPtr makeFromOBJPath( const std::string& OBJpath, bool create_normals_if_needed, bool normalize, GLint position_location, GLint normal_location = -1, GLint texcoord_location = -1 );
 /*
 Makes a VertexAndFaceArrays from a Mesh, including position, normal, and texture coordinates if present.
 */
-VertexAndFaceArrays::VertexAndFaceArraysPtr makeFromMesh( const graphics101::Mesh& mesh, GLuint position_location, GLuint normal_location = -1, GLuint texcoord_location = -1 );
+VertexAndFaceArrays::VertexAndFaceArraysPtr makeFromMesh( const graphics101::Mesh& mesh, GLint position_location, GLint normal_location = -1, GLint texcoord_location = -1 );
 }
 
 }
