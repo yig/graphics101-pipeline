@@ -89,6 +89,10 @@ scenes into an output subdirectory `screenshots`.
     * `normalmap_hercules_marble.json`
     * ... and any others that you make. You are required to make at least one (discussed below).
 
+* You will find reference output in the `examples/` directory.
+For each `<filename>.json` file, there is a `<filename>.png` screenshot
+taken from the default point of view.
+
 * Qt Creator has a great debugger for C++. For shaders, debugging is a bit
 trickier. When there is a GLSL error, you will see the shader code and
 the line number printed out to *Application Output* in Qt Creator.
