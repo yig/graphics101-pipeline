@@ -1,0 +1,7 @@
+cyborg: https://makio135.com/matcaps/1024/7B5254_E9DCC7_B19986_C8AC91.png
+lake: https://makio135.com/matcaps/1024/293534_B2BFC5_738289_8A9AA7.png
+desert: https://makio135.com/matcaps/1024/54584E_B1BAC5_818B91_A7ACA3.png
+blue: https://makio135.com/matcaps/1024/17395A_7EBCC7_4D8B9F_65A1B5.png
+gold: https://makio135.com/matcaps/256/422509_C89536_824512_0A0604-256px.png
+artred: https://makio135.com/matcaps/1024/660505_F2B090_DD4D37_AA1914.png
+rbplastic: https://makio135.com/matcaps/1024/B6B8B1_994A24_315C81_927963.png

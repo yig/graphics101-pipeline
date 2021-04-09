@@ -1,0 +1,10 @@
+## Create a normal map for a low-res mesh from a high-res mesh
+
+1. Load a mesh with "bake_vertex_normals_as_object_space_normalmap.json". Save the resulting object-space normal map to a PNG.
+2. Simplify the mesh in meshLab or some other software. If all you want is an object-space normal map, you are done. To create a tangent-space normal map, perform step 3.
+3. Load the simplified mesh and the object-space normal map with "bake_object_space_normalmap_as_tangentspace_normalmap.json". Save the resulting tangent-space normal map to a PNG.
+4. Load the simplified mesh and tangent-space normal map with "normalmap_*.json".
+
+## Create an object-space normal map from a tangent-space normal map.
+
+1. Load a mesh with "bake_tangentspace_normalmap_as_object_space_normalmap.json". Save the resulting object-space normal map to a PNG.

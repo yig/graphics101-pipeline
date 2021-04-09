@@ -4,6 +4,7 @@
 
 #include <iostream>
 
+#include "pythonlike.h"
 #include "dialogs.h"
 #include "pipelineguifactory.h"
 
@@ -55,9 +56,7 @@ void cursor_position_callback( GLFWwindow* window, double x, double y ) {
     else gui->mouseMoveEvent( event );
 }
 
-void save_screenshot() {
-    const std::string path = graphics101::saveFileDialog( "Save Screenshot As...", "screenshot.png", "PNG Image (*.png)" );
-    
+bool save_screenshot( const std::string& path ) {
     // From: https://vallentin.dev/2013/09/02/opengl-screenshot
     GLint viewport[4];
     glGetIntegerv(GL_VIEWPORT, viewport);
@@ -68,7 +67,7 @@ void save_screenshot() {
     int height = viewport[3];
     
     char* data = (char*) malloc( (size_t) (width * height * 3) ); // 3 components (R, G, B)
-    if( !data ) return;
+    if( !data ) return false;
     
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
     glReadPixels(x, y, width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -76,19 +75,53 @@ void save_screenshot() {
     stbi_flip_vertically_on_write( 1 );
     const bool success = stbi_write_png( path.c_str(), width, height, 3, data, 0 );
     if( success ) std::cout << "Saved screenshot: " << path << '\n';
+    else std::cerr << "ERROR: Could not save screenshot: " << path << '\n';
     
     free(data);
+    
+    return success;
 }
 
 void key_callback( GLFWwindow* window, int key, int scancode, int action, int mods ) {
     if( key == GLFW_KEY_S && action == GLFW_PRESS ) {
-        save_screenshot();
+        const std::string path = graphics101::saveFileDialog( "Save Screenshot As...", "screenshot.png", "PNG Image (*.png)" );
+        save_screenshot( path );
     }
+}
+
+void usage( char* argv0 ) {
+    std::cerr << "Usage: " << argv0 << "[--width pixels] [--height pixels] [--screenshot path/to/save.png] [--quit] [path/to/scene.json]\n";
 }
 
 }
 
 int main( int argc, char* argv[] ) {
+    // Gather the args into a vector.
+    std::vector<std::string> args( argv + 1, argv + argc );
+    if( pythonlike::get_optional_parameter( args, "-h" ) || pythonlike::get_optional_parameter( args, "--help" ) ) {
+        usage( argv[0] );
+        return -1;
+    }
+    
+    // Parse arguments.
+    int width = 500;
+    int height = 500;
+    std::string screenshotpath;
+    bool save_and_quit = false;
+    {
+        std::string val;
+        if( pythonlike::get_optional_parameter( args, "--width", val ) ) width = std::stoi(val);
+        if( pythonlike::get_optional_parameter( args, "--height", val ) ) height = std::stoi(val);
+        save_and_quit = pythonlike::get_optional_parameter( args, "--screenshot", screenshotpath );
+    }
+    if( args.size() > 1 ) {
+        usage( argv[0] );
+        return -1;
+    }
+    
+    // No need to make a menubar for save and quit.
+    // if( save_and_quit ) glfwInitHint(GLFW_COCOA_MENUBAR, GLFW_FALSE);
+    
     // Initialize GLFW and request an OpenGL Core Profile
     if( !glfwInit() ) {
         std::cerr << "Failed to initialize GLFW\n";
@@ -99,9 +132,11 @@ int main( int argc, char* argv[] ) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    // No need to show the window for save and quit.
+    // if( save_and_quit ) glfwWindowHint( GLFW_VISIBLE, GLFW_FALSE );
     
     // Create a window
-    GLFWwindow *window = glfwCreateWindow( 500, 500, "GPU Pipeline", 0, 0 );
+    GLFWwindow *window = glfwCreateWindow( width, height, "GPU Pipeline", 0, 0 );
     if( !window )
     {
         std::cerr << "Failed to create a window\n";
@@ -123,14 +158,17 @@ int main( int argc, char* argv[] ) {
     std::cout << "OpenGL " << glGetString(GL_VERSION) << ", GLSL " << glGetString(GL_SHADING_LANGUAGE_VERSION) << "\n";
     
     std::string scene_path;
-    if( argc == 2 ) {
-        scene_path = argv[1];
+    
+    assert( args.size() <= 1 );
+    if( args.size() == 1 ) {
+        scene_path = args.front();
     } else {
         scene_path = graphics101::loadFileDialog( "Open Scene", "", "Scene JSON Files (*.js *.json)" );
         // If the user cancels, length will be zero.
         if( scene_path.size() == 0 ) {
             // If the user cancels, don't show them an error. They cancelled. Just let them quit.
             // errorDialog( "Error", "You must select a JSON scene file to proceed." );
+            usage( argv[0] );
             return -1;
         }
     }
@@ -164,6 +202,12 @@ int main( int argc, char* argv[] ) {
         
         // Swap front and back buffers
         glfwSwapBuffers(window);
+        
+        // Save a screenshot and quit?
+        if( save_and_quit ) {
+            save_screenshot( screenshotpath );
+            break;
+        }
         
         // Poll for and process events. Wait timerCallbackMilliseconds.
         // If timerCallbackSeconds is negative, then we don't refresh.

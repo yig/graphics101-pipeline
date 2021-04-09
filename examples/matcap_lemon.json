@@ -1,0 +1,28 @@
+{
+    "PipelineGUI": "FancyScene",
+    "TimerMilliseconds": -1,
+    
+    "shaders": {
+        "vertex": [ "phong.vs" ],
+        "fragment": [ "matcap.fs" ]
+    },
+    
+    "uniforms": "matcap_lemon_uniforms.json",
+    
+    "mesh": "lemon/Lemon_01.obj",
+    
+    "textures": {
+        "diffuse": "lemon/lemon_01_Diffuse.png",
+        "normals": "lemon/Lemon_01_Normal Map-1k-objectspace.png",
+        "gloss": "lemon/lemon_01_Gloss-1k.png",
+        "cyborg": "matcaps/cyborg.png",
+        "lake": "matcaps/lake.png",
+        "desert": "matcaps/desert.png",
+        "blue": "matcaps/blue.png",
+        "gold": "matcaps/gold.png",
+        "artred": "matcaps/artred.png",
+        "rbplastic": "matcaps/rbplastic.png"
+    },
+    
+    "ClearColor": [ 1.0, 1.0, 1.0, 1.0 ]
+}

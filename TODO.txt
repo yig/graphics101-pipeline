@@ -1,6 +1,7 @@
 # TODO
 ## Code changes and examples that would benefit the framework
 
+- Flag to launch, save a screenshot, and quit.
 - "Your code goes here" in different files.
 - A way to turn on or off the visualization of the skeleton itself.
 - mesh normalization matrix goes into view, not applyTransformation

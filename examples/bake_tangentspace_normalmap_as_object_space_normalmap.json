@@ -1,0 +1,21 @@
+{
+    "PipelineGUI": "FancyScene",
+    "TimerMilliseconds": -1,
+    
+    "shaders": {
+        "vertex": [ "bake_tangentspace_normalmap_as_object_space_normalmap.vs" ],
+        "fragment": [ "bake_tangentspace_normalmap_as_object_space_normalmap.fs" ]
+    },
+    
+    "uniforms": {
+        "object_space_normalmap": { "type": "texture", "value": "normalmap" }
+    },
+    
+    "mesh": "lemon/Lemon_01.obj",
+    
+    "textures": {
+        "normalmap": "lemon/Lemon_01_Normal Map-1k.png"
+    },
+    
+    "ClearColor": [ 0.5, 0.5, 0.5, 1.0 ]
+}

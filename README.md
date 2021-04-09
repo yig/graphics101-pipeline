@@ -74,9 +74,13 @@ the JSON scene files as needed. Tangent-space normal mapping will
 require you to modify C++ code (`mesh.cpp`'s `computeTangentBitangent()`
 and `fancyscene.cpp`'s `vaoFromOBJPath()`).
 
-* Build and run and test that it is working correctly. Here are the JSON
+* Build and run and test that it is working correctly. If you run the `pipeline` program with the `-h` or `--help` flag, you should see the following:
+
+    pipeline [--width pixels] [--height pixels] [--screenshot path/to/save.png] [--quit] [path/to/scene.json]
+
+* Here are the JSON
 scene files that will verify your output.
-Save screenshots by pressing the `s` key. Save a screenshot for each of the JSON
+Save screenshots by pressing the `s` key or by passing `--screenshot output.png` to the executable. Save a screenshot for each of the JSON
 scenes into an output subdirectory `screenshots`.
 
     * `phong_bunny.json`
@@ -88,6 +92,8 @@ scenes into an output subdirectory `screenshots`.
     * `normalmap_hercules_bronze.json`
     * `normalmap_hercules_marble.json`
     * ... and any others that you make. You are required to make at least one (discussed below).
+
+* There is a cmake target `screenshots` that will do this for you, so you can just type `make screenshots` or `cmake --target screenshots --build .` in your `build` directory.
 
 * You will find reference output in the `examples/` directory.
 For each `<filename>.json` file, there is a `<filename>.png` screenshot
@@ -132,18 +138,21 @@ look like this:
 ![phong_bunny.json without refraction](docs/images/phong_bunny_norefract.jpg)
 ![phong_bunny.json with refraction](docs/images/phong_bunny_refract.jpg)
 ![phong_sphere.json](docs/images/phong_sphere.jpg)
+![cel_bunny.json](docs/images/cel_bunny.jpg)
+![cel_sphere.json](docs/images/cel_sphere.jpg)
+![matcap_head.json](docs/images/matcap_head.jpg)
+![matcap_hercules.json](docs/images/matcap_hercules.jpg)
+![matcap_lemon.json](docs/images/matcap_lemon.jpg)
 ![normalmap_cube.json](docs/images/normalmap_cube.jpg)
 ![normalmap_head.json](docs/images/normalmap_head.jpg)
 ![normalmap_hercules_bronze.json](docs/images/normalmap_hercules_bronze.jpg)
 ![normalmap_hercules_marble.json](docs/images/normalmap_hercules_marble.jpg)
 ![normalmap_lemon.json](docs/images/normalmap_lemon.jpg)
-![cel_bunny.json](docs/images/cel_bunny.jpg)
-![cel_sphere.json](docs/images/cel_sphere.jpg)
 
 Rubric:
 -------
 
-1. **(30 points)** Phong reflectance model. Your vertex shader only
+1. **(40 points)** Phong reflectance model. Your vertex shader only
 needs to transform the positions and normals. Your fragment shader is
 where the lighting is calculated. This is the same lighting model as you
 implemented for your ray tracer. However, you won't be able to implement
@@ -156,8 +165,6 @@ at all. The simplified formula is:
     ∑<sub>L</sub> (
         K<sub>A</sub> I<sub>AL</sub>
         + [ K<sub>D</sub> I<sub>L</sub> ( N · L ) + K<sub>S</sub> I<sub>L</sub> ( V · R )<sup>n</sup> ] )*
-
-    (Some equations are shown 3 ways because GitHub's Markdown processing doesn't handle math well.)
 
     Read on for details. In this assignment, all the parameters are stored as
 uniforms, which are global variables for shaders programs. *K<sub>A</sub>*,
@@ -173,9 +180,11 @@ fTexCoord )`. The summation is over all `num_lights` of the `Light` structures;
 `.color`. The light `.position` should be interpreted as existing in eye-space,
 not world-space. See *Tips* below for converting between world and eye space.
 
+    * **(10 points)** Upload the normals and texture coordinates to the GPU as per-vertex attributes. To do this, you will implement `vao.cpp`'s `makeFromMesh()`. You will see in that function how `mesh.positions` are uploaded. Do the same for `mesh.normals` and `mesh.texcoords`.
+
     * **(5 points)** Vertex shader `phong.vs`. Use the provided uniforms
 `uProjectionMatrix`, `uViewMatrix`, and `uNormalMatrix` to transform the input
-world-space position `vPos` and normal `vNormal` and pass them *out* to the
+world-space position `vPos` and normal `vNormal` into eye-space and pass them *out* to the
 fragment shader and set the output variable `gl_Position`. Pass the
 texture coordinate `vTexCoord` out unchanged.
 
@@ -185,7 +194,7 @@ your lighting calculations. You can pass along `fPos` and `fNormal` in
 world-space or in eye-space, so long as you use a consistent space when
 you compute your lighting. (If you want to compute lighting in
 world-space, you will have to convert the light position and the eye
-position into world-space by multiplying them with `inverse(uViewMatrix)`.
+position into world-space by multiplying them with `inverse(uViewMatrix)`.)
 
         * `uViewMatrix` is the matrix that converts a position in world-space into a
 position in eye-space: `uViewMatrix*p` converts `p` from world to
@@ -239,7 +248,7 @@ rotate the camera with the mouse.
 the same cube map texture as in reflections to get *I<sub>T</sub>*.
 You can get the refraction direction via the GLSL `refract()` function.
 
-2. **(20 points)** Cel or toon shading. You only need to write a fragment shader `cel.fs`,
+2. **(30 points)** Cel or toon shading. You only need to write a fragment shader `cel.fs`,
 since the same vertex shader as the one you wrote for Phong shading `phong.vs` can be re-used.
 Cel shading is the lighting effect used in games like
 *Zelda: Wind Waker* and *Breath of the Wild*, *Jet Set Radio*, and *Naruto Shippuden*.
@@ -262,7 +271,60 @@ use *K* = `material.color` times the color stored in the texture map:
 *K* = `material.color*texture( material.diffuse_texture, fTexCoord )`.
 You will re-use your `phong.vs` and only write a different `cel.fs`.
 
-3. **(40 points)** Normal mapping (`normalmap.vs` and `normalmap.fs`). This is an
+3. **(20 points)** MatCaps with object-space normal mapping.
+You only need to write a fragment shader `matcap.fs`,
+since the same vertex shader as the one you wrote for Phong shading `phong.vs` can be re-used.
+A MatCap (Material Capture) is a delightfully simple and flexible technique to create realistic or artistic lighting for a shape. The idea is simple. Different points on a shape look different because the normals are different.
+Think about your Phong reflectance model. The material parameters and lights are shared by every point on the object. The vector *V* from the point to the eye varies slightly, but we could approximate this with a constant direction. This is all to say that the appearance of an object is almost entirely dependent on its normals in eye space.
+A MatCap is a lookup table from a normal to a color. A sphere has normals pointing in all
+directions. All we need to do is render a sphere and save its colors. To render,
+we just need to look up the color of the sphere with that normal. In fact,
+we only render the part of the shape we can see, so we only need to worry about
+front-facing normals (with *z*>0 in eye-space). This gives us a very convenient way
+to store the lookup table:
+
+![matcap-blue.png](docs/images/matcap-blue.png)
+
+We store the front half of the sphere as a circle. To look up the color from the matcap, we just use the *x,y* component of the normal scaled and shifted to lie in the range [0,1]² instead of [-1,1]²: `color = texture( material.matcap_texture, n.xy*0.5 + 0.5 ).rgb`.
+We can create MatCaps any way we like. We can render a sphere with physically-based materials in a sophisticated lighting environment:
+
+![matcap-gold.png](docs/images/matcap-gold.png)
+![matcap-lake.png](docs/images/matcap-lake.png)
+
+We can also create an artistic sphere:
+
+![matcap-artred.png](docs/images/matcap-artred.png)
+
+Those MatCaps create the following bunnies:
+
+<img src="examples/matcap_bunny-blue.png" width="256" height="256" />
+<img src="examples/matcap_bunny-gold.png" width="256" height="256" />
+<img src="examples/matcap_bunny-lake.png" width="256" height="256" />
+<img src="examples/matcap_bunny-artred.png" width="256" height="256" />
+
+You can see lots of MatCaps visualized on 3D shapes [here](https://observablehq.com/@makio135/matcaps?ui=classic).
+
+    * **(10 points)** In `matcap.fs`, set the output color
+    to the color stored in the MatCap texture for the eye-space normal `fNormal`.
+    If `material.use_diffuse_texture`, multiply the color by the diffuse texture color `texture( material.diffuse_texture, fTexCoord ).rgba`.
+    
+    * **(10 points)** Object-space normal mapping. Texture resolution is typically much higher than vertex resolution. This is why we typically store colors in a texture map and not as vertex attributes. Along these same lines, we can store normals in a normal map in order to have render super-detailed surfaces. Normal maps are typically stored
+    in tangent-space, which is substantially more difficult to implement. (Tangent-space normal mapping is described below for bonus points.)
+    In `matcap.fs`, if `material.use_normal_map`, read the object-space
+    normal from the texture via
+    `texture( material.normal_map, fTexCoord ).rgb`.
+    Normal components range
+    from [-1,1], while colors range from [0,1], so each normal component
+    is stored in the texture as `0.5*(n+1)`. Convert the color stored in the normalmap texture back to a normal via `2*color-1`.
+    This normal is in object-space. Convert it to eye-space using `uNormalMatrix` and then use it instead of `fNormal` to read from the MatCap.
+
+4. **(10 points)** Be creative! Create a time-varying artistic shader of
+your own design. Make use of the uniform `uTime`, which stores the seconds
+since the program was launched. Declare it in your shader as `uniform float uTime;`
+Be sure to change `TimerMilliseconds` in the scene JSON file to something like 16
+(which corresponds to 60 frames-per-second). See `sphere.vs` for an example.
+
+4. **(bonus 30 points)** Normal mapping (`normalmap.vs` and `normalmap.fs`). This is an
 extension of your Phong reflectance model shader. With normal mapping,
 the texture stores a normal vector. Because lighting is entirely
 determined by the normal vector, high resolution normals make a surface
@@ -295,13 +357,7 @@ normal via `2*color-1`.
     
     * For a video explanation of normal mapping, see [this YouTube video](https://www.youtube.com/watch?v=yHzIx41eiD4).
 
-4. **(10 points)** Be creative! Create a time-varying artistic shader of
-your own design. Make use of the uniform `uTime`, which stores the seconds
-since the program was launched. Declare it in your shader as `uniform float uTime;`
-Be sure to change `TimerMilliseconds` in the scene JSON file to something like 16
-(which corresponds to 60 frames-per-second). See `sphere.vs` for an example.
-
-5. **Bonus (variable points):**
+5. **(bonus variable points):**
 
     * Image Processing (blur, edge detect, etc.). Draw a full-screen textured
 square. Your vertex shader should pass along the position and texture
@@ -322,7 +378,8 @@ interpolate between them (linearly or with an easing function). You can
 go further and implement linear blend skinning, in which there are
 multiple sequences of transformation matrices animating in parallel, and
 each vertex has a set of associated "skin" weights. The vertex is
-transformed by the weighted average transformation matrix.
+transformed by the weighted average transformation matrix. Some of
+the infrastructure for this is already implemented.
 
     * Ambient Occlusion. This provides a much more accurate surface ambient
 color *K<sub>A</sub>* by computing the fraction of directions that are blocked
@@ -426,3 +483,5 @@ The only property that will not live reload is `PipelineGUI`.
 * You can find lots of Creative Commons environment (cube) maps on the
 website of Emil Persson, aka Humus:
 <http://www.humus.name>
+
+* You can find lots of MatCaps on this website: <https://github.com/nidorx/matcaps>. You can see all the MatCaps nicely visualized here: <https://observablehq.com/@makio135/matcaps?ui=classic>

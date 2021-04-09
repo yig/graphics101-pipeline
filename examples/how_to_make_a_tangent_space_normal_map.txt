@@ -1,4 +1,0 @@
-1. Load a mesh with "bake.json". Save the resulting object-space normal map to a PNG.
-2. Simplify the mesh in meshLab or some other software.
-3. Load the simplified mesh and the object-space normal map with "bake_tangentspace.json". Save the resulting tangent-space normal map to a PNG.
-4. Load the simplified mesh and tangent-space normal map with "normalmap_*.json".

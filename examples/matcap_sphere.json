@@ -1,0 +1,35 @@
+{
+    "PipelineGUI": "FancyScene",
+    "TimerMilliseconds": -1,
+    
+    "shaders": {
+        "vertex": [ "phong.vs" ],
+        "fragment": [ "matcap.fs" ]
+    },
+    
+    "uniforms": {
+        "matcap_texture": { "type": "texture", "value": "cyborg" },
+
+        "material.use_diffuse_texture": { "type": "1i", "value": 0 },
+        "material.diffuse_texture": { "type": "texture", "value": "earth" },
+        
+        "material.use_normal_map": { "type": "1i", "value": 0 },
+        "material.normal_map": { "type": "texture", "value": "grid" }
+    },
+    
+    "mesh": "sphere-y.obj",
+    
+    "textures": {
+        "earth": "earth.png",
+        "grid": "uv_grid.png",
+        "cyborg": "matcaps/cyborg.png",
+        "lake": "matcaps/lake.png",
+        "desert": "matcaps/desert.png",
+        "blue": "matcaps/blue.png",
+        "gold": "matcaps/gold.png",
+        "artred": "matcaps/artred.png",
+        "rbplastic": "matcaps/rbplastic.png"
+    },
+    
+    "ClearColor": [ 1.0, 1.0, 1.0, 1.0 ]
+}

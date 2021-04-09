@@ -1,0 +1,27 @@
+{
+    "PipelineGUI": "FancyScene",
+    "TimerMilliseconds": -1,
+    
+    "shaders": {
+        "vertex": [ "phong.vs" ],
+        "fragment": [ "matcap.fs" ]
+    },
+    
+    "uniforms": "matcap_hercules_uniforms.json",
+    
+    "mesh": "hercules/HerculesBust.obj",
+    
+    "textures": {
+        "diffuse": "hercules/HB_marble_diff.png",
+        "normals": "hercules/HB_marble_norm-1k-objectspace.png",
+        "cyborg": "matcaps/cyborg.png",
+        "lake": "matcaps/lake.png",
+        "desert": "matcaps/desert.png",
+        "blue": "matcaps/blue.png",
+        "gold": "matcaps/gold.png",
+        "artred": "matcaps/artred.png",
+        "rbplastic": "matcaps/rbplastic.png"
+    },
+    
+    "ClearColor": [ 1.0, 1.0, 1.0, 1.0 ]
+}

@@ -1,0 +1,9 @@
+{
+    "matcap_texture": { "type": "texture", "value": "cyborg" },
+
+    "material.use_diffuse_texture": { "type": "1i", "value": 0 },
+    "material.diffuse_texture": { "type": "texture", "value": "diffuse" },
+    
+    "material.use_normal_map": { "type": "1i", "value": 1 },
+    "material.normal_map": { "type": "texture", "value": "normals" }
+}

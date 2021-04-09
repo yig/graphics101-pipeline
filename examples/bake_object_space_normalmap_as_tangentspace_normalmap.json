@@ -1,0 +1,21 @@
+{
+    "PipelineGUI": "FancyScene",
+    "TimerMilliseconds": -1,
+    
+    "shaders": {
+        "vertex": [ "bake_object_space_normalmap_as_tangentspace_normalmap.vs" ],
+        "fragment": [ "bake_object_space_normalmap_as_tangentspace_normalmap.fs" ]
+    },
+    
+    "uniforms": {
+        "object_space_normalmap": { "type": "texture", "value": "object_space_normalmap" }
+    },
+    
+    "mesh": "head/head-200.obj",
+    
+    "textures": {
+        "object_space_normalmap": "head/object_space_normal_map.png"
+    },
+    
+    "ClearColor": [ 0.5, 0.5, 0.5, 1.0 ]
+}

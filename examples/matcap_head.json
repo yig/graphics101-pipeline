@@ -1,0 +1,27 @@
+{
+    "PipelineGUI": "FancyScene",
+    "TimerMilliseconds": -1,
+    
+    "shaders": {
+        "vertex": [ "phong.vs" ],
+        "fragment": [ "matcap.fs" ]
+    },
+    
+    "uniforms": "matcap_head_uniforms.json",
+    
+    "mesh": "head/head.obj",
+    
+    "textures": {
+        "skin": "head/lambertian.jpg",
+        "normals": "head/normal-lowRes-objectspace.png",
+        "cyborg": "matcaps/cyborg.png",
+        "lake": "matcaps/lake.png",
+        "desert": "matcaps/desert.png",
+        "blue": "matcaps/blue.png",
+        "gold": "matcaps/gold.png",
+        "artred": "matcaps/artred.png",
+        "rbplastic": "matcaps/rbplastic.png"
+    },
+    
+    "ClearColor": [ 1.0, 1.0, 1.0, 1.0 ]
+}

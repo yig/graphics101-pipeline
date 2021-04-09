@@ -60,6 +60,7 @@ set(SRCS
     src/mesh.h
     src/parsing.cpp
     src/parsing.h
+    src/pythonlike.h
     src/shaderprogram.cpp
     src/shaderprogram.h
     src/stb_image_write.h
@@ -91,5 +92,22 @@ set(SCREENSHOTS "${PROJECT_SOURCE_DIR}/screenshots")
 file(MAKE_DIRECTORY "${SCREENSHOTS}")
 # Remember the examples directory, too.
 set(EXAMPLES "${PROJECT_SOURCE_DIR}/examples")
+
+# A CMake target to create the desired outputs
+add_custom_target(screenshots
+    COMMAND pipeline --screenshot "${SCREENSHOTS}/phong_bunny.png" "${EXAMPLES}/phong_bunny.json"
+    COMMAND pipeline --screenshot "${SCREENSHOTS}/phong_sphere.png" "${EXAMPLES}/phong_sphere.json"
+    COMMAND pipeline --screenshot "${SCREENSHOTS}/cel_bunny.png" "${EXAMPLES}/cel_bunny.json"
+    COMMAND pipeline --screenshot "${SCREENSHOTS}/normalmap_cube.png" "${EXAMPLES}/normalmap_cube.json"
+    COMMAND pipeline --screenshot "${SCREENSHOTS}/normalmap_head.png" "${EXAMPLES}/normalmap_head.json"
+    COMMAND pipeline --screenshot "${SCREENSHOTS}/normalmap_lemon.png" "${EXAMPLES}/normalmap_lemon.json"
+    COMMAND pipeline --screenshot "${SCREENSHOTS}/normalmap_hercules_bronze.png" "${EXAMPLES}/normalmap_hercules_bronze.json"
+    COMMAND pipeline --screenshot "${SCREENSHOTS}/normalmap_hercules_marble.png" "${EXAMPLES}/normalmap_hercules_marble.json"
+    
+    WORKING_DIRECTORY "${OUTPUT}"
+    VERBATIM
+    )
+# This output target depends on the meshes target having been created.
+add_dependencies(screenshots pipeline)
 
 include("CMakeLists-zip.txt" OPTIONAL)

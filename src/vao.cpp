@@ -283,17 +283,24 @@ VertexAndFaceArrays::VertexAndFaceArraysPtr makeFromOBJPath( const std::string& 
 VertexAndFaceArrays::VertexAndFaceArraysPtr makeFromMesh( const graphics101::Mesh& mesh, GLint position_location, GLint normal_location, GLint texcoord_location ) {
     // Upload the mesh to the GPU.
     VertexAndFaceArrays::VertexAndFaceArraysPtr vao = VertexAndFaceArrays::makePtr();
+    
+    // 1 Flatten.
+    // 2 Upload to `position_location`
     auto flat_positions = flatten_attribute( mesh.face_positions, mesh.positions );
     vao->uploadAttribute( flat_positions, position_location );
     
     if( normal_location != -1 ) {
-        auto flat_normals = flatten_attribute( mesh.face_normals, mesh.normals );
-        vao->uploadAttribute( flat_normals, normal_location );
+        // Your code goes here.
+        // 1 Flatten.
+        // 2 Upload to `normal_location`
+        
     }
     
     if( texcoord_location != -1 && !mesh.face_texcoords.empty() ) {
-        auto flat_texcoords = flatten_attribute( mesh.face_texcoords, mesh.texcoords );
-        vao->uploadAttribute( flat_texcoords, texcoord_location );
+        // Your code goes here.
+        // 1 Flatten.
+        // 2 Upload to `texcoord_location`
+        
     }
 
     auto flat_faces = flatten_face_indices( mesh.face_positions.size() );

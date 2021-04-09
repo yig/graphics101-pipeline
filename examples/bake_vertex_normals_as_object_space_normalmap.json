@@ -3,8 +3,8 @@
     "TimerMilliseconds": -1,
     
     "shaders": {
-        "vertex": [ "bake.vs" ],
-        "fragment": [ "bake.fs" ]
+        "vertex": [ "bake_vertex_normals_as_object_space_normalmap.vs" ],
+        "fragment": [ "bake_vertex_normals_as_object_space_normalmap.fs" ]
     },
     
     "mesh": "head/head.obj",
