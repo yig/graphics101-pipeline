@@ -67,6 +67,10 @@ working. They don't depend on any code you write:
     You should see:
 
     ![simplescene.json](docs/images/simplescene.png)
+    ![sphere.json](docs/images/sphere-first.png)
+    
+    Once you add the missing code to `vao.cpp`, `sphere.json` will look as follows:
+    
     ![sphere.json](docs/images/sphere.jpg)
 
 * Create your vertex shader and fragment shaders for each shader. Modify
