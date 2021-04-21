@@ -282,7 +282,7 @@ use *K* = `material.color` times the color stored in the texture map:
 *K* = `material.color*texture( material.diffuse_texture, fTexCoord )`.
 You will re-use your `phong.vs` and only write a different `cel.fs`.
 
-3. **(20 points)** MatCaps with object-space normal mapping.
+3. **(20 points + bonus 3 points)** MatCaps with object-space normal mapping.
 You only need to write a fragment shader `matcap.fs`,
 since the same vertex shader as the one you wrote for Phong shading `phong.vs` can be re-used.
 A MatCap (Material Capture) is a delightfully simple and flexible technique to create realistic or artistic lighting for a shape. The idea is simple. Different points on a shape look different because the normals are different.
@@ -328,6 +328,8 @@ You can see lots of MatCaps visualized on 3D shapes [here](https://observablehq.
     from [-1,1], while colors range from [0,1], so each normal component
     is stored in the texture as `0.5*(n+1)`. Convert the color stored in the normalmap texture back to a normal via `2*color-1`.
     This normal is in object-space. Convert it to eye-space using `uNormalMatrix` and then use it instead of `fNormal` to read from the MatCap.
+    
+    * **(bonus 3 points)** Make your own MatCap! You can make a toon shader MatCap by taking a screenshot of a toon-shaded sphere. You can also make much cooler stuff. Have fun with this.
 
 4. **(10 points)** Be creative! Create a time-varying artistic shader of
 your own design. Make use of the uniform `uTime`, which stores the seconds
