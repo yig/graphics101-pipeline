@@ -62,7 +62,7 @@ move the `head`, `lemon`, and `hercules` directories into your
 `pipeline/examples/head`, `pipeline/examples/lemon`, and
 `pipeline/examples/hercules`.
 
-* Copy the `mesh.cpp`'s functions `computeNormals()`, `normalizingTransformation()`, and `applyTransformation()` from the `mesh.cpp` you wrote for the previous homework on [meshes](https://github.com/yig/graphics101-meshes).
+* Copy the `mesh.cpp`'s functions `computeNormals()`, `normalizingTransformation()`, and `applyTransformation()` from the `mesh.cpp` you wrote for the previous homework on [meshes](https://github.com/yig/graphics101-meshes). Don't replace the `mesh.cpp` file with the one you previously wrote, because there's a new function for this project and some functions aren't needed (the half-edge support code is missing from this project). If you already turned in your [meshes](https://github.com/yig/graphics101-meshes) homework, you can email us to request a guaranteed-correct version of `meshes.cpp`.
 
 * Build and run the code. The code should compile. When it runs, it will
 ask you to choose a JSON file specifying a scene. It can also be run
