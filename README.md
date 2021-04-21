@@ -266,7 +266,7 @@ Cel shading is the lighting effect used in games like
 To achieve cel shading, we compute a scalar brightness value,
 round it to discrete levels, and then use that to scale the material color.
 The scalar brightness value *F* is computed with a simplified Phong reflectance
-in which no material colors *K* appear and the light color terms `.color_ambient` and `.color`
+in which no material colors *K* appear and the light color terms *I<sub>AL</sub>* and *I<sub>L</sub>* for `.color_ambient` and `.color`
 are simplified into scalar intensities:
 
     *F = ∑<sub>L</sub> (I<sub>AL</sub> + [I<sub>L</sub> ( N · L ) + I<sub>L</sub> ( V · R )<sup>n</sup>])*
