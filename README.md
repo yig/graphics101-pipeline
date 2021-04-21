@@ -315,21 +315,21 @@ Those MatCaps create the following bunnies:
 
 You can see lots of MatCaps visualized on 3D shapes [here](https://observablehq.com/@makio135/matcaps?ui=classic).
 
-    * **(10 points)** In `matcap.fs`, set the output color
-    to the color stored in the MatCap texture for the eye-space normal `fNormal`.
-    If `material.use_diffuse_texture`, multiply the color by the diffuse texture color `texture( material.diffuse_texture, fTexCoord ).rgba`.
-    
-    * **(10 points)** Object-space normal mapping. Texture resolution is typically much higher than vertex resolution. This is why we typically store colors in a texture map and not as vertex attributes. Along these same lines, we can store normals in a normal map in order to have render super-detailed surfaces. Normal maps are typically stored
-    in tangent-space, which is substantially more difficult to implement. (Tangent-space normal mapping is described below for bonus points.)
-    In `matcap.fs`, if `material.use_normal_map`, read the object-space
-    normal from the texture via
-    `texture( material.normal_map, fTexCoord ).rgb`.
-    Normal components range
-    from [-1,1], while colors range from [0,1], so each normal component
-    is stored in the texture as `0.5*(n+1)`. Convert the color stored in the normalmap texture back to a normal via `2*color-1`.
-    This normal is in object-space. Convert it to eye-space using `uNormalMatrix` and then use it instead of `fNormal` to read from the MatCap.
-    
-    * **(bonus 3 points)** Make your own MatCap! You can make a toon shader MatCap by taking a screenshot of a toon-shaded sphere. You can also make much cooler stuff. Have fun with this.
+* **(10 points)** In `matcap.fs`, set the output color
+to the color stored in the MatCap texture for the eye-space normal `fNormal`.
+If `material.use_diffuse_texture`, multiply the color by the diffuse texture color `texture( material.diffuse_texture, fTexCoord ).rgba`.
+
+* **(10 points)** Object-space normal mapping. Texture resolution is typically much higher than vertex resolution. This is why we typically store colors in a texture map and not as vertex attributes. Along these same lines, we can store normals in a normal map in order to have render super-detailed surfaces. Normal maps are typically stored
+in tangent-space, which is substantially more difficult to implement. (Tangent-space normal mapping is described below for bonus points.)
+In `matcap.fs`, if `material.use_normal_map`, read the object-space
+normal from the texture via
+`texture( material.normal_map, fTexCoord ).rgb`.
+Normal components range
+from [-1,1], while colors range from [0,1], so each normal component
+is stored in the texture as `0.5*(n+1)`. Convert the color stored in the normalmap texture back to a normal via `2*color-1`.
+This normal is in object-space. Convert it to eye-space using `uNormalMatrix` and then use it instead of `fNormal` to read from the MatCap.
+
+* **(bonus 3 points)** Make your own MatCap! You can make a toon shader MatCap by taking a screenshot of a toon-shaded sphere. You can also make much cooler stuff. Have fun with this.
 
 4. **(10 points)** Be creative! Create a time-varying artistic shader of
 your own design. Make use of the uniform `uTime`, which stores the seconds
