@@ -12,11 +12,21 @@ Goals:
 
 * Understand texture coordinates.
 
-* Understand tangent-space normal mapping.
-
-* Understand how to compute a tangent-space from texture coordinates.
+* Understand normal mapping.
 
 * Understand cube maps.
+
+* (optional) Understand how to compute a tangent-space from texture coordinates.
+
+Background
+---------
+
+* Topics: The Graphics Pipeline, Viewing, Illumination, Texture Mapping, Meshes
+* Book (FoCG,4e): Chapter 17 *Using Graphics Hardware*.
+* Video: "Lecture 8: The Graphics Pipeline" and "Lecture 9: Texture Mapping" and "Assignment 6: Shaders aka The Graphics Pipeline"
+* Quiz: Mesh Processing
+
+(FoCG,4e is *Fundamentals of Computer Graphics (4th edition)* by Steve Marschner and Peter Shirley, 4th edition.)
 
 Getting Started & Handing In:
 -----------------------------
@@ -73,14 +83,11 @@ working. They don't depend on any code you write:
     
     ![sphere.json](docs/images/sphere.jpg)
 
-* Create your vertex shader and fragment shaders for each shader. Modify
-the JSON scene files as needed. Tangent-space normal mapping will
-require you to modify C++ code (`mesh.cpp`'s `computeTangentBitangent()`
-and `fancyscene.cpp`'s `vaoFromOBJPath()`).
+* Implement `vao.cpp`'s `makeFromMesh()` to upload normals and texture coordinates to the GPU as per-vertex attributes. Create your vertex shader and fragment shaders for each shader. Modify the JSON scene files as needed. Tangent-space normal mapping will require you to modify additional C++ code (`mesh.cpp`'s `computeTangentBitangent()` and `fancyscene.cpp`'s `vaoFromOBJPath()`).
 
 * Build and run and test that it is working correctly. If you run the `pipeline` program with the `-h` or `--help` flag, you should see the following:
 
-    pipeline [--width pixels] [--height pixels] [--screenshot path/to/save.png] [--quit] [path/to/scene.json]
+        pipeline [--width pixels] [--height pixels] [--screenshot path/to/save.png] [--quit] [path/to/scene.json]
 
 * Here are the JSON
 scene files that will verify your output.
