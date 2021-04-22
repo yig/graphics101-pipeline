@@ -90,7 +90,7 @@ void key_callback( GLFWwindow* window, int key, int scancode, int action, int mo
 }
 
 void usage( char* argv0 ) {
-    std::cerr << "Usage: " << argv0 << "[--width pixels] [--height pixels] [--screenshot path/to/save.png] [--quit] [path/to/scene.json]\n";
+    std::cerr << "Usage: " << argv0 << " [--width pixels] [--height pixels] [--screenshot path/to/save.png] [path/to/scene.json]\n";
 }
 
 }

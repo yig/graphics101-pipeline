@@ -39,12 +39,12 @@ inline bool get_optional_parameter( std::vector< std::string >& args, const std:
     // Look for `name`.
     auto has_name = std::find( args.begin(), args.end(), name );
     
+    // If we don't find it, return.
+    if( has_name == args.end() ) return false;
+    
     // It's an error to find `name` as the last argument,
     // because it must be followed by the value.
     if( has_name + 1 == args.end() ) return false;
-    
-    // If we don't find it, return.
-    if( has_name == args.end() ) return false;
     
     // Grab the following parameter as the setting_path.
     value = *( has_name + 1 );

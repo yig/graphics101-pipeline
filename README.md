@@ -87,7 +87,7 @@ working. They don't depend on any code you write:
 
 * Build and run and test that it is working correctly. If you run the `pipeline` program with the `-h` or `--help` flag, you should see the following:
 
-        pipeline [--width pixels] [--height pixels] [--screenshot path/to/save.png] [--quit] [path/to/scene.json]
+        Usage: ./pipeline [--width pixels] [--height pixels] [--screenshot path/to/save.png] [path/to/scene.json]
 
 * Here are the JSON
 scene files that will verify your output.
