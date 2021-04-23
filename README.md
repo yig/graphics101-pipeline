@@ -23,7 +23,7 @@ Background
 
 * Topics: The Graphics Pipeline, Viewing, Illumination, Texture Mapping, Meshes
 * Book (FoCG,4e): Chapter 17 *Using Graphics Hardware*.
-* Video: "Lecture 8: The Graphics Pipeline" and "Lecture 9: Texture Mapping" and "Assignment 6: Shaders aka The Graphics Pipeline"
+* Video: "Lecture 8: The Graphics Pipeline" and "Lecture 9: Texture Mapping", "Assignment 6: Shaders aka The Graphics Pipeline", and "Assignment 6: Shaders addendum"
 * Quiz: Mesh Processing
 
 (FoCG,4e is *Fundamentals of Computer Graphics (4th edition)* by Steve Marschner and Peter Shirley, 4th edition.)
