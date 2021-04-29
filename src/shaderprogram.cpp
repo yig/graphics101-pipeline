@@ -228,6 +228,32 @@ GLint ShaderProgram::getUniformLocation( const std::string& name ) const {
 GLint ShaderProgram::getAttribLocation( const std::string& name ) const {
     return glGetAttribLocation( m_program, name.c_str() );
 }
+StringSet ShaderProgram::getActiveAttributes() const {
+    // Create an empty set to start.
+    StringSet result;
+    
+    // How long can attribute names be?
+    GLint buffer_size = 0;
+    glGetProgramiv( m_program, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &buffer_size );
+    assert( buffer_size >= 0 );
+    if( buffer_size == 0 ) return result;
+    
+    // Allocate a large enough buffer.
+    std::vector<GLchar> name( buffer_size );
+    
+    GLint num_active_uniforms = 0;
+    glGetProgramiv( m_program, GL_ACTIVE_UNIFORMS, &num_active_uniforms );
+    
+    for( GLuint i = 0; i < num_active_uniforms; i++ ) {
+        GLsizei length;
+ 	    GLint size;
+     	GLenum type;
+        glGetActiveUniform( m_program, i, buffer_size, &length, &size, &type, &name[0] );
+        result.insert( std::string( &name[0] ) );
+    }
+    
+    return result;
+}
 
 void ShaderProgram::addShader( GLenum shaderType, const std::string& shader_source_code ) {
     addShader( shaderType, std::vector<std::string>{ shader_source_code } );

@@ -174,6 +174,14 @@ void FancyScene::loadShaders() {
     // Load shaders.
     const StringSet paths_accessed = parseShader( j["shaders"], *m_drawable->program, relativePathFromJSONPathTransformer() );
     
+    // If the set of active attributes has changed, reload the mesh
+    // so we re-upload the attributes.
+    const StringSet new_active_attributes = m_drawable->program->getActiveAttributes();
+    if( new_active_attributes != m_shader_active_attributes ) {
+        m_mesh_changed = true;
+    }
+    m_shader_active_attributes = new_active_attributes;
+    
     // Add shader paths to the file watcher.
     for( const auto& path : paths_accessed ) {
         m_watcher.watchPath( path, [=]( const std::string& ) { this->m_shader_changed = true; } );

@@ -82,6 +82,7 @@ private:
     bool m_animation_changed = true;
     StringVec m_texture_names_in_bind_order;
     int m_timerMilliseconds = -1;
+    StringSet m_shader_active_attributes;
     
     // Related to animation
     Skeleton m_skeleton;

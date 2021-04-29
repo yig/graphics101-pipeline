@@ -23,7 +23,6 @@ void parseUniforms( const json& j, UniformSet& u, StringVec& texture_names_in_bi
 // Parses the JSON `j` to fill in a ShaderProgram `program`.
 // Note that this does not/cannot delete and re-create `program`.
 // Returns the set of paths accessed.
-typedef std::unordered_set< std::string > StringSet;
 StringSet parseShader( const json& j, ShaderProgram& program );
 // The same, but with an optional function parameter that will be called
 // on any paths encountered prior to loading the file contents.

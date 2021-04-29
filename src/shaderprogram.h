@@ -3,6 +3,9 @@
 
 #include "types.h"
 
+// Forward declarations.
+#include "glfwd.h"
+
 #include <unordered_map>
 #include <string>
 #include <vector>
@@ -30,6 +33,8 @@ public:
     
     GLint getUniformLocation( const std::string& name ) const;
     GLint getAttribLocation( const std::string& name ) const;
+    typedef std::unordered_set< std::string > ActiveAttributes;
+    StringSet getActiveAttributes() const;
     
     void use() const;
 

@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 
 namespace graphics101 {
 
@@ -20,6 +21,7 @@ typedef std::shared_ptr< UniformSet > UniformSetPtr;
 typedef std::shared_ptr< VertexAndFaceArrays > VertexAndFaceArraysPtr;
 typedef std::shared_ptr< Texture > TexturePtr;
 typedef std::unordered_map< std::string, TexturePtr > TextureSet;
+typedef std::unordered_set< std::string > StringSet;
 typedef std::vector< TexturePtr > TextureVec;
 typedef std::vector< std::string > StringVec;
 typedef std::unique_ptr< Drawable > DrawablePtr;
