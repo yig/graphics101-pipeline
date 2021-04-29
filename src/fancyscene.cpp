@@ -421,6 +421,8 @@ void FancyScene::draw() {
     
     // Draw the skeleton for visualization.
     if( m_showSkeleton ) m_skelview.draw();
+    
+    assert( glGetError() == GL_NO_ERROR );
 }
 
 void FancyScene::mousePressEvent( const Event& event ) {
