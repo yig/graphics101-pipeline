@@ -34,6 +34,8 @@ FileWatcherMTime::FileWatcherMTime() {
     m_anythingChangedKeyCounter = 0;
 }
 void FileWatcherMTime::watchPath( const std::string& path, const Callback& callback ) {
+    cerr << "Watching path for changes: " << path << '\n';
+    
     // Store the callback.
     m_watchedCallbacks[ path ] = callback;
     // Store the current mtime.

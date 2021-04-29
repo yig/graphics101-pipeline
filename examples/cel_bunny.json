@@ -1,6 +1,6 @@
 {
     "PipelineGUI": "FancyScene",
-    "TimerMilliseconds": -1,
+    "TimerMilliseconds": 16,
     
     "shaders": {
         "vertex": [ "phong.vs" ],

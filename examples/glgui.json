@@ -2,7 +2,7 @@
     "PipelineGUI": "FancyScene",
     // -1 means no timer callback, 16 means 60fps.
     // A uniform named uTime will be set storing seconds since launch.
-    "TimerMilliseconds": -1,
+    "TimerMilliseconds": 16,
     
     "shaders": {
         "vertex": [ "glgui_top.vs", "common.glsl", "glgui_bottom.vs" ],

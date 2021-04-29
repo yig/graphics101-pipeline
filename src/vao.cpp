@@ -15,7 +15,7 @@ namespace {
 void upload_attribute( GLuint VAO, GLint dimension, const GLfloat* data, int num_vertices, GLint location )
 {
     if( location < 0 ) {
-        std::cerr << "WARNING: Not uploading attribute with a negative location\n";
+        std::cerr << "WARNING: Not uploading attribute with a negative location. The vertex shader doesn't declare or use this attribute. You need to re-launch if your set of declared or used vertex attributes changes.\n";
         return;
     }
     
@@ -53,7 +53,7 @@ void upload_attribute( GLuint VAO, GLint dimension, const GLfloat* data, int num
 void upload_attribute( GLuint VAO, GLint dimension, const GLint* data, int num_vertices, GLint location )
 {
     if( location < 0 ) {
-        std::cerr << "WARNING: Not uploading attribute with a negative location\n";
+        std::cerr << "WARNING: Not uploading attribute with a negative location. The vertex shader doesn't declare or use this attribute. You need to re-launch if your set of declared or used vertex attributes changes.\n";
         return;
     }
     
@@ -284,12 +284,14 @@ VertexAndFaceArrays::VertexAndFaceArraysPtr makeFromMesh( const graphics101::Mes
     // Upload the mesh to the GPU.
     VertexAndFaceArrays::VertexAndFaceArraysPtr vao = VertexAndFaceArrays::makePtr();
     
+    std::cerr << "Uploading vertex attribute positions to the GPU.\n";
     // 1 Flatten.
     // 2 Upload to `position_location`
     auto flat_positions = flatten_attribute( mesh.face_positions, mesh.positions );
     vao->uploadAttribute( flat_positions, position_location );
     
     if( normal_location != -1 ) {
+        std::cerr << "Uploading vertex attribute normals to the GPU.\n";
         // Your code goes here.
         // 1 Flatten.
         // 2 Upload to `normal_location`
@@ -297,6 +299,7 @@ VertexAndFaceArrays::VertexAndFaceArraysPtr makeFromMesh( const graphics101::Mes
     }
     
     if( texcoord_location != -1 && !mesh.face_texcoords.empty() ) {
+        std::cerr << "Uploading vertex attribute texture coordinates to the GPU.\n";
         // Your code goes here.
         // 1 Flatten.
         // 2 Upload to `texcoord_location`

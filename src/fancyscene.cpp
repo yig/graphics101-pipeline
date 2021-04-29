@@ -55,6 +55,7 @@ VertexAndFaceArraysPtr vaoFromOBJPath( const std::string& path, const ShaderProg
         mesh.computeTangentBitangent();
         // Upload mesh.tangents and mesh.bitangents to the GPU.
         
+        std::cerr << "Uploading vertex attributes tangents and bitangents to the GPU.\n";
         // Your code goes here.
         // 1 Flatten.
         // 2 Upload to "vTangent" and "vBitangent".
@@ -147,7 +148,7 @@ void FancyScene::loadScene() {
         } else {
             m_timerMilliseconds = j["TimerMilliseconds"];
             if( m_timerMilliseconds < 0 ) {
-                cerr << "WARNING: TimerMilliseconds is negative.\n";
+                cerr << "WARNING: The JSON file's TimerMilliseconds is negative. Make it positive for animations and shader reloading without clicking on the window.\n";
             } else {
                 std::cout << "Draw will be called at least every " << m_timerMilliseconds << " milliseconds.\n";
             }
@@ -316,9 +317,11 @@ void FancyScene::loadAnimation() {
     
     // Load the skeleton and animation from the BVH.
     if( j.count("animation") == 0 || !j["animation"].is_string() ) {
-        cerr << "Scene JSON has no animation: " << m_scene_path << '\n';
+        // cerr << "Scene JSON has no animation: " << m_scene_path << '\n';
         return;
     }
+    
+    cerr << "Scene JSON has an animation!\n";
     
     const auto BVHpath = relativePathFromJSONPath( j["animation"].get<std::string>() );
     // Add the animation path to the filewatcher.
