@@ -97,6 +97,11 @@ scenes into an output subdirectory `screenshots`.
     * `phong_bunny.json`
     * `phong_sphere.json`
     * `cel_bunny.json`
+    * `matcap_bunny.json`
+    * `matcap_head.json`
+    * `matcap_hercules.json`
+    * `matcap_lemon.json`
+    * `matcap_sphere.json`
     * `normalmap_cube.json`
     * `normalmap_head.json`
     * `normalmap_lemon.json`
