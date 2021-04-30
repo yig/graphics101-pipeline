@@ -415,6 +415,8 @@ exotic shaders, but the framework supports them.
 Tips
 ----
 
+* If you see a blank screen (all background color and no shape), the problem is most likely in your vertex shader. This is assuming that your environment works (e.g. that `simplescene.json` and `sphere.json` produce the expected output).
+
 * The glm library is modeled after the OpenGL shading language GLSL.
 Anything involving `vec2`, `vec3`, `vec4`, `mat3`, `mat4`, etc. and virtually any
 GLSL functions should be accessible in C++ with the `glm::` prefix.
