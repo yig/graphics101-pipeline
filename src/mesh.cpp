@@ -31,7 +31,7 @@ void Mesh::computeTangentBitangent() {
     // Make space for a tangent and bitangent for each position. Initialize them to 0.
     tangents.resize( positions.size(), vec3(0,0,0) );
     bitangents.resize( positions.size(), vec3(0,0,0) );
-    // Since there is a normal for each position, face_normals should be identical
+    // Since there is a tangent for each position, face_tangents should be identical
     // to face_positions.
     face_tangents = face_positions;
     
