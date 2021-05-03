@@ -422,7 +422,9 @@ void FancyScene::draw() {
     // Draw the skeleton for visualization.
     if( m_showSkeleton ) m_skelview.draw();
     
-    assert( glGetError() == GL_NO_ERROR );
+    // This passes in general, but if there is a shader error it fails.
+    // We don't want the program to terminate that way.
+    // assert( glGetError() == GL_NO_ERROR );
 }
 
 void FancyScene::mousePressEvent( const Event& event ) {
