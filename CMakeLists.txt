@@ -30,6 +30,7 @@ CPMFindPackage(
         "GLFW_BUILD_DOCS OFF"
         "GLFW_BUILD_INSTALL OFF"
         )
+CPMAddPackage("https://github.com/g-truc/glm.git#0.9.9.8")
 
 # Some platforms need OpenGL. Most don't, because we are using the gl3w loader library.
 find_package(OpenGL REQUIRED)
@@ -80,7 +81,7 @@ set(SRCS
 )
 add_executable(pipeline ${SRCS})
 target_include_directories(pipeline PUBLIC include)
-target_link_libraries(pipeline glfw ${CMAKE_DL_LIBS})
+target_link_libraries(pipeline glfw glm::glm ${CMAKE_DL_LIBS})
 
 ## We don't want to include the OpenGL directories because we are using gl3w.
 # target_include_directories(pipeline ${OPENGL_INCLUDE_DIRS})
