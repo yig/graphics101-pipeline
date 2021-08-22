@@ -128,7 +128,7 @@ to generate an appropriate zip file of your `pipeline` project.
 The zip file it creates, `pipeline.zip`, will include
 the `screenshots` subdirectory and your `Notes.txt` file.
 It will ignore unneeded large and numerous directories
-(e.g. `build`, `examples/head`, `examples/hercules`, `examples/lemon`, `glm`).
+(e.g. `build`, `examples/head`, `examples/hercules`, `examples/lemon`).
 Upload your `pipeline.zip` to Blackboard before the deadline.
 
 * **THIS IS AN INDIVIDUAL, NOT A GROUP ASSIGNMENT. That means all code
