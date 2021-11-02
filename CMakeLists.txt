@@ -88,6 +88,12 @@ target_link_libraries(pipeline glfw glm::glm ${CMAKE_DL_LIBS})
 ## On some platforms we still need to link directly.
 target_link_libraries(pipeline OpenGL::GL)
 
+## On Windows, the following line may help build a static binary that can be called from the autograder.
+## Some platforms can't build entirely static binaries, so I'm leaving it off by default.
+if(WIN32)
+    target_link_libraries(pipeline -static)
+endif()
+
 # Create the screenshots directory and remember its location.
 set(SCREENSHOTS "${PROJECT_SOURCE_DIR}/screenshots")
 file(MAKE_DIRECTORY "${SCREENSHOTS}")
