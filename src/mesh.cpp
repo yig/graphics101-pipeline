@@ -279,6 +279,52 @@ bool Mesh::writeToOBJ( const std::string& path ) {
         return false;
     }
     
+    // Check for valid position indices in face_positions.
+    {
+        bool valid_indices = true;
+        for( const auto& f : face_positions ) {
+            for( int vi = 0; vi < 3; ++vi ) {
+                if( f[vi] < 0 || f[vi] >= positions.size() ) {
+                    valid_indices = false;
+                }
+            }
+        }
+        if( !valid_indices ) {
+            cerr << "WARNING: Faces for positions contain invalid indices. OBJ will contain an invalid mesh.\n";
+            // return false;
+        }
+    }
+    // Check for valid normal indices in face_normals.
+    {
+        bool valid_indices = true;
+        for( const auto& f : face_normals ) {
+            for( int vi = 0; vi < 3; ++vi ) {
+                if( f[vi] < 0 || f[vi] >= normals.size() ) {
+                    valid_indices = false;
+                }
+            }
+        }
+        if( !valid_indices ) {
+            cerr << "WARNING: Faces for normals contain invalid indices. OBJ will contain an invalid mesh.\n";
+            // return false;
+        }
+    }
+    // Check for valid texture coordinate indices in face_texcoords.
+    {
+        bool valid_indices = true;
+        for( const auto& f : face_texcoords ) {
+            for( int vi = 0; vi < 3; ++vi ) {
+                if( f[vi] < 0 || f[vi] >= texcoords.size() ) {
+                    valid_indices = false;
+                }
+            }
+        }
+        if( !valid_indices ) {
+            cerr << "WARNING: Faces for texture coordinates contain invalid indices. OBJ will contain an invalid mesh.\n";
+            // return false;
+        }
+    }
+    
     // Open the file.
     ofstream out( path );
     if( !out ) {
