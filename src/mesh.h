@@ -41,17 +41,17 @@ public:
     void clear();
     
     std::vector< vec3 > positions;
-    TriangleVec face_positions;
+    std::vector< Triangle > face_positions;
     
     std::vector< vec3 > normals;
-    TriangleVec face_normals;
+    std::vector< Triangle > face_normals;
     
     std::vector< vec2 > texcoords;
-    TriangleVec face_texcoords;
+    std::vector< Triangle > face_texcoords;
     
     std::vector< vec3 > tangents;
     std::vector< vec3 > bitangents;
-    TriangleVec face_tangents;
+    std::vector< Triangle > face_tangents;
 };
 
 }

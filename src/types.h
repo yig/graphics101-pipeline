@@ -79,7 +79,6 @@ namespace graphics101 {
         // Compare two triangles.
         bool operator==( const Triangle& rhs ) const { return A == rhs.A && B == rhs.B && C == rhs.C; }
     };
-    typedef std::vector< Triangle > TriangleVec;
     
     typedef std::string string;
     

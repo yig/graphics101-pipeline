@@ -76,7 +76,7 @@ The flattened data order is [ face0_vertex0, face0_vertex1, face0_vertex2, face1
 */
 template< typename T >
 std::vector< T > flatten_attribute(
-	const TriangleVec& F,
+	const std::vector< Triangle >& F,
 	const std::vector< T >& attribute
 	)
 {
