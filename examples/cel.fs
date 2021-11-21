@@ -35,5 +35,5 @@ void main()
 {
     // Your code goes here.
     
-    FragColor = vec4( 1.0, 0.0, 1,0, 1.0 );
+    FragColor = vec4( 1.0, 0.0, 1.0, 1.0 );
 }
