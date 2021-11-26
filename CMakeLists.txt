@@ -103,6 +103,8 @@ set(EXAMPLES "${PROJECT_SOURCE_DIR}/examples")
 # A CMake target to create the desired outputs
 add_custom_target(screenshots
     COMMAND pipeline --screenshot "${SCREENSHOTS}/phong_bunny.png" "${EXAMPLES}/phong_bunny.json"
+    COMMAND pipeline --screenshot "${SCREENSHOTS}/phong_bunny-reflective.png" "${EXAMPLES}/phong_bunny-reflective.json"
+    COMMAND pipeline --screenshot "${SCREENSHOTS}/phong_bunny-refractive.png" "${EXAMPLES}/phong_bunny-refractive.json"
     COMMAND pipeline --screenshot "${SCREENSHOTS}/phong_sphere.png" "${EXAMPLES}/phong_sphere.json"
     COMMAND pipeline --screenshot "${SCREENSHOTS}/cel_bunny.png" "${EXAMPLES}/cel_bunny.json"
     COMMAND pipeline --screenshot "${SCREENSHOTS}/matcap_bunny.png" "${EXAMPLES}/matcap_bunny.json"

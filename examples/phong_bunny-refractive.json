@@ -18,7 +18,7 @@
         "material.reflective": { "type": "1i", "value": 0 },
         "material.color_reflect": { "type": "3f", "value": [ 0.4, 0.3, 0.2 ] },
         
-        "material.refractive": { "type": "1i", "value": 0 },
+        "material.refractive": { "type": "1i", "value": 1 },
         "material.color_refract": { "type": "3f", "value": [ 0.5, 0.5, 0.5 ] },
         "material.index_of_refraction": { "type": "1f", "value": 1.6 },
         
