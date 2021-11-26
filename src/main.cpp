@@ -196,7 +196,10 @@ int main( int argc, char* argv[] ) {
     // The timer has never been called, so initialize `lastTimer`
     // to a time earlier than the program start time minus the callback interval.
     double lastTimer = -2*( fabs(gui->timerCallbackMilliseconds()/1000.) );
+    int counter = 0;
     while( !glfwWindowShouldClose(window) ) {
+        counter += 1;
+        
         // Draw
         gui->draw();
         
@@ -204,7 +207,7 @@ int main( int argc, char* argv[] ) {
         glfwSwapBuffers(window);
         
         // Save a screenshot and quit?
-        if( save_and_quit ) {
+        if( save_and_quit && counter > 1 ) {
             save_screenshot( screenshotpath );
             break;
         }
@@ -213,7 +216,7 @@ int main( int argc, char* argv[] ) {
         // If timerCallbackSeconds is negative, then we don't refresh.
         // Get this number inside the loop so the gui can change it dynamically if needed.
         const double timerCallbackSeconds = gui->timerCallbackMilliseconds()/1000.;
-        if( timerCallbackSeconds < 0 ) glfwWaitEvents();
+        if( timerCallbackSeconds < 0 && !save_and_quit ) glfwWaitEvents();
         else {
             double now = glfwGetTime();
             const double waitTime = lastTimer + timerCallbackSeconds - now;
