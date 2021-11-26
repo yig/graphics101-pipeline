@@ -241,7 +241,7 @@ and you should not add diffuse OR specular lighting.
         * **(10 points)** Specular lighting: K<sub>S</sub> I<sub>L</sub> ( V · R )<sup>n</sup>.
 *V* is the (normalized) vector from the surface position to the eye position.
 In eye-space the eye is located at the origin. *R* is the (normalized)
-direction from the surface position to the light position, reflected
+direction from the light position to the surface position, reflected
 across the surface normal. The formula for reflecting a vector across
 another vector is given below under *Implementation Details* (or you can
 use the GLSL `reflect()` function). Note that if the dot product is
