@@ -107,6 +107,7 @@ add_custom_target(screenshots
     COMMAND pipeline --screenshot "${SCREENSHOTS}/phong_bunny-refractive.png" "${EXAMPLES}/phong_bunny-refractive.json"
     COMMAND pipeline --screenshot "${SCREENSHOTS}/phong_sphere.png" "${EXAMPLES}/phong_sphere.json"
     COMMAND pipeline --screenshot "${SCREENSHOTS}/cel_bunny.png" "${EXAMPLES}/cel_bunny.json"
+    COMMAND pipeline --screenshot "${SCREENSHOTS}/cel_sphere.png" "${EXAMPLES}/cel_sphere.json"
     COMMAND pipeline --screenshot "${SCREENSHOTS}/matcap_bunny.png" "${EXAMPLES}/matcap_bunny.json"
     COMMAND pipeline --screenshot "${SCREENSHOTS}/matcap_head.png" "${EXAMPLES}/matcap_head.json"
     COMMAND pipeline --screenshot "${SCREENSHOTS}/matcap_hercules.png" "${EXAMPLES}/matcap_hercules.json"
