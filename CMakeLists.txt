@@ -11,26 +11,29 @@ set (CMAKE_CXX_STANDARD 11)
 
 # GLFW is non-trivial to install on Windows.
 ## There's not a great system package manager for Windows.
-## Let's use a CMake package manager.
-# The CPM dependency manager: https://github.com/TheLartians/CPM.cmake
-# The Hunter package manager: https://github.com/cpp-pm/hunter
-
-include(cmake/CPM.cmake)
-CPMFindPackage(
-    NAME glfw3
-    # GITHUB_REPOSITORY glfw/glfw
-    # GIT_TAG 3.3.2
-    URL https://github.com/glfw/glfw/releases/download/3.3.2/glfw-3.3.2.zip
-    URL_HASH SHA256=08a33a512f29d7dbf78eab39bd7858576adcc95228c9efe8e4bc5f0f3261efc7
-    VERSION 3.2
-    OPTIONS
-        "ENKITS_BUILD_EXAMPLES OFF"
-        "GLFW_BUILD_EXAMPLES OFF"
-        "GLFW_BUILD_TESTS OFF"
-        "GLFW_BUILD_DOCS OFF"
-        "GLFW_BUILD_INSTALL OFF"
-        )
-CPMAddPackage("https://github.com/g-truc/glm.git#0.9.9.8")
+## Let's use CMake's FetchContent as the package manager.
+include(FetchContent)
+FetchContent_Declare(
+    glfw3
+    # URL https://github.com/glfw/glfw/releases/download/3.3.8/glfw-3.3.8.zip
+    # URL_HASH SHA256=4d025083cc4a3dd1f91ab9b9ba4f5807193823e565a5bcf4be202669d9911ea6
+    GIT_REPOSITORY https://github.com/glfw/glfw.git
+    GIT_TAG 3.3-stable
+    GIT_SHALLOW TRUE
+    GIT_PROGRESS TRUE
+    )
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable( glfw3 )
+FetchContent_Declare(
+    glm
+    GIT_REPOSITORY https://github.com/g-truc/glm.git
+    GIT_TAG 0.9.9.8
+    GIT_SHALLOW TRUE
+    GIT_PROGRESS TRUE
+    )
+FetchContent_MakeAvailable( glm )
 
 # Some platforms need OpenGL. Most don't, because we are using the gl3w loader library.
 find_package(OpenGL REQUIRED)
