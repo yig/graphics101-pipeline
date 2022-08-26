@@ -13,6 +13,7 @@ set (CMAKE_CXX_STANDARD 11)
 ## There's not a great system package manager for Windows.
 ## Let's use CMake's FetchContent as the package manager.
 include(FetchContent)
+set(FETCHCONTENT_QUIET FALSE)
 FetchContent_Declare(
     glfw3
     # URL https://github.com/glfw/glfw/releases/download/3.3.8/glfw-3.3.8.zip
