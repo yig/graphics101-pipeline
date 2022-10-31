@@ -343,11 +343,11 @@ since the program was launched. Declare it in your shader as `uniform float uTim
 Be sure to change `TimerMilliseconds` in the scene JSON file to something like 16
 (which corresponds to 60 frames-per-second). See `sphere.vs` for an example.
 
-4. **(bonus 30 points)** Normal mapping (`normalmap.vs` and `normalmap.fs`). This is an
+4. **(bonus 30 points)** Tangent-space normal mapping (`normalmap.vs` and `normalmap.fs`). This is an
 extension of your Phong reflectance model shader. With normal mapping,
 the texture stores a normal vector. Because lighting is entirely
 determined by the normal vector, high resolution normals make a surface
-look incredibly detailed. The normals in a normal maps are typically
+look incredibly detailed. The normals in a normal map are typically
 stored as vectors in the *tangent space* of the surface. This technique
 requires you to compute a "tangent frame" for each vertex (tangent and
 bitangent vectors to accompany the normal) and upload that to the GPU as
