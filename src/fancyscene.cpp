@@ -3,6 +3,7 @@
 #include "types.h"
 #include <fstream>
 #include <iostream>
+#include <algorithm> // std::min
 using std::cerr;
 
 #include "parsing.h"
