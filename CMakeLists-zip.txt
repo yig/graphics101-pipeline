@@ -1,6 +1,24 @@
 # A custom target to create a zip file to handin.
 
-# Describe the package to create. Run "make package" or "cpack".
+# Version 1: A custom target named "zip". Run "make zip" or "cmake --build . --target zip"
+
+## Can't exclude the large head, hercules, lemon data.
+# add_custom_target(zip COMMAND
+#     ${CMAKE_COMMAND} -E tar "cfv" "${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.zip" --format=zip
+#     ${SRCS}
+#     "Notes.txt"
+#     "CMakeLists.txt"
+#     "CMakeLists-zip.txt"
+#     "${SCREENSHOTS}"
+#     "${EXAMPLES}"
+#     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
+#     VERBATIM
+# )
+# add_dependencies(zip screenshots)
+
+
+# Version 2: Describe the package to create. Run "make package" or "cpack".
+# This depends on screenshots having been generated.
 
 # Install only what we specify.
 install(FILES
@@ -12,9 +30,6 @@ install(FILES
 install(FILES
     ${SRCS}
     DESTINATION "src"
-)
-install(DIRECTORY "cmake"
-    DESTINATION .
 )
 # No trailing slash after "${SCREENSHOTS}" preserves the "output" directory in the zip.
 install(DIRECTORY "${SCREENSHOTS}"
