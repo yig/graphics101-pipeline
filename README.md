@@ -110,7 +110,7 @@ scenes into an output subdirectory `screenshots`.
     * `normalmap_hercules_marble.json`
     * ... and any others that you make. You are required to make at least one (discussed below).
 
-* There is a cmake target `screenshots` that will do this for you, so you can just type `make screenshots` or `cmake --target screenshots --build .` in your `build` directory.
+* There is a cmake target `screenshots` that will do this for you, so you can just type `make screenshots` or `cmake --build . --target screenshots` in your `build` directory.
 
 * You will find reference output in the `examples/` directory.
 For each `<filename>.json` file, there is a `<filename>.png` screenshot
