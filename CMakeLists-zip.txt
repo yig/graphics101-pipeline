@@ -6,6 +6,7 @@
 # add_custom_target(zip COMMAND
 #     ${CMAKE_COMMAND} -E tar "cfv" "${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.zip" --format=zip
 #     ${SRCS}
+#     "include"
 #     "Notes.txt"
 #     "CMakeLists.txt"
 #     "CMakeLists-zip.txt"
@@ -30,6 +31,10 @@ install(FILES
 install(FILES
     ${SRCS}
     DESTINATION "src"
+)
+install(DIRECTORY "include"
+    DESTINATION .
+    PATTERN ".DS_Store" EXCLUDE
 )
 # No trailing slash after "${SCREENSHOTS}" preserves the "output" directory in the zip.
 install(DIRECTORY "${SCREENSHOTS}"
