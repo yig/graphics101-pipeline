@@ -1,3 +1,14 @@
 .DS_Store
-*.pro.user
+Thumbs.db
+
+*~
+
+# Common CMake directory names
 /build*
+/Release
+/Debug
+/.vs
+
+# Qt Creator creates this
+CMakeLists.txt.user
+*.pro.user
